@@ -1,5 +1,7 @@
 'use client';
 import React, { useState } from "react";
+import Image from "next/image";
+import heroImg from "@/public/hero/veycron-hero.png";
 
 // Vectoron – Engineering Landing (Next.js/React + Tailwind)
 // Fokus: Cloud & Platform Engineering, Data Platform/Lakehouse, Applied AI/ML, MLOps/LLMOps
@@ -14,7 +16,7 @@ export default function LandingPage() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <div aria-hidden="true" className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-500" />
-            <a href="#" className="font-semibold tracking-tight">Vectoron</a>
+            <a href="#" className="font-semibold tracking-tight">veycron</a>
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm">
             <a href="#features" className="hover:text-gray-900 text-gray-600">Kompetenzen</a>
@@ -85,6 +87,21 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="relative">
+            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-2 shadow-sm">
+              <div className="relative aspect-[16/10] w-full rounded-xl">
+                <Image
+                  src="/img/landing_page_symbols.png"
+                  alt="Cloud · Data · AI — Veycron"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(min-width:1024px) 560px, 100vw"
+                />
+              </div>
+            </div>
+            <p className="mt-3 text-center text-sm text-gray-500">Cloud · Data · AI</p>
+          </div>
+{/*           <div className="relative">
             <div className="relative rounded-2xl border border-gray-200 bg-white p-2 shadow-sm">
               <div className="rounded-xl bg-gray-900 p-3 text-gray-200">
                 <div className="flex items-center gap-2 text-xs text-gray-400">
@@ -100,7 +117,7 @@ git push origin main && npx vercel</code></pre>
               </div>
             </div>
             <p className="mt-3 text-center text-sm text-gray-500">Engineering-led · Outcome-first</p>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -166,7 +183,7 @@ git push origin main && npx vercel</code></pre>
             <p className="mt-2 text-gray-600">SLIs/SLOs, Error Budgets, Incident Response, Release-Automatisierung.</p>
           </div>
           <div className="rounded-2xl border border-gray-200 p-8">
-            <h3 className="text-xl font-semibold">Security</h3>
+            <h3 className="text-xl font-semibold">Data Analysis</h3>
             <p className="mt-2 text-gray-600">Threat Modeling, Shift-Left, Secrets/KMS, DSGVO, Privacy-Preserving ML.</p>
           </div>
         </div>
@@ -186,14 +203,24 @@ git push origin main && npx vercel</code></pre>
             </ul>
           </div>
           <div className="rounded-2xl border border-gray-200 p-4">
-            <div className="aspect-[16/10] w-full rounded-xl bg-gray-100" />
-            <p className="mt-3 text-sm text-gray-500">Platzhalter für Screenshot/Diagramm</p>
+            <figure>
+              <div className="aspect-[16/10] w-full overflow-hidden rounded-xl bg-gray-50">
+                <img
+                  src="/img/img_website.png"
+                  alt="Von Monolith zu AI-fähiger Plattform – Architekturdiagramm"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <figcaption className="mt-3 text-sm text-gray-500">
+                Case: Von Monolith zu AI-Plattform
+              </figcaption>
+            </figure>
           </div>
         </div>
       </section>
 
       {/* Pricing / Angebot */}
-      <section id="pricing" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+{/*       <section id="pricing" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Angebot</h2>
           <p className="mt-3 text-gray-600">Starte fokussiert – skaliere, wenn die Traktion da ist.</p>
@@ -216,7 +243,7 @@ git push origin main && npx vercel</code></pre>
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ */}
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
@@ -224,7 +251,7 @@ git push origin main && npx vercel</code></pre>
           <h3 className="text-2xl font-semibold">FAQ</h3>
           <dl className="mt-6 space-y-4">
             {[
-              ["Welche Clouds unterstützt ihr?", "AWS, Azure, GCP – Cloud-neutral, mit IaC und GitOps für reproduzierbare Umgebungen."],
+              ["Welche Clouds unterstützt ihr?", "AWS, Azure – Cloud-neutral, mit IaC und GitOps für reproduzierbare Umgebungen."],
               ["Wie startet ein Projekt?", "Mit einem Discovery-Sprint: Ziele, Architektur, Roadmap und messbare Outcomes."],
               ["Wie integriert ihr AI/ML?", "Über MLOps/LLMOps: Datenqualität, Trainings-/Inference-Pipelines, Evaluations, Monitoring & Guardrails."],
               ["Security & Compliance?", "Security-by-Design, Least Privilege/IAM, Secrets/KMS, Audit-Trails, DSGVO-Konformität."],
@@ -248,7 +275,7 @@ git push origin main && npx vercel</code></pre>
             <ul className="mt-6 space-y-2 text-gray-600">
               <li className="flex items-center gap-2"><span className="inline-block h-2 w-2 rounded-full bg-green-500" /> Antwort binnen 24h</li>
               <li className="flex items-center gap-2"><span className="inline-block h-2 w-2 rounded-full bg-blue-500" /> Technik &amp; Design aus einer Hand</li>
-              <li className="flex items-center gap-2"><span className="inline-block h-2 w-2 rounded-full bg-purple-500" /> Skalierbar auf AWS/Vercel</li>
+              <li className="flex items-center gap-2"><span className="inline-block h-2 w-2 rounded-full bg-purple-500" /> Skalierbar auf AWS/Azure</li>
             </ul>
           </div>
           <form className="rounded-2xl border border-gray-200 p-6">
@@ -280,8 +307,8 @@ git push origin main && npx vercel</code></pre>
             <p className="mt-3 text-sm text-gray-600">© {new Date().getFullYear()} Vectoron. Alle Rechte vorbehalten.</p>
           </div>
           <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 lg:col-span-2 lg:justify-self-end">
-            <a href="#" className="hover:text-gray-900">Impressum</a>
-            <a href="#" className="hover:text-gray-900">Datenschutz</a>
+            <a href="/impressum" className="hover:text-gray-900">Impressum</a>
+            <a href="/datenschutz" className="hover:text-gray-900">Datenschutz</a>
             <a href="#" className="hover:text-gray-900">Nutzungsbedingungen</a>
             <a href="#" className="hover:text-gray-900">Cookie-Einstellungen</a>
           </div>
