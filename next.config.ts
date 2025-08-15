@@ -1,6 +1,4 @@
-// next.config.ts
-import type { NextConfig } from "next";
-const nextConfig: NextConfig = {
-  images: { formats: ["image/avif","image/webp"] },
+export default {
+  output: "export",
+  images: { unoptimized: true },
 };
-export default nextConfig;
