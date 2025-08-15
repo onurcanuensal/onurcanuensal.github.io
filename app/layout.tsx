@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const siteName = "Vectoron";
+const siteName = "veycron";
 const siteDescription =
-  "Vectoron baut Plattformen, Data- und ML-Lösungen: Cloud Foundations & Landing Zones, Lakehouse/Data Platform, GenAI/LLM-Anwendungen – sicher, skalierbar, messbar.";
+  "veycron baut Plattformen, Data- und ML-Lösungen: Cloud Foundations & Landing Zones, Lakehouse/Data Platform, GenAI/LLM-Anwendungen – sicher, skalierbar, messbar.";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -11,8 +11,8 @@ const baseUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Vectoron — Engineering für Cloud, Data & AI",
-    template: "%s · Vectoron",
+    default: "veycron — Engineering für Cloud, Data & AI",
+    template: "%s · veycron",
   },
   description: siteDescription,
   alternates: { canonical: "/" },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName,
-    title: "Vectoron — Engineering für Cloud, Data & AI",
+    title: "veycron — Engineering für Cloud, Data & AI",
     description: siteDescription,
     images: ["/og.png"], // Lege /public/og.png ab (1200x630)
     locale: "de_DE",

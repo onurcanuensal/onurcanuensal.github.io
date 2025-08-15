@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import heroImg from "@/public/hero/veycron-hero.png";
 
-// Vectoron – Engineering Landing (Next.js/React + Tailwind)
+// veycron – Engineering Landing (Next.js/React + Tailwind)
 // Fokus: Cloud & Platform Engineering, Data Platform/Lakehouse, Applied AI/ML, MLOps/LLMOps
 
 export default function LandingPage() {
@@ -304,7 +304,7 @@ git push origin main && npx vercel</code></pre>
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
           <div>
             <div aria-hidden="true" className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-500" />
-            <p className="mt-3 text-sm text-gray-600">© {new Date().getFullYear()} Vectoron. Alle Rechte vorbehalten.</p>
+            <p className="mt-3 text-sm text-gray-600">© {new Date().getFullYear()} veycron. Alle Rechte vorbehalten.</p>
           </div>
           <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 lg:col-span-2 lg:justify-self-end">
             <a href="/impressum" className="hover:text-gray-900">Impressum</a>
