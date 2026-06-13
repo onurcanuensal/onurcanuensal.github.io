@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Veycron – Maßgeschneiderte KI-Systeme, Cloud-Infrastruktur und Enterprise-Software für anspruchsvolle Branchen weltweit.">
+<title>Veycron – Enterprise Technology Solutions</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0F;
+    --bg2: #0F0F18;
+    --bg3: #13131F;
+    --blue: #2563EB;
+    --blue-light: #3B82F6;
+    --cyan: #06B6D4;
+    --cyan-light: #22D3EE;
+    --glow: rgba(37,99,235,0.35);
+    --glow-cyan: rgba(6,182,212,0.25);
+    --text: #F1F5F9;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+    --border: rgba(255,255,255,0.07);
+    --border-blue: rgba(37,99,235,0.4);
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --nav-h: 72px;
+  }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: rgba(37,99,235,0.4); color: #fff; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 2px; }
+
+  /* ── UTILITY ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 120px 0; position: relative; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--cyan);
+    margin-bottom: 20px;
+  }
+  .section-label::before {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--cyan);
+  }
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+    line-height: 1.15; letter-spacing: -0.02em;
+    color: var(--text); margin-bottom: 20px;
+  }
+  .section-sub {
+    font-size: 1.1rem; color: var(--text-muted); max-width: 600px; line-height: 1.7;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 8px;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
+    cursor: pointer; border: none; text-decoration: none;
+    transition: all 0.25s ease; white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--blue); color: #fff;
+    box-shadow: 0 0 24px rgba(37,99,235,0.4);
+  }
+  .btn-primary:hover {
+    background: var(--blue-light);
+    box-shadow: 0 0 40px rgba(37,99,235,0.6);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+  }
+  .btn-secondary:hover {
+    border-color: rgba(37,99,235,0.5);
+    background: rgba(37,99,235,0.08);
+    transform: translateY(-2px);
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--nav-h); z-index: 1000;
+    transition: background 0.3s, border-bottom 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,15,0.9);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  }
+  .nav-logo {
+    font-size: 22px; font-weight: 900; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #fff; text-decoration: none;
+    background: linear-gradient(135deg, #fff 0%, var(--cyan-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--text-muted);
+    text-decoration: none; letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { margin-left: 16px; padding: 10px 20px; font-size: 14px; }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px; background: none; border: none;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu {
+    display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
+    background: rgba(10,10,15,0.97); border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px); padding: 24px;
+    flex-direction: column; gap: 4px; z-index: 999;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-size: 16px; font-weight: 500; color: var(--text-muted);
+    text-decoration: none; padding: 12px 0;
+    border-bottom: 1px solid var(--border); display: block;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--text); }
+  .mobile-menu .btn { margin-top: 16px; justify-content: center; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    position: relative; overflow: hidden; padding: 0;
+  }
+  #hero-canvas {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+  }
+  .hero-glow {
+    position: absolute; width: 700px; height: 700px;
+    border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -55%);
+  }
+  .hero-glow-2 {
+    position: absolute; width: 500px; height: 500px;
+    border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
+    top: 60%; right: 5%;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    padding-top: var(--nav-h);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.2);
+    border-radius: 100px; padding: 6px 16px; margin-bottom: 32px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--cyan);
+  }
+  .hero-badge::before {
+    content: ''; display: block; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--cyan);
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+  .hero-title {
+    font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 900;
+    line-height: 1.08; letter-spacing: -0.03em;
+    margin-bottom: 28px; max-width: 900px;
+  }
+  .hero-title .line-blue {
+    background: linear-gradient(90deg, var(--blue-light) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-muted);
+    max-width: 580px; line-height: 1.75; margin-bottom: 44px;
+  }
+  .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--text-dim); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, transparent, var(--text-dim));
+    animation: scroll-anim 2s infinite;
+  }
+  @keyframes scroll-anim {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── STATS ── */
+  #stats {
+    padding: 80px 0;
+    background: linear-gradient(to bottom, var(--bg), var(--bg2));
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  }
+  .stat-item {
+    padding: 40px 32px; text-align: center; position: relative;
+  }
+  .stat-item:not(:last-child)::after {
+    content: ''; position: absolute; right: 0; top: 20%; height: 60%;
+    width: 1px; background: var(--border);
+  }
+  .stat-number {
+    font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 900;
+    letter-spacing: -0.02em; line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, var(--cyan-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 10px;
+  }
+  .stat-label {
+    font-size: 14px; color: var(--text-muted); font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── INDUSTRIES ── */
+  #industries { background: var(--bg2); }
+  .industries-header { margin-bottom: 64px; }
+  .industries-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .industry-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 16px; padding: 36px 32px;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .industry-card:hover {
+    border-color: rgba(37,99,235,0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(37,99,235,0.15);
+  }
+  .industry-icon {
+    width: 52px; height: 52px; border-radius: 12px; margin-bottom: 24px;
+    background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(6,182,212,0.1));
+    border: 1px solid rgba(37,99,235,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .industry-card h3 {
+    font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--text);
+  }
+  .industry-card p {
+    font-size: 14px; color: var(--text-muted); line-height: 1.7;
+  }
+
+  /* ── TECH STACK ── */
+  #tech { background: var(--bg); }
+  .tech-header { margin-bottom: 56px; }
+  .tech-grid {
+    display: flex; flex-wrap: wrap; gap: 12px;
+  }
+  .tech-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 8px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    font-size: 13px; font-weight: 600; color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .tech-badge:hover {
+    border-color: rgba(37,99,235,0.4);
+    color: var(--text); background: rgba(37,99,235,0.06);
+  }
+  .tech-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan); flex-shrink: 0;
+  }
+  .tech-badge.blue .dot { background: var(--blue-light); }
+  .tech-badge.green .dot { background: #10B981; }
+  .tech-badge.purple .dot { background: #8B5CF6; }
+  .tech-badge.orange .dot { background: #F59E0B; }
+
+  /* ── CASE STUDIES ── */
+  #cases { background: var(--bg2); }
+  .cases-header { margin-bottom: 64px; }
+  .cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .case-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 20px; overflow: hidden;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  }
+  .case-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    border-color: rgba(37,99,235,0.3);
+  }
+  .case-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .case-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .case-icon.auto { background: rgba(37,99,235,0.15); }
+  .case-icon.fin { background: rgba(16,185,129,0.15); }
+  .case-icon.med { background: rgba(139,92,246,0.15); }
+  .case-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .case-title {
+    font-size: 16px; font-weight: 700; color: var(--text);
+  }
+  .case-body { padding: 24px 28px; }
+  .case-row { margin-bottom: 16px; }
+  .case-row-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px;
+  }
+  .case-row-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+  .case-result {
+    margin-top: 20px; padding: 14px 18px; border-radius: 10px;
+    background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.15);
+    font-size: 14px; font-weight: 600; color: var(--blue-light);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .case-result::before { content: '↑'; font-size: 16px; }
+  .case-card.fin .case-result { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.15); color: #34D399; }
+  .case-card.fin .case-result::before { color: #34D399; }
+  .case-card.med .case-result { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.15); color: #A78BFA; }
+  .case-card.med .case-result::before { color: #A78BFA; }
+
+  /* ── WHY VEYCRON ── */
+  #why { background: var(--bg); }
+  .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 64px; }
+  .why-card {
+    padding: 40px 36px; border-radius: 20px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px); position: relative; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .why-card:hover { border-color: rgba(37,99,235,0.3); transform: translateY(-3px); }
+  .why-card::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(37,99,235,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .why-number {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--blue-light); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .why-number::before {
+    content: ''; display: block; width: 20px; height: 1px;
+    background: var(--blue-light);
+  }
+  .why-card h3 {
+    font-size: 22px; font-weight: 800; margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .why-card p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg2); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: start; margin-top: 64px;
+  }
+  .contact-left h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; margin-bottom: 16px; }
+  .contact-left p { font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-bottom: 32px; }
+  .contact-info { display: flex; flex-direction: column; gap: 16px; }
+  .contact-info-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px; border-radius: 12px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    font-size: 14px; color: var(--text-muted); text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-info-item:hover { border-color: rgba(37,99,235,0.4); color: var(--text); }
+  .contact-info-item .icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(37,99,235,0.1); display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; font-size: 16px;
+  }
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.03em; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 10px; padding: 13px 16px;
+    font-size: 15px; color: var(--text);
+    font-family: inherit; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--text-dim); }
+  .form-group select option { background: #1a1a2e; color: var(--text); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-submit { margin-top: 8px; }
+  .form-note { font-size: 12px; color: var(--text-dim); margin-top: 10px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+  }
+  .footer-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-size: 16px; font-weight: 900; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #fff 0%, var(--cyan-light) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .footer-links {
+    display: flex; gap: 28px; list-style: none; flex-wrap: wrap;
+  }
+  .footer-links a {
+    font-size: 13px; color: var(--text-dim); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text-muted); }
+  .footer-copy { font-size: 13px; color: var(--text-dim); }
+
+  /* ── DIVIDER LINE ── */
+  .section-line {
+    width: 64px; height: 2px; margin-bottom: 48px;
+    background: linear-gradient(90deg, var(--blue), transparent);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-cta.desktop { display: none; }
+    .hamburger { display: flex; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-item:nth-child(2)::after { display: none; }
+    .industries-grid { grid-template-columns: repeat(2, 1fr); }
+    .cases-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 80px 0; }
+    .industries-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0; }
+    .stat-item::after { display: none !important; }
+    .stat-item { padding: 32px 16px; }
+    .hero-ctas { flex-direction: column; }
+    .hero-ctas .btn { text-align: center; justify-content: center; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ NAVIGATION ══════════════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">Veycron</a>
+    <ul class="nav-links">
+      <li><a href="#industries">Branchen</a></li>
+      <li><a href="#tech">Technologie</a></li>
+      <li><a href="#cases">Projekte</a></li>
+      <li><a href="#why">Über uns</a></li>
+      <li><a href="#contact" class="btn btn-primary nav-cta desktop">Zusammenarbeit anfragen</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#industries" class="mobile-link">Branchen</a>
+  <a href="#tech" class="mobile-link">Technologie</a>
+  <a href="#cases" class="mobile-link">Projekte</a>
+  <a href="#why" class="mobile-link">Über uns</a>
+  <a href="#contact" class="btn btn-primary">Zusammenarbeit anfragen</a>
+</div>
+
+<!-- ══ HERO ════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Enterprise Technology — Worldwide</div>
+    <h1 class="hero-title">
+      Technologie, die<br>
+      <span class="line-blue">komplexe Probleme</span><br>
+      nachhaltig löst.
+    </h1>
+    <p class="hero-sub">
+      Veycron entwickelt maßgeschneiderte KI-Systeme, skalierbare Cloud-Infrastruktur und
+      branchenspezifische Softwarelösungen — für Unternehmen, die keine Kompromisse eingehen.
+    </p>
+    <div class="hero-ctas">
+      <a href="#industries" class="btn btn-primary">Unsere Lösungen</a>
+      <a href="#contact" class="btn btn-secondary">Kontakt aufnehmen</a>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ STATS ═══════════════════════════════════════════════════════════ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-number" data-count="50">0</div>
+        <div class="stat-label">Abgeschlossene Projekte</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-number">6</div>
+        <div class="stat-label">Branchen weltweit</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-number">10+</div>
+        <div class="stat-label">Jahre Expertise im Team</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Kontinente</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INDUSTRIES ══════════════════════════════════════════════════════ -->
+<section id="industries">
+  <div class="container">
+    <div class="industries-header">
+      <div class="section-label">Branchen</div>
+      <h2 class="section-title reveal">Wo Veycron<br>den Unterschied macht.</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        Wir entwickeln keine Standardlösungen. Jede Branche hat eigene Anforderungen,
+        Regulierungen und Dynamiken — unsere Lösungen werden exakt dafür gebaut.
+      </p>
+    </div>
+    <div class="industries-grid">
+
+      <div class="industry-card reveal">
+        <div class="industry-icon">🤖</div>
+        <h3>KI-Systeme & Intelligente Agenten</h3>
+        <p>Wir entwickeln firmeninterne KI-Lösungen, die auf den eigenen Daten trainiert und in bestehende Prozesse integriert werden. Von autonomen Agenten bis hin zu spezialisierten Analyse-Systemen — präzise, skalierbar, DSGVO-konform.</p>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-1">
+        <div class="industry-icon">☁️</div>
+        <h3>Cloud-Infrastruktur & Architektur</h3>
+        <p>Hochverfügbare, sichere Cloud-Architekturen auf AWS, Azure und GCP. Wir entwerfen und implementieren Infrastrukturen, die mit den Anforderungen des Unternehmens wachsen — von der Containerisierung bis zum Zero-Downtime-Deployment.</p>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-2">
+        <div class="industry-icon">🚗</div>
+        <h3>Automotive Software</h3>
+        <p>Embedded Systems, vernetzte Fahrzeugplattformen und KI-gestützte Diagnosesysteme für die Automobilindustrie. Unsere Lösungen erfüllen die höchsten Sicherheits- und Qualitätsstandards — von AUTOSAR bis OTA-Updates.</p>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-3">
+        <div class="industry-icon">🏥</div>
+        <h3>Medizintechnik & Health IT</h3>
+        <p>Regulierungskonforme Softwarelösungen nach MDR und DSGVO für Medizingeräte, klinische Informationssysteme und KI-gestützte Diagnostik. Zertifizierungsfähig von Beginn an.</p>
+      </div>
+
+      <div class="industry-card reveal">
+        <div class="industry-icon">📊</div>
+        <h3>Finance & Investment Tech</h3>
+        <p>Datenplattformen, automatisierte Analyse-Engines und KI-Modelle für Finanz- und Investmentprozesse. Echtzeit-Risikoanalyse, automatisiertes Reporting und intelligente Entscheidungsunterstützung.</p>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-1">
+        <div class="industry-icon">⚙️</div>
+        <h3>Enterprise Softwareentwicklung</h3>
+        <p>Komplexe Backend-Systeme, skalierbare APIs und Microservice-Architekturen für Unternehmen mit hohen Anforderungen an Performance, Sicherheit und Wartbarkeit. Built to last.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ TECH STACK ══════════════════════════════════════════════════════ -->
+<section id="tech">
+  <div class="container">
+    <div class="tech-header">
+      <div class="section-label">Technologie</div>
+      <h2 class="section-title reveal">Der Stack hinter<br>unseren Lösungen.</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        Wir setzen auf bewährte, zukunftssichere Technologien — kombiniert mit den
+        leistungsfähigsten KI-Frameworks der Industrie.
+      </p>
+    </div>
+    <div class="tech-grid reveal">
+      <span class="tech-badge"><span class="dot"></span>Python</span>
+      <span class="tech-badge"><span class="dot"></span>LangChain</span>
+      <span class="tech-badge"><span class="dot"></span>LangGraph</span>
+      <span class="tech-badge"><span class="dot"></span>PyTorch</span>
+      <span class="tech-badge"><span class="dot"></span>Hugging Face</span>
+      <span class="tech-badge blue"><span class="dot"></span>TypeScript</span>
+      <span class="tech-badge blue"><span class="dot"></span>Rust</span>
+      <span class="tech-badge blue"><span class="dot"></span>Go</span>
+      <span class="tech-badge blue"><span class="dot"></span>C++</span>
+      <span class="tech-badge green"><span class="dot"></span>Kubernetes</span>
+      <span class="tech-badge green"><span class="dot"></span>Docker</span>
+      <span class="tech-badge green"><span class="dot"></span>Terraform</span>
+      <span class="tech-badge green"><span class="dot"></span>AWS</span>
+      <span class="tech-badge green"><span class="dot"></span>Azure</span>
+      <span class="tech-badge green"><span class="dot"></span>Google Cloud</span>
+      <span class="tech-badge purple"><span class="dot"></span>PostgreSQL</span>
+      <span class="tech-badge purple"><span class="dot"></span>Redis</span>
+      <span class="tech-badge purple"><span class="dot"></span>ClickHouse</span>
+      <span class="tech-badge purple"><span class="dot"></span>Kafka</span>
+      <span class="tech-badge orange"><span class="dot"></span>RAG / Vector DB</span>
+      <span class="tech-badge orange"><span class="dot"></span>GPT-4 / Claude</span>
+      <span class="tech-badge orange"><span class="dot"></span>Fine-Tuning</span>
+      <span class="tech-badge orange"><span class="dot"></span>MLOps</span>
+      <span class="tech-badge"><span class="dot"></span>AUTOSAR</span>
+      <span class="tech-badge"><span class="dot"></span>FHIR / HL7</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CASE STUDIES ════════════════════════════════════════════════════ -->
+<section id="cases">
+  <div class="container">
+    <div class="cases-header">
+      <div class="section-label">Referenzprojekte</div>
+      <h2 class="section-title reveal">Komplexe Herausforderungen.<br>Messbare Ergebnisse.</h2>
+      <p class="section-sub reveal reveal-delay-1">
+        Ein Einblick in repräsentative Projekte, die zeigen, wie Veycron technologische
+        Tiefe in konkreten Geschäftserfolg übersetzt.
+      </p>
+    </div>
+    <div class="cases-grid">
+
+      <div class="case-card reveal">
+        <div class="case-header">
+          <div class="case-icon auto">🚘</div>
+          <div>
+            <div class="case-tag">Automotive</div>
+            <div class="case-title">KI-Diagnosesystem für Fahrzeugflotten</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-row">
+            <div class="case-row-label">Ausgangslage</div>
+            <div class="case-row-text">Ein Flottendienstleister mit 8.000+ Fahrzeugen verwaltete Wartungsintervalle manuell. Fehler wurden erst nach Ausfall erkannt — mit hohen Kosten und Ausfallzeiten.</div>
+          </div>
+          <div class="case-row">
+            <div class="case-row-label">Lösung</div>
+            <div class="case-row-text">Veycron entwickelte ein KI-gestütztes Echtzeit-Diagnosesystem, das Sensordaten aus CAN-Bus, OBD-II und Telematik auswertet und Anomalien Wochen vor einem Ausfall erkennt.</div>
+          </div>
+          <div class="case-result">40 % schnellere Diagnosezyklen, 60 % weniger ungeplante Ausfälle</div>
+        </div>
+      </div>
+
+      <div class="case-card fin reveal reveal-delay-1">
+        <div class="case-header">
+          <div class="case-icon fin">📈</div>
+          <div>
+            <div class="case-tag">Finance</div>
+            <div class="case-title">Automatisierte Investment-Analyse-Plattform</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-row">
+            <div class="case-row-label">Ausgangslage</div>
+            <div class="case-row-text">Ein mittelgroßes Investmenthaus analysierte Portfoliorisiken mit Excel-Modellen und wöchentlichen Reports — zu langsam für volatile Märkte und anfällig für manuelle Fehler.</div>
+          </div>
+          <div class="case-row">
+            <div class="case-row-label">Lösung</div>
+            <div class="case-row-text">Eine vollautomatische Analyse-Engine mit Echtzeit-Daten aus 15 Quellen, KI-basierter Risikomodellierung und automatischem Report-Generierungssystem für Compliance und Management.</div>
+          </div>
+          <div class="case-result">Analysezeit von 3 Tagen auf 4 Minuten reduziert</div>
+        </div>
+      </div>
+
+      <div class="case-card med reveal reveal-delay-2">
+        <div class="case-header">
+          <div class="case-icon med">🔬</div>
+          <div>
+            <div class="case-tag">Medizin</div>
+            <div class="case-title">DSGVO-konforme KI-Auswertung medizinischer Daten</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-row">
+            <div class="case-row-label">Ausgangslage</div>
+            <div class="case-row-text">Ein Universitätsklinikum wollte klinische Studiendaten automatisiert auswerten, scheiterte aber an DSGVO-Anforderungen und fehlender KI-Infrastruktur im medizinischen Kontext.</div>
+          </div>
+          <div class="case-row">
+            <div class="case-row-label">Lösung</div>
+            <div class="case-row-text">Veycron implementierte ein On-Premise-KI-System mit vollständiger Datenisolierung, pseudonymisierten Verarbeitungspipelines und einem Audit-Trail, der MDR-Konformität sicherstellt.</div>
+          </div>
+          <div class="case-result">100 % DSGVO-konform — 3× schnellere Studienauswertung</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY VEYCRON ══════════════════════════════════════════════════════ -->
+<section id="why">
+  <div class="container">
+    <div class="section-label">Warum Veycron</div>
+    <h2 class="section-title reveal">Technologische Exzellenz<br>als Grundprinzip.</h2>
+    <p class="section-sub reveal reveal-delay-1">
+      Wir sind kein Systemintegrator, der fertige Pakete verschnürt.
+      Wir sind Ingenieure, die verstehen, was unter der Oberfläche passiert.
+    </p>
+    <div class="why-grid">
+
+      <div class="why-card reveal">
+        <div class="why-number">01</div>
+        <h3>Technologische Tiefe</h3>
+        <p>Veycron arbeitet auf Systemebene — nicht auf Konfigurationsebene. Unsere Teams verstehen Compiler, Netzwerkprotokolle, ML-Architekturen und Hardwarenahe Entwicklung. Das erlaubt Lösungen, die kein Standardprodukt bieten kann.</p>
+      </div>
+
+      <div class="why-card reveal reveal-delay-1">
+        <div class="why-number">02</div>
+        <h3>Branchenexpertise</h3>
+        <p>Automotive-Software hat andere Anforderungen als Health IT, die sich wiederum fundamental von Finance-Plattformen unterscheiden. Wir bringen nicht nur Engineering mit — sondern echte Kenntnis der jeweiligen Regulierung, Normen und Prozesse.</p>
+      </div>
+
+      <div class="why-card reveal">
+        <div class="why-number">03</div>
+        <h3>Skalierbarkeit von Tag&nbsp;1</h3>
+        <p>Was wir bauen, wächst mit dem Unternehmen. Architekturentscheidungen treffen wir so, dass eine Lösung, die heute 100 Nutzer bedient, morgen 100.000 bedienen kann — ohne Systemwechsel, ohne Neuimplementierung.</p>
+      </div>
+
+      <div class="why-card reveal reveal-delay-1">
+        <div class="why-number">04</div>
+        <h3>Compliance & Sicherheit</h3>
+        <p>Security ist kein nachträgliches Feature. DSGVO, ISO 27001, MDR, SOC 2 — Compliance-Anforderungen sind bei Veycron Teil des Architekturprozesses. Lösungen, die prüfungssicher und auditfähig sind — von Anfang an.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ═════════════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">Kontakt</div>
+    <div class="contact-grid">
+      <div class="contact-left">
+        <h2 class="reveal">Bereit für den<br>nächsten Schritt?</h2>
+        <p class="reveal reveal-delay-1">
+          Ob strategische Beratung, konkrete Projektanfrage oder technische Evaluation —
+          unser Team antwortet innerhalb von 24 Stunden.
+          Kein unverbindliches Verkaufsgespräch. Substanz von der ersten Nachricht an.
+        </p>
+        <div class="contact-info reveal reveal-delay-2">
+          <a href="mailto:[EMAIL]" class="contact-info-item">
+            <div class="icon">✉️</div>
+            <div>[EMAIL]</div>
+          </a>
+          <a href="#" class="contact-info-item">
+            <div class="icon">💼</div>
+            <div>LinkedIn — Veycron</div>
+          </a>
+          <div class="contact-info-item" style="cursor:default;">
+            <div class="icon">🌍</div>
+            <div>Deutschland · Europa · Weltweit</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-right reveal reveal-delay-1">
+        <form class="contact-form" onsubmit="return false;">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">Vorname</label>
+              <input type="text" id="fname" placeholder="Max" autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label for="lname">Nachname</label>
+              <input type="text" id="lname" placeholder="Mustermann" autocomplete="family-name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="company">Unternehmen</label>
+            <input type="text" id="company" placeholder="Mustermann GmbH" autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label for="email">E-Mail-Adresse</label>
+            <input type="email" id="email" placeholder="max@mustermann.de" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="topic">Thema</label>
+            <select id="topic">
+              <option value="" disabled selected>Bitte auswählen</option>
+              <option>KI-Systeme & Agenten</option>
+              <option>Cloud-Infrastruktur</option>
+              <option>Automotive Software</option>
+              <option>Medizintechnik & Health IT</option>
+              <option>Finance & Investment Tech</option>
+              <option>Enterprise Softwareentwicklung</option>
+              <option>Allgemeine Anfrage</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Kurze Beschreibung</label>
+            <textarea id="message" placeholder="Beschreiben Sie kurz Ihr Vorhaben oder Ihre Herausforderung …"></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+              Anfrage senden
+            </button>
+          </div>
+          <p class="form-note">Mit dem Absenden stimmen Sie unserer Datenschutzerklärung zu. Keine Weitergabe an Dritte.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">Veycron</div>
+      <ul class="footer-links">
+        <li><a href="#">Impressum</a></li>
+        <li><a href="#">Datenschutz</a></li>
+        <li><a href="#">AGB</a></li>
+      </ul>
+      <div class="footer-copy">© 2025 Veycron. Alle Rechte vorbehalten.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── PARTICLE CANVAS ──────────────────────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], lines = [];
+  const COUNT = window.innerWidth < 640 ? 50 : 100;
+  const BLUE = [37, 99, 235];
+  const CYAN = [6, 182, 212];
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  function Particle() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.r = Math.random() * 1.5 + 0.3;
+    this.color = Math.random() > 0.5 ? BLUE : CYAN;
+    this.alpha = Math.random() * 0.5 + 0.1;
+  }
+
+  Particle.prototype.update = function() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0) this.x = W;
+    if (this.x > W) this.x = 0;
+    if (this.y < 0) this.y = H;
+    if (this.y > H) this.y = 0;
+  };
+
+  function init() {
+    particles = [];
+    for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const MAX_DIST = 140;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.update();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color.join(',')},${p.alpha})`;
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < MAX_DIST) {
+          const a = (1 - d / MAX_DIST) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(37,99,235,${a})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', function() { resize(); init(); });
+  resize();
+  init();
+  draw();
+})();
+
+/* ── NAVBAR SCROLL ────────────────────────────────────────────────── */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', function() {
+  navbar.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* ── HAMBURGER MENU ───────────────────────────────────────────────── */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', function() {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+});
+
+document.querySelectorAll('.mobile-link, .mobile-menu .btn').forEach(function(link) {
+  link.addEventListener('click', function() {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-label', 'Menü öffnen');
+  });
+});
+
+/* ── SCROLL REVEAL ────────────────────────────────────────────────── */
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(function(el) { observer.observe(el); });
+
+/* ── COUNTER ANIMATION ────────────────────────────────────────────── */
+function animateCount(el, target, suffix) {
+  let current = 0;
+  const duration = 1600;
+  const step = 16;
+  const steps = duration / step;
+  const increment = target / steps;
+  const timer = setInterval(function() {
+    current += increment;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = Math.floor(current) + suffix;
+  }, step);
+}
+
+const statObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const raw = el.getAttribute('data-count');
+      if (raw) {
+        const suffix = el.textContent.replace(/\d/g, '').trim();
+        animateCount(el, parseInt(raw), suffix || '+');
+      }
+      statObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-number[data-count]').forEach(function(el) {
+  statObserver.observe(el);
+});
+
+/* ── SMOOTH NAV SCROLL ────────────────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    const offset = document.getElementById('navbar').offsetHeight;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  });
+});
+
+/* ── FORM SUBMIT FEEDBACK ─────────────────────────────────────────── */
+document.querySelector('.contact-form').addEventListener('submit', function(e) {
+  const btn = this.querySelector('button[type="submit"]');
+  const orig = btn.textContent;
+  btn.textContent = '✓ Anfrage gesendet';
+  btn.style.background = '#059669';
+  btn.style.boxShadow = '0 0 24px rgba(5,150,105,0.4)';
+  btn.disabled = true;
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.style.background = '';
+    btn.style.boxShadow = '';
+    btn.disabled = false;
+  }, 3000);
+});
+</script>
+
+</body>
+</html>
