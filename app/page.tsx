@@ -183,7 +183,8 @@ function BentoCard({
   return (
     <div
       onClick={onClick}
-      className={`bento-card group relative cursor-pointer overflow-hidden rounded-2xl border border-zinc-200 bg-white p-7 flex flex-col gap-4${wide ? ' lg:col-span-4' : ' lg:col-span-2'}`}
+      className={`bento-card group relative cursor-pointer overflow-hidden rounded-2xl p-7 flex flex-col gap-4${wide ? ' lg:col-span-4' : ' lg:col-span-2'}`}
+      style={{ background: '#111113', border: '1px solid #27272a' }}
     >
       {/* accent line */}
       <div className="h-0.5 w-10 rounded-full" style={{ background: accent }} />
@@ -193,8 +194,8 @@ function BentoCard({
         {title.slice(0, 1)}
       </div>
       <div className="flex-1">
-        <h3 className="text-lg font-bold text-zinc-950 leading-snug">{title}</h3>
-        <p className="mt-2 text-sm text-zinc-500 leading-relaxed">{desc}</p>
+        <h3 className="text-lg font-bold leading-snug" style={{ color: '#fafafa' }}>{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed" style={{ color: '#71717a' }}>{desc}</p>
       </div>
       <button className="flex items-center gap-1.5 text-sm font-semibold transition-colors"
         style={{ color: accent }}
@@ -203,7 +204,7 @@ function BentoCard({
         <span className="transition-transform group-hover:translate-x-1 inline-block">→</span>
       </button>
       {/* hover glow */}
-      <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full opacity-0 blur-2xl transition-opacity group-hover:opacity-15"
+      <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full opacity-0 blur-2xl transition-opacity group-hover:opacity-20"
         style={{ background: accent }} />
     </div>
   );
@@ -395,14 +396,14 @@ export default function LandingPage() {
       </div>
 
       {/* ── FEATURES BENTO ──────────────────────────────────────────── */}
-      <section id="features" className="bg-white py-24 text-zinc-950">
+      <section id="features" className="py-24" style={{ background: '#09090b' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-14">
-            <div className="mb-3 text-xs font-bold uppercase tracking-widest text-violet-600">Kompetenzen</div>
-            <h2 className="font-black tracking-tight text-zinc-950" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.03em' }}>
+            <div className="mb-3 text-xs font-bold uppercase tracking-widest" style={{ color: '#7c3aed' }}>Kompetenzen</div>
+            <h2 className="font-black tracking-tight text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.03em' }}>
               Klar. Technisch. Wirksam.
             </h2>
-            <p className="mt-4 max-w-lg text-zinc-500" style={{ fontSize: '1.1rem' }}>
+            <p className="mt-4 max-w-lg" style={{ fontSize: '1.1rem', color: '#71717a' }}>
               Von Cloud-Fundamenten bis GenAI-Anwendungen — Kompetenzen, die Ergebnisse liefern.
             </p>
           </div>
@@ -477,14 +478,14 @@ export default function LandingPage() {
       </section>
 
       {/* ── SOLUTIONS ───────────────────────────────────────────────── */}
-      <section id="solutions" className="bg-white py-24 text-zinc-950">
+      <section id="solutions" className="py-24" style={{ background: '#111113' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 max-w-2xl">
-            <div className="mb-3 text-xs font-bold uppercase tracking-widest text-violet-600">Lösungen</div>
-            <h2 className="font-black tracking-tight" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', letterSpacing: '-0.02em' }}>
+            <div className="mb-3 text-xs font-bold uppercase tracking-widest" style={{ color: '#7c3aed' }}>Lösungen</div>
+            <h2 className="font-black tracking-tight text-white" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', letterSpacing: '-0.02em' }}>
               End-to-End. Strategie bis Betrieb.
             </h2>
-            <p className="mt-3 text-zinc-500">Mit klaren Metriken: Time-to-Market, Zuverlässigkeit, Kosten, Risiko.</p>
+            <p className="mt-3" style={{ color: '#71717a' }}>Mit klaren Metriken: Time-to-Market, Zuverlässigkeit, Kosten, Risiko.</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
@@ -495,10 +496,10 @@ export default function LandingPage() {
               ["SRE & DevOps", "SLIs/SLOs, Error Budgets, Incident Response, Release-Automatisierung.", "#ec4899"],
               ["Security by Design", "Threat Modeling, Shift-Left, Secrets/KMS, DSGVO, Privacy ML.", "#f59e0b"],
             ].map(([t, d, c]) => (
-              <div key={t} className="rounded-2xl border border-zinc-200 p-6 transition hover:-translate-y-1 hover:shadow-lg hover:border-zinc-300">
+              <div key={t} className="rounded-2xl p-6 transition hover:-translate-y-1" style={{ background: '#1c1c1f', border: '1px solid #27272a' }}>
                 <div className="mb-4 h-0.5 w-8 rounded-full" style={{ background: c }} />
-                <h3 className="font-bold text-zinc-950">{t}</h3>
-                <p className="mt-2 text-sm text-zinc-500 leading-relaxed">{d}</p>
+                <h3 className="font-bold text-white">{t}</h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: '#71717a' }}>{d}</p>
               </div>
             ))}
           </div>
