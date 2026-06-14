@@ -492,6 +492,139 @@
     background: linear-gradient(90deg, var(--blue), transparent);
   }
 
+  /* ── INDUSTRY CARD MEHR ERFAHREN ── */
+  .industry-card { cursor: pointer; }
+  .industry-card .mehr-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 18px; font-size: 13px; font-weight: 600;
+    color: var(--blue-light); letter-spacing: 0.02em;
+    transition: gap 0.2s, color 0.2s;
+    background: none; border: none; cursor: pointer; padding: 0;
+    font-family: inherit;
+  }
+  .industry-card .mehr-btn:hover { gap: 10px; color: var(--cyan); }
+  .industry-card .mehr-btn .arrow { font-size: 14px; transition: transform 0.2s; }
+  .industry-card:hover .mehr-btn .arrow { transform: translateX(3px); }
+
+  /* ── MODAL DRAWER ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px); z-index: 2000;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(760px, 100vw);
+    background: #0D0D1A; border-left: 1px solid var(--border);
+    z-index: 2001; overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    display: flex; flex-direction: column;
+  }
+  .modal-drawer.open { transform: translateX(0); }
+
+  .modal-close {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 32px; background: rgba(13,13,26,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+  }
+  .modal-close-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    color: var(--text-muted); font-size: 18px; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+  .modal-breadcrumb {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .modal-breadcrumb span { color: var(--cyan); }
+
+  .modal-body { padding: 48px 40px 64px; }
+  @media (max-width: 640px) { .modal-body { padding: 32px 24px 48px; } .modal-close { padding: 16px 24px; } }
+
+  .modal-hero-icon {
+    width: 72px; height: 72px; border-radius: 18px; margin-bottom: 28px;
+    background: linear-gradient(135deg, rgba(37,99,235,0.25), rgba(6,182,212,0.12));
+    border: 1px solid rgba(37,99,235,0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 34px;
+  }
+  .modal-title {
+    font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 900;
+    letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 12px;
+  }
+  .modal-subtitle {
+    font-size: 16px; color: var(--cyan); font-weight: 600;
+    margin-bottom: 24px; letter-spacing: 0.01em;
+  }
+  .modal-intro {
+    font-size: 16px; color: var(--text-muted); line-height: 1.75;
+    margin-bottom: 48px; border-left: 2px solid var(--blue);
+    padding-left: 20px;
+  }
+  .modal-section { margin-bottom: 44px; }
+  .modal-section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--cyan); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .modal-section-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .modal-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .modal-list li {
+    display: flex; gap: 12px; font-size: 15px; color: var(--text-muted);
+    line-height: 1.6; align-items: flex-start;
+  }
+  .modal-list li::before {
+    content: ''; display: block; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--blue-light);
+    margin-top: 8px; flex-shrink: 0;
+  }
+  .modal-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 480px) { .modal-cards { grid-template-columns: 1fr; } }
+  .modal-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 20px;
+  }
+  .modal-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .modal-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .modal-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .modal-badge {
+    padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2);
+    color: var(--blue-light);
+  }
+  .modal-results {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  @media (max-width: 480px) { .modal-results { grid-template-columns: repeat(2, 1fr); } }
+  .modal-result-item {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 20px; text-align: center;
+  }
+  .modal-result-num {
+    font-size: 1.8rem; font-weight: 900; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--blue-light), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; line-height: 1; margin-bottom: 6px;
+  }
+  .modal-result-label { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .modal-cta {
+    margin-top: 48px; padding: 32px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(6,182,212,0.06));
+    border: 1px solid rgba(37,99,235,0.2); text-align: center;
+  }
+  .modal-cta p { font-size: 16px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+  .modal-cta .btn { margin: 0 auto; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     .nav-links { display: none; }
@@ -607,40 +740,46 @@
     </div>
     <div class="industries-grid">
 
-      <div class="industry-card reveal">
+      <div class="industry-card reveal" onclick="openModal('ki')">
         <div class="industry-icon">🤖</div>
         <h3>KI-Systeme & Intelligente Agenten</h3>
         <p>Wir entwickeln firmeninterne KI-Lösungen, die auf den eigenen Daten trainiert und in bestehende Prozesse integriert werden. Von autonomen Agenten bis hin zu spezialisierten Analyse-Systemen — präzise, skalierbar, DSGVO-konform.</p>
+        <button class="mehr-btn" onclick="event.stopPropagation();openModal('ki')">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-1">
+      <div class="industry-card reveal reveal-delay-1" onclick="openModal('cloud')">
         <div class="industry-icon">☁️</div>
         <h3>Cloud-Infrastruktur & Architektur</h3>
         <p>Hochverfügbare, sichere Cloud-Architekturen auf AWS, Azure und GCP. Wir entwerfen und implementieren Infrastrukturen, die mit den Anforderungen des Unternehmens wachsen — von der Containerisierung bis zum Zero-Downtime-Deployment.</p>
+        <button class="mehr-btn" onclick="event.stopPropagation();openModal('cloud')">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-2">
+      <div class="industry-card reveal reveal-delay-2" onclick="openModal('auto')">
         <div class="industry-icon">🚗</div>
         <h3>Automotive Software</h3>
         <p>Embedded Systems, vernetzte Fahrzeugplattformen und KI-gestützte Diagnosesysteme für die Automobilindustrie. Unsere Lösungen erfüllen die höchsten Sicherheits- und Qualitätsstandards — von AUTOSAR bis OTA-Updates.</p>
+        <button class="mehr-btn" onclick="event.stopPropagation();openModal('auto')">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-3">
+      <div class="industry-card reveal reveal-delay-3" onclick="openModal('med')">
         <div class="industry-icon">🏥</div>
         <h3>Medizintechnik & Health IT</h3>
         <p>Regulierungskonforme Softwarelösungen nach MDR und DSGVO für Medizingeräte, klinische Informationssysteme und KI-gestützte Diagnostik. Zertifizierungsfähig von Beginn an.</p>
+        <button class="mehr-btn" onclick="event.stopPropagation();openModal('med')">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal">
+      <div class="industry-card reveal" onclick="openModal('fin')">
         <div class="industry-icon">📊</div>
         <h3>Finance & Investment Tech</h3>
         <p>Datenplattformen, automatisierte Analyse-Engines und KI-Modelle für Finanz- und Investmentprozesse. Echtzeit-Risikoanalyse, automatisiertes Reporting und intelligente Entscheidungsunterstützung.</p>
+        <button class="mehr-btn" onclick="event.stopPropagation();openModal('fin')">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-1">
+      <div class="industry-card reveal reveal-delay-1" onclick="openModal('ent')">
         <div class="industry-icon">⚙️</div>
         <h3>Enterprise Softwareentwicklung</h3>
         <p>Komplexe Backend-Systeme, skalierbare APIs und Microservice-Architekturen für Unternehmen mit hohen Anforderungen an Performance, Sicherheit und Wartbarkeit. Built to last.</p>
+        <button class="mehr-btn" onclick="event.stopPropagation();openModal('ent')">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
     </div>
@@ -883,6 +1022,552 @@
   </div>
 </section>
 
+<!-- ══ MODAL OVERLAY ════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
+<!-- ══ MODAL: KI-SYSTEME ════════════════════════════════════════════════ -->
+<div class="modal-drawer" id="modal-ki" role="dialog" aria-modal="true" aria-label="KI-Systeme & Intelligente Agenten">
+  <div class="modal-close">
+    <div class="modal-breadcrumb">Veycron / <span>KI-Systeme</span></div>
+    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-hero-icon">🤖</div>
+    <h2 class="modal-title">KI-Systeme &amp; Intelligente Agenten</h2>
+    <div class="modal-subtitle">Ihre Daten. Ihre KI. Ihr Wettbewerbsvorteil.</div>
+    <p class="modal-intro">
+      Veycron entwickelt maßgeschneiderte KI-Systeme, die nicht auf generischen Modellen basieren,
+      sondern auf dem Wissen Ihres Unternehmens. Das Ergebnis: eine KI, die Ihre Sprache spricht,
+      Ihre Prozesse versteht und messbare Ergebnisse liefert — ohne Datenweitergabe an Dritte.
+    </p>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Was wir konkret liefern</div>
+      <div class="modal-cards">
+        <div class="modal-card">
+          <h4>Firmeninterne KI (RAG-Systeme)</h4>
+          <p>KI-Assistent auf Basis Ihrer Dokumente, Handbücher, Wissensdatenbank und ERP-Daten. Kein Halluzinieren, nur belegbare Antworten aus Ihren eigenen Quellen.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Autonome KI-Agenten</h4>
+          <p>Agenten, die eigenständig Aufgaben erledigen: E-Mails klassifizieren, Angebote vorqualifizieren, Berichte erstellen oder Workflows automatisch anstoßen.</p>
+        </div>
+        <div class="modal-card">
+          <h4>KI-gestützte Dokumentenanalyse</h4>
+          <p>Verträge, Rechnungen, technische Zeichnungen oder medizinische Befunde — automatisch erfasst, kategorisiert und ausgewertet in Sekunden statt Stunden.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Intelligente Suchsysteme</h4>
+          <p>Semantische Suche über tausende interne Dokumente. Mitarbeiter finden in Sekunden, was sie brauchen — ohne Aktenordner oder veraltete Wikis.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Anwendungsfälle</div>
+      <ul class="modal-list">
+        <li>Automatisierter Kundenservice-Bot, der 80 % der Anfragen ohne menschliches Eingreifen beantwortet</li>
+        <li>Interne Wissens-KI für Servicetechniker, die sofort auf technische Dokumentation zugreift</li>
+        <li>KI-Assistent für Juristen und Compliance-Teams zur automatischen Vertragsprüfung</li>
+        <li>Predictive Analytics: Nachfrageprognosen, Lageroptimierung, Ausfallvorhersagen</li>
+        <li>Automatisierte Qualitätskontrolle in der Produktion mittels Computer Vision</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Unsere KI-Technologien</div>
+      <div class="modal-badges">
+        <span class="modal-badge">LangChain</span>
+        <span class="modal-badge">LangGraph</span>
+        <span class="modal-badge">RAG / Vector DB</span>
+        <span class="modal-badge">GPT-4 / Claude</span>
+        <span class="modal-badge">Fine-Tuning</span>
+        <span class="modal-badge">PyTorch</span>
+        <span class="modal-badge">Hugging Face</span>
+        <span class="modal-badge">Pinecone / Weaviate</span>
+        <span class="modal-badge">MLOps / Monitoring</span>
+        <span class="modal-badge">On-Premise möglich</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Ergebnisse unserer Kunden</div>
+      <div class="modal-results">
+        <div class="modal-result-item">
+          <div class="modal-result-num">80%</div>
+          <div class="modal-result-label">weniger manuelle Bearbeitungszeit</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">24/7</div>
+          <div class="modal-result-label">Verfügbarkeit ohne Personalkosten</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">6–10 Wo.</div>
+          <div class="modal-result-label">bis zum ersten produktiven Einsatz</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-cta">
+      <p>Bereit, die erste KI in Ihrem Unternehmen einzuführen? Wir zeigen Ihnen in einem kostenlosen 45-minütigen Gespräch, welches Potenzial in Ihren Daten steckt.</p>
+      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Kostenloses Erstgespräch anfragen →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: CLOUD ══════════════════════════════════════════════════════ -->
+<div class="modal-drawer" id="modal-cloud" role="dialog" aria-modal="true" aria-label="Cloud-Infrastruktur">
+  <div class="modal-close">
+    <div class="modal-breadcrumb">Veycron / <span>Cloud-Infrastruktur</span></div>
+    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-hero-icon">☁️</div>
+    <h2 class="modal-title">Cloud-Infrastruktur &amp; Architektur</h2>
+    <div class="modal-subtitle">Skalierbar. Sicher. Immer verfügbar.</div>
+    <p class="modal-intro">
+      Eine Cloud-Infrastruktur ist mehr als Server in Rechenzentren. Veycron entwirft Architekturen,
+      die unter Last stabil bleiben, automatisch skalieren, ausfallsicher sind und
+      dabei die Betriebskosten optimieren — auf AWS, Azure und GCP.
+    </p>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Was wir konkret liefern</div>
+      <div class="modal-cards">
+        <div class="modal-card">
+          <h4>Cloud-Architektur & Design</h4>
+          <p>Technologie-neutrale Bewertung, welche Cloud-Plattform zu Ihren Anforderungen passt. Aufbau einer robusten, mehrschichtigen Architektur mit klaren Skalierungspfaden.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Migration & Modernisierung</h4>
+          <p>Migration bestehender On-Premise-Systeme in die Cloud — ohne Betriebsunterbrechung. Lift-and-Shift oder vollständige Modernisierung mit containerisierten Microservices.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Kubernetes & Container-Plattformen</h4>
+          <p>Aufbau und Betrieb von Kubernetes-Clustern für hochverfügbare Anwendungen. CI/CD-Pipelines, automatische Deployments, Zero-Downtime-Updates.</p>
+        </div>
+        <div class="modal-card">
+          <h4>DevSecOps & Infrastruktur as Code</h4>
+          <p>Vollständig automatisierte Infrastruktur mit Terraform und Ansible. Security by Design: Netzwerksegmentierung, IAM-Policies, Secrets-Management von Beginn an.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Einsatzszenarien</div>
+      <ul class="modal-list">
+        <li>Aufbau einer produktionsreifen Cloud-Infrastruktur für ein wachsendes SaaS-Unternehmen</li>
+        <li>Migration eines Legacy-Monolithen in eine skalierbare Microservice-Architektur</li>
+        <li>Multi-Cloud-Strategie mit Disaster Recovery und 99,99 % Verfügbarkeits-SLA</li>
+        <li>Kostenoptimierung bestehender Cloud-Umgebungen — typisch 30–50 % Einsparung</li>
+        <li>Aufbau einer sicheren, DSGVO-konformen Datenplattform in der EU-Cloud</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Technologie-Stack</div>
+      <div class="modal-badges">
+        <span class="modal-badge">AWS</span>
+        <span class="modal-badge">Microsoft Azure</span>
+        <span class="modal-badge">Google Cloud</span>
+        <span class="modal-badge">Kubernetes</span>
+        <span class="modal-badge">Docker</span>
+        <span class="modal-badge">Terraform</span>
+        <span class="modal-badge">Ansible</span>
+        <span class="modal-badge">ArgoCD</span>
+        <span class="modal-badge">GitHub Actions</span>
+        <span class="modal-badge">Grafana / Prometheus</span>
+        <span class="modal-badge">Vault (Secrets)</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Ergebnisse</div>
+      <div class="modal-results">
+        <div class="modal-result-item">
+          <div class="modal-result-num">99,99%</div>
+          <div class="modal-result-label">Verfügbarkeit durch redundante Architektur</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">–40%</div>
+          <div class="modal-result-label">Cloud-Kosten durch Optimierung</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">10×</div>
+          <div class="modal-result-label">schnellere Deployment-Zyklen</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-cta">
+      <p>Wir analysieren Ihre bestehende Infrastruktur kostenlos und zeigen auf, wo Optimierungspotenzial besteht — ohne Verpflichtung.</p>
+      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Infrastruktur-Assessment anfragen →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: AUTOMOTIVE ════════════════════════════════════════════════ -->
+<div class="modal-drawer" id="modal-auto" role="dialog" aria-modal="true" aria-label="Automotive Software">
+  <div class="modal-close">
+    <div class="modal-breadcrumb">Veycron / <span>Automotive Software</span></div>
+    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-hero-icon">🚗</div>
+    <h2 class="modal-title">Automotive Software</h2>
+    <div class="modal-subtitle">Von Embedded bis Connected Vehicle — auf jedem Stack zuhause.</div>
+    <p class="modal-intro">
+      Fahrzeugsoftware ist kein gewöhnliches Softwareprojekt. Sie arbeitet in Echtzeit,
+      unter harten Ressourcenbeschränkungen, mit Sicherheitsanforderungen nach ISO 26262
+      und muss über die gesamte Fahrzeuglebensdauer zuverlässig funktionieren.
+      Veycron hat das Know-how dafür.
+    </p>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Was wir konkret liefern</div>
+      <div class="modal-cards">
+        <div class="modal-card">
+          <h4>Embedded & AUTOSAR-Entwicklung</h4>
+          <p>Entwicklung von Steuergeräte-Software auf Classic und Adaptive AUTOSAR. Implementierung nach MISRA-C, mit statischer Code-Analyse und vollständiger Testabdeckung.</p>
+        </div>
+        <div class="modal-card">
+          <h4>KI-gestützte Diagnosesysteme</h4>
+          <p>Predictive Maintenance auf Basis von CAN-Bus, OBD-II und Telematik-Daten. Anomalieerkennung in Echtzeit — Ausfälle werden erkannt, bevor sie entstehen.</p>
+        </div>
+        <div class="modal-card">
+          <h4>OTA-Update-Plattformen</h4>
+          <p>Sichere Over-the-Air-Update-Systeme für Fahrzeugflotten. Rollout-Management, Versionssteuerung, Rollback-Mechanismen und digitale Signaturprüfung.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Vernetzte Fahrzeugplattformen</h4>
+          <p>V2X-Kommunikation, Cloud-Backend für Flottenmanagement, Telematikplattformen und Integration mit OEM-Ökosystemen. End-to-End-Entwicklung aus einer Hand.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Normen & Standards</div>
+      <ul class="modal-list">
+        <li>ISO 26262 – Funktionale Sicherheit für Straßenfahrzeuge (ASIL A–D)</li>
+        <li>AUTOSAR Classic & Adaptive Platform</li>
+        <li>ASPICE (Automotive SPICE) – Prozessqualität in der Fahrzeugentwicklung</li>
+        <li>MISRA-C / MISRA-C++ für sicherheitskritische Embedded-Software</li>
+        <li>UN-ECE Regulation 155/156 – Cybersecurity und Software-Update-Management</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Technologie-Stack</div>
+      <div class="modal-badges">
+        <span class="modal-badge">C / C++</span>
+        <span class="modal-badge">Rust</span>
+        <span class="modal-badge">AUTOSAR</span>
+        <span class="modal-badge">CAN / LIN / Ethernet</span>
+        <span class="modal-badge">OBD-II / UDS</span>
+        <span class="modal-badge">Python (Diagnose)</span>
+        <span class="modal-badge">MQTT / SOME/IP</span>
+        <span class="modal-badge">FreeRTOS / QNX</span>
+        <span class="modal-badge">Vector CANoe</span>
+        <span class="modal-badge">MATLAB/Simulink</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Ergebnisse</div>
+      <div class="modal-results">
+        <div class="modal-result-item">
+          <div class="modal-result-num">–60%</div>
+          <div class="modal-result-label">ungeplante Fahrzeugausfälle</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">40%</div>
+          <div class="modal-result-label">schnellere Diagnosezyklen</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">ASIL-D</div>
+          <div class="modal-result-label">zertifizierungsfähige Entwicklung</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-cta">
+      <p>Ob Serienentwicklung, Machbarkeitsstudie oder Verstärkung Ihres bestehenden Teams — sprechen Sie uns an.</p>
+      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Automotive-Projekt besprechen →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: MEDIZIN ═══════════════════════════════════════════════════ -->
+<div class="modal-drawer" id="modal-med" role="dialog" aria-modal="true" aria-label="Medizintechnik">
+  <div class="modal-close">
+    <div class="modal-breadcrumb">Veycron / <span>Medizintechnik & Health IT</span></div>
+    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-hero-icon">🏥</div>
+    <h2 class="modal-title">Medizintechnik &amp; Health IT</h2>
+    <div class="modal-subtitle">Regulierungskonform. Patientensicher. Zukunftsfähig.</div>
+    <p class="modal-intro">
+      Softwareentwicklung im medizinischen Bereich verlangt höchste Präzision, lückenlose
+      Dokumentation und vollständige Regulierungskonformität. Veycron kennt die Anforderungen
+      der MDR, DSGVO und IEC 62304 — und entwickelt Software, die Zertifizierungen standhält.
+    </p>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Was wir konkret liefern</div>
+      <div class="modal-cards">
+        <div class="modal-card">
+          <h4>Medizinprodukte-Software (SaMD)</h4>
+          <p>Entwicklung von Software as a Medical Device nach IEC 62304 und MDR. Vollständige technische Dokumentation, Risikoanalyse nach ISO 14971 und Audit-Trail inklusive.</p>
+        </div>
+        <div class="modal-card">
+          <h4>KI-Diagnostik & Bildanalyse</h4>
+          <p>KI-Modelle zur Unterstützung der Diagnostik — Analyse von Röntgen-, MRT- und CT-Bildern, Auswertung von Labordaten oder Risikostratifizierung von Patientengruppen.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Klinische Informationssysteme</h4>
+          <p>FHIR-konforme Datenschnittstellen, KIS-Integration, elektronische Patientenakte (EPA) und Interoperabilitätslösungen für Krankenhäuser und Praxisnetzwerke.</p>
+        </div>
+        <div class="modal-card">
+          <h4>DSGVO-konforme Datenplattformen</h4>
+          <p>On-Premise-KI-Systeme mit vollständiger Datenisolierung, Pseudonymisierungspipelines und auditfähigem Zugriffskontrollsystem — kein Datenverlust nach außen.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Normen & Regularien</div>
+      <ul class="modal-list">
+        <li>MDR (EU 2017/745) – EU-Medizinprodukteverordnung für Software als Medizinprodukt</li>
+        <li>IEC 62304 – Softwarelebenszyklus für Medizingeräte-Software</li>
+        <li>ISO 14971 – Risikomanagement für Medizinprodukte</li>
+        <li>DSGVO / BDSG – Datenschutz für Gesundheitsdaten (Art. 9 DSGVO)</li>
+        <li>HL7 FHIR – Interoperabilitätsstandard für Gesundheitsdaten</li>
+        <li>ISO 27001 – Informationssicherheits-Management</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Technologie-Stack</div>
+      <div class="modal-badges">
+        <span class="modal-badge">Python / PyTorch</span>
+        <span class="modal-badge">HL7 FHIR</span>
+        <span class="modal-badge">DICOM</span>
+        <span class="modal-badge">PostgreSQL (verschlüsselt)</span>
+        <span class="modal-badge">On-Premise KI</span>
+        <span class="modal-badge">TypeScript / React</span>
+        <span class="modal-badge">Audit-Logging</span>
+        <span class="modal-badge">Pseudonymisierung</span>
+        <span class="modal-badge">OAuth 2.0 / SMART on FHIR</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Ergebnisse</div>
+      <div class="modal-results">
+        <div class="modal-result-item">
+          <div class="modal-result-num">3×</div>
+          <div class="modal-result-label">schnellere klinische Auswertungen</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">100%</div>
+          <div class="modal-result-label">DSGVO- & MDR-konform von Tag 1</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">0</div>
+          <div class="modal-result-label">Datenpannen durch sichere Architektur</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-cta">
+      <p>Regulierungsanforderungen müssen kein Hindernis sein. Wir helfen Ihnen, den richtigen Weg zur MDR-konformen Software zu finden — effizient und prüfungssicher.</p>
+      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Health-IT-Projekt anfragen →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: FINANCE ═══════════════════════════════════════════════════ -->
+<div class="modal-drawer" id="modal-fin" role="dialog" aria-modal="true" aria-label="Finance Tech">
+  <div class="modal-close">
+    <div class="modal-breadcrumb">Veycron / <span>Finance & Investment Tech</span></div>
+    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-hero-icon">📊</div>
+    <h2 class="modal-title">Finance &amp; Investment Tech</h2>
+    <div class="modal-subtitle">Daten, die entscheiden. Systeme, die liefern.</div>
+    <p class="modal-intro">
+      Im Finanzbereich entscheidet Geschwindigkeit. Wer Risikoanalysen in Echtzeit hat,
+      wer Reports automatisch generiert und wer KI-gestützte Entscheidungen trifft,
+      hat einen strukturellen Vorteil. Veycron baut die Systeme, die diesen Vorsprung erzeugen.
+    </p>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Was wir konkret liefern</div>
+      <div class="modal-cards">
+        <div class="modal-card">
+          <h4>Automatisierte Analyse-Engines</h4>
+          <p>Vollautomatische Auswertung von Portfolios, Marktdaten und Risikopositionen. Echtzeit-Dashboards statt wöchentlicher Excel-Reports. Daten aus 20+ Quellen konsolidiert.</p>
+        </div>
+        <div class="modal-card">
+          <h4>KI-Risikomodelle</h4>
+          <p>Machine-Learning-Modelle für Kreditrisiko, Marktrisiko und Liquiditätsplanung. Backtesting, Modell-Monitoring und automatische Rekalibrierung bei Marktveränderungen.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Compliance & Reporting-Automation</h4>
+          <p>Automatisierte Erstellung von MiFID-II-, EMIR- und BaFin-konformen Reports. Audit-Trail, Versionierung und direkte Integration in Ihre Compliance-Workflows.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Datenplattformen & Data Warehouses</h4>
+          <p>Hochperformante Datenarchitekturen für Finanzinstitutionen: ClickHouse für Zeitreihendaten, Apache Kafka für Echtzeit-Feeds, vollständig auditierbar und mandantenfähig.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Einsatzszenarien</div>
+      <ul class="modal-list">
+        <li>Automatisierte Portfolioanalyse mit täglicher Risikoberichterstattung statt wöchentlichem Excel</li>
+        <li>KI-gestützte Bonitätsprüfung für Kreditanträge — Entscheidung in Minuten statt Tagen</li>
+        <li>Echtzeit-Marktdaten-Aggregation aus 15+ Quellen für Trading-Desks</li>
+        <li>Automatisiertes Regulatory Reporting (MiFID II, EMIR, DSGVO-konforme Datenverarbeitung)</li>
+        <li>Fraud-Detection-System mit Anomalieerkennung in Transaktionsdaten</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Technologie-Stack</div>
+      <div class="modal-badges">
+        <span class="modal-badge">Python / Pandas</span>
+        <span class="modal-badge">ClickHouse</span>
+        <span class="modal-badge">Apache Kafka</span>
+        <span class="modal-badge">Apache Spark</span>
+        <span class="modal-badge">PostgreSQL</span>
+        <span class="modal-badge">Redis</span>
+        <span class="modal-badge">PyTorch / XGBoost</span>
+        <span class="modal-badge">Grafana</span>
+        <span class="modal-badge">dbt</span>
+        <span class="modal-badge">REST / FIX Protocol</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Ergebnisse</div>
+      <div class="modal-results">
+        <div class="modal-result-item">
+          <div class="modal-result-num">3 Tage → 4 Min.</div>
+          <div class="modal-result-label">Analysezeit durch Automatisierung</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">–90%</div>
+          <div class="modal-result-label">manuelle Reporting-Aufwände</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">Echtzeit</div>
+          <div class="modal-result-label">Risikoüberwachung statt T+1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-cta">
+      <p>Erfahren Sie, wie Veycron Ihre Finanzprozesse automatisiert und welche Daten in Ihrer Organisation noch ungenutzt bleiben.</p>
+      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Finance-Projekt besprechen →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: ENTERPRISE SOFTWARE ═══════════════════════════════════════ -->
+<div class="modal-drawer" id="modal-ent" role="dialog" aria-modal="true" aria-label="Enterprise Software">
+  <div class="modal-close">
+    <div class="modal-breadcrumb">Veycron / <span>Enterprise Software</span></div>
+    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-hero-icon">⚙️</div>
+    <h2 class="modal-title">Enterprise Softwareentwicklung</h2>
+    <div class="modal-subtitle">Komplexe Systeme. Klare Architektur. Langfristig wartbar.</div>
+    <p class="modal-intro">
+      Enterprise-Software muss nicht komplex sein — aber sie muss zuverlässig, skalierbar und
+      wartbar sein. Veycron entwickelt Systeme, die unter Last stabil bleiben, Teams produktiv machen
+      und über Jahre ohne technische Schulden weiterentwickelt werden können.
+    </p>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Was wir konkret liefern</div>
+      <div class="modal-cards">
+        <div class="modal-card">
+          <h4>Backend-Systeme & APIs</h4>
+          <p>Hochperformante REST- und GraphQL-APIs, die Millionen von Anfragen verarbeiten. Entwickelt mit Domain-Driven Design, klaren Schnittstellen und vollständiger Testabdeckung.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Microservice-Architekturen</h4>
+          <p>Zerlegung von Monolithen in wartbare, unabhängig deploybare Microservices. Event-driven Architecture mit Kafka, klare Service-Boundaries und orchestrierte Deployments.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Datenbank-Design & Performance</h4>
+          <p>Datenbankarchitekturen für hohe Last: Sharding-Strategien, Index-Optimierung, Read-Replicas und Caching-Schichten. Queries, die in Millisekunden statt Sekunden antworten.</p>
+        </div>
+        <div class="modal-card">
+          <h4>Legacy-Modernisierung</h4>
+          <p>Schrittweise Modernisierung bestehender Systeme nach dem Strangler-Fig-Muster — ohne Big-Bang-Rewrite, ohne Betriebsunterbrechung, mit klarem Migrationspfad.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Architekturansätze & Methoden</div>
+      <ul class="modal-list">
+        <li>Domain-Driven Design (DDD) — Software, die die Sprache des Unternehmens spricht</li>
+        <li>Event-Driven Architecture — entkoppelte Systeme, die asynchron und resilient kommunizieren</li>
+        <li>CQRS & Event Sourcing — für komplexe Domänen mit Audit-Anforderungen</li>
+        <li>API-First-Entwicklung — Schnittstellen, die sich für Partner und interne Teams gleich verhalten</li>
+        <li>Test-Driven Development — Bugs werden verhindert, nicht nur gefunden</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Technologie-Stack</div>
+      <div class="modal-badges">
+        <span class="modal-badge">TypeScript / Node.js</span>
+        <span class="modal-badge">Python / FastAPI</span>
+        <span class="modal-badge">Go</span>
+        <span class="modal-badge">Rust</span>
+        <span class="modal-badge">PostgreSQL</span>
+        <span class="modal-badge">Redis</span>
+        <span class="modal-badge">Apache Kafka</span>
+        <span class="modal-badge">GraphQL</span>
+        <span class="modal-badge">gRPC</span>
+        <span class="modal-badge">OpenAPI / Swagger</span>
+        <span class="modal-badge">React / Next.js</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Typische Ergebnisse</div>
+      <div class="modal-results">
+        <div class="modal-result-item">
+          <div class="modal-result-num">10×</div>
+          <div class="modal-result-label">Performance gegenüber Legacy-Systemen</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">–70%</div>
+          <div class="modal-result-label">Deployment-Zeit durch CI/CD</div>
+        </div>
+        <div class="modal-result-item">
+          <div class="modal-result-num">&gt;95%</div>
+          <div class="modal-result-label">Testabdeckung als Standard</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-cta">
+      <p>Ob Neuentwicklung, Modernisierung oder Skalierung eines bestehenden Systems — wir analysieren Ihre Situation und erarbeiten einen klaren Technologiefahrplan.</p>
+      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Software-Projekt besprechen →</a>
+    </div>
+  </div>
+</div>
+
 <!-- ══ FOOTER ═══════════════════════════════════════════════════════════ -->
 <footer>
   <div class="container">
@@ -1055,6 +1740,37 @@ document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
     const top = target.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top: top, behavior: 'smooth' });
   });
+});
+
+/* ── MODAL DRAWER ─────────────────────────────────────────────────── */
+const overlay = document.getElementById('modalOverlay');
+let activeDrawer = null;
+
+function openModal(id) {
+  if (activeDrawer) {
+    activeDrawer.classList.remove('open');
+  }
+  const drawer = document.getElementById('modal-' + id);
+  if (!drawer) return;
+  overlay.classList.add('open');
+  drawer.classList.add('open');
+  activeDrawer = drawer;
+  document.body.style.overflow = 'hidden';
+  drawer.scrollTop = 0;
+  drawer.focus();
+}
+
+function closeModal() {
+  if (activeDrawer) {
+    activeDrawer.classList.remove('open');
+    activeDrawer = null;
+  }
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
 });
 
 /* ── FORM SUBMIT FEEDBACK ─────────────────────────────────────────── */
