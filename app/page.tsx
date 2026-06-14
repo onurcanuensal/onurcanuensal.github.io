@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 
 // veycron – Engineering Landing (Next.js/React + Tailwind)
@@ -298,7 +298,41 @@ export default function LandingPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
+  // Contact form state
+  const [formName, setFormName] = useState('');
+  const [formEmail, setFormEmail] = useState('');
+  const [formMessage, setFormMessage] = useState('');
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [formError, setFormError] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
+
   const closeModal = useCallback(() => setActiveFeature(null), []);
+
+  async function handleContactSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setFormStatus('loading');
+    setFormError('');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: formName, email: formEmail, message: formMessage }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setFormError(data.error ?? 'Unbekannter Fehler.');
+        setFormStatus('error');
+      } else {
+        setFormStatus('success');
+        setFormName('');
+        setFormEmail('');
+        setFormMessage('');
+      }
+    } catch {
+      setFormError('Netzwerkfehler. Bitte prüfe deine Verbindung.');
+      setFormStatus('error');
+    }
+  }
 
   useEffect(() => {
     if (activeFeature) {
@@ -543,23 +577,77 @@ export default function LandingPage() {
               <li className="flex items-center gap-2"><span className="inline-block h-2 w-2 rounded-full bg-purple-500" /> Skalierbar auf AWS/Azure</li>
             </ul>
           </div>
-          <form className="rounded-2xl border border-gray-200 p-6">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="text-sm text-gray-700">Name</label>
-                <input className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900" placeholder="Max Mustermann" />
+          <form ref={formRef} onSubmit={handleContactSubmit} className="rounded-2xl border border-gray-200 p-6">
+            {formStatus === 'success' ? (
+              <div className="flex flex-col items-center gap-3 py-8 text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600 text-2xl">✓</div>
+                <p className="font-semibold text-gray-900">Nachricht gesendet!</p>
+                <p className="text-sm text-gray-500">Wir melden uns innerhalb von 24 Stunden bei dir.</p>
+                <button
+                  type="button"
+                  onClick={() => setFormStatus('idle')}
+                  className="mt-2 text-sm text-indigo-600 underline"
+                >
+                  Weitere Nachricht senden
+                </button>
               </div>
-              <div>
-                <label className="text-sm text-gray-700">E-Mail</label>
-                <input type="email" className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900" placeholder="max@firma.de" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <label className="text-sm text-gray-700">Nachricht</label>
-              <textarea rows={4} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900" placeholder="Was möchtest du erreichen?" />
-            </div>
-            <button type="submit" className="mt-4 w-full rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800">Absenden</button>
-            <p className="mt-3 text-xs text-gray-500">Mit dem Absenden bestätigst du die <a className="underline" href="#">Datenschutzhinweise</a>.</p>
+            ) : (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="cf-name" className="text-sm text-gray-700">Name</label>
+                    <input
+                      id="cf-name"
+                      required
+                      value={formName}
+                      onChange={(e) => setFormName(e.target.value)}
+                      className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="Max Mustermann"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="cf-email" className="text-sm text-gray-700">E-Mail</label>
+                    <input
+                      id="cf-email"
+                      type="email"
+                      required
+                      value={formEmail}
+                      onChange={(e) => setFormEmail(e.target.value)}
+                      className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                      placeholder="max@firma.de"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <label htmlFor="cf-message" className="text-sm text-gray-700">Nachricht</label>
+                  <textarea
+                    id="cf-message"
+                    rows={4}
+                    required
+                    value={formMessage}
+                    onChange={(e) => setFormMessage(e.target.value)}
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900"
+                    placeholder="Was möchtest du erreichen?"
+                  />
+                </div>
+                {formStatus === 'error' && (
+                  <p className="mt-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-600">
+                    {formError}
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={formStatus === 'loading'}
+                  className="mt-4 w-full rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-60 disabled:cursor-not-allowed transition"
+                >
+                  {formStatus === 'loading' ? 'Wird gesendet…' : 'Absenden'}
+                </button>
+                <p className="mt-3 text-xs text-gray-500">
+                  Mit dem Absenden bestätigst du die{' '}
+                  <a className="underline" href="/datenschutz">Datenschutzhinweise</a>.
+                </p>
+              </>
+            )}
           </form>
         </div>
       </section>
