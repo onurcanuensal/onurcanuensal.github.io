@@ -740,46 +740,46 @@
     </div>
     <div class="industries-grid">
 
-      <div class="industry-card reveal" onclick="openModal('ki')">
+      <div class="industry-card reveal" data-modal="ki">
         <div class="industry-icon">🤖</div>
         <h3>KI-Systeme & Intelligente Agenten</h3>
         <p>Wir entwickeln firmeninterne KI-Lösungen, die auf den eigenen Daten trainiert und in bestehende Prozesse integriert werden. Von autonomen Agenten bis hin zu spezialisierten Analyse-Systemen — präzise, skalierbar, DSGVO-konform.</p>
-        <button class="mehr-btn" onclick="event.stopPropagation();openModal('ki')">Mehr erfahren <span class="arrow">→</span></button>
+        <button class="mehr-btn" data-modal="ki">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-1" onclick="openModal('cloud')">
+      <div class="industry-card reveal reveal-delay-1" data-modal="cloud">
         <div class="industry-icon">☁️</div>
         <h3>Cloud-Infrastruktur & Architektur</h3>
         <p>Hochverfügbare, sichere Cloud-Architekturen auf AWS, Azure und GCP. Wir entwerfen und implementieren Infrastrukturen, die mit den Anforderungen des Unternehmens wachsen — von der Containerisierung bis zum Zero-Downtime-Deployment.</p>
-        <button class="mehr-btn" onclick="event.stopPropagation();openModal('cloud')">Mehr erfahren <span class="arrow">→</span></button>
+        <button class="mehr-btn" data-modal="cloud">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-2" onclick="openModal('auto')">
+      <div class="industry-card reveal reveal-delay-2" data-modal="auto">
         <div class="industry-icon">🚗</div>
         <h3>Automotive Software</h3>
         <p>Embedded Systems, vernetzte Fahrzeugplattformen und KI-gestützte Diagnosesysteme für die Automobilindustrie. Unsere Lösungen erfüllen die höchsten Sicherheits- und Qualitätsstandards — von AUTOSAR bis OTA-Updates.</p>
-        <button class="mehr-btn" onclick="event.stopPropagation();openModal('auto')">Mehr erfahren <span class="arrow">→</span></button>
+        <button class="mehr-btn" data-modal="auto">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-3" onclick="openModal('med')">
+      <div class="industry-card reveal reveal-delay-3" data-modal="med">
         <div class="industry-icon">🏥</div>
         <h3>Medizintechnik & Health IT</h3>
         <p>Regulierungskonforme Softwarelösungen nach MDR und DSGVO für Medizingeräte, klinische Informationssysteme und KI-gestützte Diagnostik. Zertifizierungsfähig von Beginn an.</p>
-        <button class="mehr-btn" onclick="event.stopPropagation();openModal('med')">Mehr erfahren <span class="arrow">→</span></button>
+        <button class="mehr-btn" data-modal="med">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal" onclick="openModal('fin')">
+      <div class="industry-card reveal" data-modal="fin">
         <div class="industry-icon">📊</div>
         <h3>Finance & Investment Tech</h3>
         <p>Datenplattformen, automatisierte Analyse-Engines und KI-Modelle für Finanz- und Investmentprozesse. Echtzeit-Risikoanalyse, automatisiertes Reporting und intelligente Entscheidungsunterstützung.</p>
-        <button class="mehr-btn" onclick="event.stopPropagation();openModal('fin')">Mehr erfahren <span class="arrow">→</span></button>
+        <button class="mehr-btn" data-modal="fin">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
-      <div class="industry-card reveal reveal-delay-1" onclick="openModal('ent')">
+      <div class="industry-card reveal reveal-delay-1" data-modal="ent">
         <div class="industry-icon">⚙️</div>
         <h3>Enterprise Softwareentwicklung</h3>
         <p>Komplexe Backend-Systeme, skalierbare APIs und Microservice-Architekturen für Unternehmen mit hohen Anforderungen an Performance, Sicherheit und Wartbarkeit. Built to last.</p>
-        <button class="mehr-btn" onclick="event.stopPropagation();openModal('ent')">Mehr erfahren <span class="arrow">→</span></button>
+        <button class="mehr-btn" data-modal="ent">Mehr erfahren <span class="arrow">→</span></button>
       </div>
 
     </div>
@@ -1023,13 +1023,13 @@
 </section>
 
 <!-- ══ MODAL OVERLAY ════════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+<div class="modal-overlay" id="modalOverlay"></div>
 
 <!-- ══ MODAL: KI-SYSTEME ════════════════════════════════════════════════ -->
 <div class="modal-drawer" id="modal-ki" role="dialog" aria-modal="true" aria-label="KI-Systeme & Intelligente Agenten">
   <div class="modal-close">
     <div class="modal-breadcrumb">Veycron / <span>KI-Systeme</span></div>
-    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+    <button class="modal-close-btn" data-close-modal aria-label="Schließen">✕</button>
   </div>
   <div class="modal-body">
     <div class="modal-hero-icon">🤖</div>
@@ -1110,7 +1110,7 @@
 
     <div class="modal-cta">
       <p>Bereit, die erste KI in Ihrem Unternehmen einzuführen? Wir zeigen Ihnen in einem kostenlosen 45-minütigen Gespräch, welches Potenzial in Ihren Daten steckt.</p>
-      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Kostenloses Erstgespräch anfragen →</a>
+      <a href="#contact" class="btn btn-primary" data-close-modal>Kostenloses Erstgespräch anfragen →</a>
     </div>
   </div>
 </div>
@@ -1119,7 +1119,7 @@
 <div class="modal-drawer" id="modal-cloud" role="dialog" aria-modal="true" aria-label="Cloud-Infrastruktur">
   <div class="modal-close">
     <div class="modal-breadcrumb">Veycron / <span>Cloud-Infrastruktur</span></div>
-    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+    <button class="modal-close-btn" data-close-modal aria-label="Schließen">✕</button>
   </div>
   <div class="modal-body">
     <div class="modal-hero-icon">☁️</div>
@@ -1201,7 +1201,7 @@
 
     <div class="modal-cta">
       <p>Wir analysieren Ihre bestehende Infrastruktur kostenlos und zeigen auf, wo Optimierungspotenzial besteht — ohne Verpflichtung.</p>
-      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Infrastruktur-Assessment anfragen →</a>
+      <a href="#contact" class="btn btn-primary" data-close-modal>Infrastruktur-Assessment anfragen →</a>
     </div>
   </div>
 </div>
@@ -1210,7 +1210,7 @@
 <div class="modal-drawer" id="modal-auto" role="dialog" aria-modal="true" aria-label="Automotive Software">
   <div class="modal-close">
     <div class="modal-breadcrumb">Veycron / <span>Automotive Software</span></div>
-    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+    <button class="modal-close-btn" data-close-modal aria-label="Schließen">✕</button>
   </div>
   <div class="modal-body">
     <div class="modal-hero-icon">🚗</div>
@@ -1292,7 +1292,7 @@
 
     <div class="modal-cta">
       <p>Ob Serienentwicklung, Machbarkeitsstudie oder Verstärkung Ihres bestehenden Teams — sprechen Sie uns an.</p>
-      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Automotive-Projekt besprechen →</a>
+      <a href="#contact" class="btn btn-primary" data-close-modal>Automotive-Projekt besprechen →</a>
     </div>
   </div>
 </div>
@@ -1301,7 +1301,7 @@
 <div class="modal-drawer" id="modal-med" role="dialog" aria-modal="true" aria-label="Medizintechnik">
   <div class="modal-close">
     <div class="modal-breadcrumb">Veycron / <span>Medizintechnik & Health IT</span></div>
-    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+    <button class="modal-close-btn" data-close-modal aria-label="Schließen">✕</button>
   </div>
   <div class="modal-body">
     <div class="modal-hero-icon">🏥</div>
@@ -1382,7 +1382,7 @@
 
     <div class="modal-cta">
       <p>Regulierungsanforderungen müssen kein Hindernis sein. Wir helfen Ihnen, den richtigen Weg zur MDR-konformen Software zu finden — effizient und prüfungssicher.</p>
-      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Health-IT-Projekt anfragen →</a>
+      <a href="#contact" class="btn btn-primary" data-close-modal>Health-IT-Projekt anfragen →</a>
     </div>
   </div>
 </div>
@@ -1391,7 +1391,7 @@
 <div class="modal-drawer" id="modal-fin" role="dialog" aria-modal="true" aria-label="Finance Tech">
   <div class="modal-close">
     <div class="modal-breadcrumb">Veycron / <span>Finance & Investment Tech</span></div>
-    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+    <button class="modal-close-btn" data-close-modal aria-label="Schließen">✕</button>
   </div>
   <div class="modal-body">
     <div class="modal-hero-icon">📊</div>
@@ -1472,7 +1472,7 @@
 
     <div class="modal-cta">
       <p>Erfahren Sie, wie Veycron Ihre Finanzprozesse automatisiert und welche Daten in Ihrer Organisation noch ungenutzt bleiben.</p>
-      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Finance-Projekt besprechen →</a>
+      <a href="#contact" class="btn btn-primary" data-close-modal>Finance-Projekt besprechen →</a>
     </div>
   </div>
 </div>
@@ -1481,7 +1481,7 @@
 <div class="modal-drawer" id="modal-ent" role="dialog" aria-modal="true" aria-label="Enterprise Software">
   <div class="modal-close">
     <div class="modal-breadcrumb">Veycron / <span>Enterprise Software</span></div>
-    <button class="modal-close-btn" onclick="closeModal()" aria-label="Schließen">✕</button>
+    <button class="modal-close-btn" data-close-modal aria-label="Schließen">✕</button>
   </div>
   <div class="modal-body">
     <div class="modal-hero-icon">⚙️</div>
@@ -1563,7 +1563,7 @@
 
     <div class="modal-cta">
       <p>Ob Neuentwicklung, Modernisierung oder Skalierung eines bestehenden Systems — wir analysieren Ihre Situation und erarbeiten einen klaren Technologiefahrplan.</p>
-      <a href="#contact" class="btn btn-primary" onclick="closeModal()">Software-Projekt besprechen →</a>
+      <a href="#contact" class="btn btn-primary" data-close-modal>Software-Projekt besprechen →</a>
     </div>
   </div>
 </div>
@@ -1743,35 +1743,64 @@ document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
 });
 
 /* ── MODAL DRAWER ─────────────────────────────────────────────────── */
-const overlay = document.getElementById('modalOverlay');
-let activeDrawer = null;
+(function() {
+  var overlay = document.getElementById('modalOverlay');
+  var activeDrawer = null;
 
-function openModal(id) {
-  if (activeDrawer) {
-    activeDrawer.classList.remove('open');
+  function openModal(id) {
+    if (!overlay) return;
+    if (activeDrawer) activeDrawer.classList.remove('open');
+    var drawer = document.getElementById('modal-' + id);
+    if (!drawer) return;
+    overlay.classList.add('open');
+    drawer.classList.add('open');
+    activeDrawer = drawer;
+    document.body.style.overflow = 'hidden';
+    drawer.scrollTop = 0;
   }
-  const drawer = document.getElementById('modal-' + id);
-  if (!drawer) return;
-  overlay.classList.add('open');
-  drawer.classList.add('open');
-  activeDrawer = drawer;
-  document.body.style.overflow = 'hidden';
-  drawer.scrollTop = 0;
-  drawer.focus();
-}
 
-function closeModal() {
-  if (activeDrawer) {
-    activeDrawer.classList.remove('open');
-    activeDrawer = null;
+  function closeModal() {
+    if (!overlay) return;
+    if (activeDrawer) { activeDrawer.classList.remove('open'); activeDrawer = null; }
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
   }
-  overlay.classList.remove('open');
-  document.body.style.overflow = '';
-}
 
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
-});
+  /* Cards und Mehr-erfahren-Buttons */
+  document.querySelectorAll('[data-modal]').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openModal(this.getAttribute('data-modal'));
+    });
+  });
+
+  /* Schließen-Buttons und CTA-Links im Modal */
+  document.querySelectorAll('[data-close-modal]').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal();
+      /* Wenn CTA-Link: nach kurzer Pause zum Kontakt scrollen */
+      var href = this.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        setTimeout(function() {
+          var target = document.querySelector(href);
+          if (target) {
+            var offset = document.getElementById('navbar').offsetHeight;
+            window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+          }
+        }, 350);
+      }
+    });
+  });
+
+  /* Klick auf Overlay schließt */
+  if (overlay) overlay.addEventListener('click', closeModal);
+
+  /* Escape-Taste schließt */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+})();
 
 /* ── FORM SUBMIT FEEDBACK ─────────────────────────────────────────── */
 document.querySelector('.contact-form').addEventListener('submit', function(e) {
