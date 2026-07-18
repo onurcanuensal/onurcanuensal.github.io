@@ -47,7 +47,7 @@ export default function ImpressumPage() {
           {[
             ["Anbieter", [
               "Veycron (Arbeitstitel)",
-              "Onurcan Ünsal",
+              "Yagmur Ünsal",
               "Steigstraße 26",
               "86505 Münsterhausen",
               "Deutschland",
@@ -55,7 +55,7 @@ export default function ImpressumPage() {
             ["Kontakt", [
               "E-Mail: cetmikli21@gmailcom",
             ]],
-            ["Vertretungsberechtigt", ["Onurcan Ünsal"]],
+            ["Vertretungsberechtigt", ["Yagmur Ünsal"]],
             ["Umsatzsteuer-ID", ["DE000000000 (falls vorhanden)"]],
           ].map(([title, lines]) => (
             <section key={String(title)} className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
