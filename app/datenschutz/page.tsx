@@ -60,7 +60,7 @@ export default function DatenschutzPage() {
           <section id="verantwortlicher" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
             <h2 className="text-xl font-semibold text-indigo-600">Verantwortlicher</h2>
             <p className="mt-2 text-gray-700">
-              Veycron, Onurcan Ünsal, Musterstraße 1, 12345 Musterstadt, Deutschland ·
+              Veycron, Ünsal, Musterstraße 1, 12345 Musterstadt, Deutschland ·
               E-Mail: privacy@veycron.dev
             </p>
           </section>
@@ -116,7 +116,7 @@ export default function DatenschutzPage() {
           </section>
 
           <section id="rechte" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h2 className="text-xl font-semibold text-indigo-600">Ihre Rechte</h2>
+            <h2 className="text-xl font-semibold text-indigo-600">Ihr e Rechte</h2>
             <ul className="mt-2 list-disc pl-5 text-gray-700">
               <li>Auskunft, Berichtigung, Löschung, Einschränkung</li>
               <li>Widerspruch gegen Verarbeitung</li>

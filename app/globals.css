@@ -18,41 +18,23 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ── ORBS ── */
-@keyframes orb-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%       { transform: translate(24px, -32px) scale(1.06); }
-}
-@keyframes orb-b {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%       { transform: translate(-20px, 28px) scale(0.95); }
-}
-@keyframes orb-c {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%       { transform: translate(16px, 20px) scale(1.04); }
-}
-.orb-a { animation: orb-a 10s ease-in-out infinite; }
-.orb-b { animation: orb-b 13s ease-in-out infinite 1.5s; }
-.orb-c { animation: orb-c 8s ease-in-out infinite 3s; }
-
 /* ── HERO FADE IN ── */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.fade-up-1 { animation: fade-up 0.7s ease-out 0.05s both; }
-.fade-up-2 { animation: fade-up 0.7s ease-out 0.2s both; }
-.fade-up-3 { animation: fade-up 0.7s ease-out 0.35s both; }
-.fade-up-4 { animation: fade-up 0.7s ease-out 0.5s both; }
+.fade-up-1 { animation: fade-up 0.6s ease-out 0.05s both; }
+.fade-up-2 { animation: fade-up 0.6s ease-out 0.15s both; }
+.fade-up-3 { animation: fade-up 0.6s ease-out 0.25s both; }
+.fade-up-4 { animation: fade-up 0.6s ease-out 0.35s both; }
 
-/* ── BENTO CARD ── */
-.bento-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+/* ── FEATURE CARD ── */
+.feature-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.bento-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  border-color: #3f3f46 !important;
+.feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
 /* ── FAQ ── */
