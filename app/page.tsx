@@ -16,32 +16,32 @@ const featureDetails: Record<string, FeatureDetail> = {
     title: "Angebotserstellung", subtitle: "Von der Anfrage zur PDF in Minuten.",
     intro: "Ihre Angebote entstehen jetzt halb automatisch. KI versteht Kundenangaben, kalkuliert korrekt, formatiert professionell — Sie kontrollieren und versenden.",
     deliverables: [
-      { title: "Automatische Erfassung", desc: "Kundenangaben → KI liest das, versteht die Anforderung → Stundensätze, Materialkosten, Pausen — alles richtig kalküliert." },
-      { title: "Korrekte Kalkulation", desc: "KI kennt Ihre Preislisten, Gewinnspannen, Standardadressen. Keine Rechenfehler, keine Vergessenheiten mehr." },
+      { title: "Automatische Erfassung", desc: "Kundenangaben → KI liest das, versteht die Anforderung → Stundensätze, Materialkosten, Pausen — alles richtig kalkuliert." },
+      { title: "Korrekte Kalkulation", desc: "KI kennt Ihre Preislisten, Gewinnspannen, Standardadressen. Keine Rechenfehler, nichts wird vergessen." },
       { title: "Professionelle Formatierung", desc: "Logos, Geschäftsdaten, rechtliche Hinweise — automatisch eingesetzt. Angebote sehen einheitlich und seriös aus." },
       { title: "Ihre Kontrolle", desc: "Vor dem Versand: Sie sehen, was die KI erstellt hat. Änderungen möglich. Sie bleiben die Chefin oder der Chef." },
     ],
     usecases: ["Metallbauer: Angebote von 45 auf 8 Minuten reduziert", "Elektrofirma: 12 Angebote pro Tag statt 4 — bei besserer Qualität", "Malermeister: Keine Rechenfehler mehr — höhere Gewinnmarge"],
     highlights: ["Zeit einsparen", "Keine Fehler", "Professionelle Optik", "Schneller verkaufen"],
     metrics: [{ num: "60%", label: "weniger Zeit pro Angebot" }, { num: "0", label: "Rechenfehler" }, { num: "+15%", label: "schnellere Auftragskonvertierung" }],
-    ctaText: "Mehr erfahren →",
+    ctaText: "Erstgespräch vereinbaren →",
   },
   "Kundenmails": {
-    title: "Kundenmails & Korrespondentz", subtitle: "Mails, die nach Euch klingen.",
-    intro: "Die KI schreitet Mails für Sie vor — im richtigen Ton, mit Ihren Vorlagen und Ihrem Wissen. Sie überprüfen, unterschreiben, fertig. Keine Tippfehler. Keine unprofessionellen Mails mehr.",
+    title: "Kundenmails & Korrespondenz", subtitle: "Mails, die nach Ihrem Haus klingen.",
+    intro: "Die KI schreibt Mails für Sie vor — im richtigen Ton, mit Ihren Vorlagen und Ihrem Wissen. Sie überprüfen, unterschreiben, fertig. Keine Tippfehler. Keine unprofessionellen Mails mehr.",
     deliverables: [
       { title: "Tonalität Ihres Unternehmens", desc: "KI lernt, wie Sie schreiben: formal, freundlich, direkt. Mails klingen nach Ihnen, nicht nach Maschinentext." },
-      { title: "Terminbestätigung & Rückfragen", desc: "Standardmails entstehen im Sekündentakt: Termin bestätigt, Material-Frage beantwortet, Rechnung versendet." },
+      { title: "Terminbestätigung & Rückfragen", desc: "Standardmails entstehen in Sekunden: Termin bestätigt, Material-Frage beantwortet, Rechnung versendet." },
       { title: "Keine Tippfehler & Rechtschreibung", desc: "KI korrigiert, prüft Grammatik, prüft auf Unstimmigkeiten. Sie geben grünes Licht oder ändern in 10 Sekunden." },
-      { title: "Batch-Verarbeitung", desc: "10 Kundenfragen gleichzeitig? KI antwortet auf alle. Sie prüfen, senden. Ein Zehntel der Zeit wie Manual." },
+      { title: "Batch-Verarbeitung", desc: "10 Kundenfragen gleichzeitig? KI antwortet auf alle. Sie prüfen, senden. Ein Zehntel der Zeit im Vergleich zur Handarbeit." },
     ],
     usecases: ["Kanzlei: 30 Mandantenmails täglich → KI-Vordrucke → Chef unterschreibt nur noch", "Zahnarzt-Praxis: Terminbestätigungen, Nachsorge-Infos — alle automatisch, persönlich", "Handwerksfirma: Kundenanfragen über Formular → KI entwirft Antwort → 2 Min Kontrolle → versenden"],
     highlights: ["Sprache Ihres Unternehmens", "Professionell & verlässlich", "Zeit für echte Kundengespräche", "Null Rechtschreibfehler"],
     metrics: [{ num: "80%", label: "weniger Zeit bei E-Mails" }, { num: "+30%", label: "schnellere Antwortzeit" }, { num: "100%", label: "Professionalität" }],
-    ctaText: "Mehr erfahren →",
+    ctaText: "Erstgespräch vereinbaren →",
   },
   "Dokumentation": {
-    title: "Dokumentation & Prozesse", subtitle: "Wissen aufschreiben — selbsttätig.",
+    title: "Dokumentation & Prozesse", subtitle: "Wissen aufschreiben — automatisch.",
     intro: "Jede Arbeit, die Ihre Mitarbeiter erledigen, ist implizites Wissen. KI dokumentiert dieses Wissen: Prozessanleitungen, Checklisten, Schulungsmaterial. Alle im gleichen Format. Immer aktuell.",
     deliverables: [
       { title: "Prozess-Dokumentation", desc: "KI schaut dem Meister zu (Beschreibung, Video, Notizen) → erstellt Schritt-für-Schritt-Anleitungen → mit Fotos, Checklisten, Fehlermöglichkeiten." },
@@ -49,13 +49,13 @@ const featureDetails: Record<string, FeatureDetail> = {
       { title: "Qualitätskontrolle", desc: "Alle arbeiten nach dem gleichen Standard. KI prüft: Hält Ihre Arbeit die Dokumentation ein? Konsistenz über alle Mitarbeiter." },
       { title: "Digitale Wissensdatenbank", desc: "Alle Prozesse zentral, durchsuchbar, versioniert. Wenn Sie eine Regel ändern, aktualisiert sich die KI automatisch." },
     ],
-    usecases: ["Handwerksbetrieb: Alle 12 Standardprozesse dokumentiert — neue Azubis lernen sofort korrekt", "Zahnarzt-Praxis: Hygienestandards, Patientenkommunikation — alle im System, niemand vergisst etwas", "Rechtsanwalt: Mandaten-Checklisten, Dokumentenablage, Fristen — KI prüft ob alles beachtet wird"],
+    usecases: ["Handwerksbetrieb: Alle 12 Standardprozesse dokumentiert — neue Azubis lernen sofort korrekt", "Zahnarzt-Praxis: Hygienestandards, Patientenkommunikation — alle im System, niemand vergisst etwas", "Rechtsanwalt: Mandanten-Checklisten, Dokumentenablage, Fristen — KI prüft ob alles beachtet wird"],
     highlights: ["Wissen nicht verlieren", "Neue Mitarbeiter schneller produktiv", "Höhere Konsistenz", "Weniger Fehler durch fehlende Infos"],
     metrics: [{ num: "3 Tage", label: "Einarbeitung statt 2 Wochen" }, { num: "+25%", label: "weniger Fehler" }, { num: "100%", label: "aller Prozesse dokumentiert" }],
-    ctaText: "Mehr erfahren →",
+    ctaText: "Erstgespräch vereinbaren →",
   },
   "Dateneingabe & Admin": {
-    title: "Dateneingabe & Admin", subtitle: "Papierkram, der sich selbst erfüllt.",
+    title: "Dateneingabe & Admin", subtitle: "Papierkram, der sich selbst erledigt.",
     intro: "Rechnungen, Lieferscheine, Stundenzettel, Kundenformulare — Ihre Mitarbeiter füllen diese weiterhin per Hand aus, aber: KI übernimmt die Eingabe ins System. Keine Tippfehler, keine doppelte Arbeit.",
     deliverables: [
       { title: "Optische Erfassung", desc: "Fotos von Papieren (Rechnungen, Belege) → KI erkennt die Informationen → sofort im System. Keine manuelle Übertragung nötig." },
@@ -66,7 +66,35 @@ const featureDetails: Record<string, FeatureDetail> = {
     usecases: ["Praxis: Patientenformulare → automatisch in Arztsoftware, Versicherungsdaten validiert", "Handwerk: Stundenzettel eingescannt → sofort in Abrechnung, Lohnabrechnung vorbereitet", "Kanzlei: Rechnungseingangsbuch automatisch gefüllt aus E-Rechnungen"],
     highlights: ["Keine doppelte Dateneingabe", "Weniger Tippfehler", "Schnellere Verarbeitung", "Zeit für wichtigere Aufgaben"],
     metrics: [{ num: "4h", label: "pro Woche Zeit gespart" }, { num: "99%", label: "weniger Eingabefehler" }, { num: "1 Tag", label: "Durchlaufzeit statt 3 Tage" }],
-    ctaText: "Mehr erfahren →",
+    ctaText: "Erstgespräch vereinbaren →",
+  },
+  "Software": {
+    title: "Individuelle Software", subtitle: "Genau das Tool, das Ihnen noch fehlt.",
+    intro: "Nicht jeder Prozess lässt sich mit Standardsoftware abbilden. Wir entwickeln individuelle Anwendungen, Dashboards und interne Tools — zugeschnitten auf Ihre Abläufe, Ihr Team und Ihre Daten.",
+    deliverables: [
+      { title: "Bedarfsanalyse", desc: "Wir verstehen Ihren Prozess, bevor wir programmieren. Gemeinsam klären wir: Was muss das Tool können, wer nutzt es, wo spart es am meisten?" },
+      { title: "Entwicklung & Design", desc: "Moderne Technologie, saubere Oberfläche, schnelle Ladezeiten. Wir bauen Web-Apps, Dashboards, Kalkulatoren oder Verwaltungstools — je nachdem, was gebraucht wird." },
+      { title: "Anbindung an Ihre Systeme", desc: "Das neue Tool spricht mit Ihrem ERP, Ihrer Buchhaltung oder Ihrem CRM. Kein Inselbetrieb, keine doppelte Datenpflege." },
+      { title: "Wartung & Weiterentwicklung", desc: "Nach dem Go-live betreuen wir die Software: Updates, neue Features, Fehlerbehebung. Sie haben einen festen Ansprechpartner." },
+    ],
+    usecases: ["Handwerksbetrieb: Internes Auftragsboard ersetzt Zettelwirtschaft und Excel-Listen", "Industrieunternehmen: Produktionskennzahlen live auf einem Dashboard statt in monatlichen Excel-Reports", "Praxis: Patientenportal für Terminbuchung und Dokumentenupload — spart Telefonzeit"],
+    highlights: ["Maßgeschneidert", "Moderne Technologie", "Nahtlose Integration", "Laufende Betreuung"],
+    metrics: [{ num: "100%", label: "auf Ihren Betrieb zugeschnitten" }, { num: "1", label: "fester Ansprechpartner" }, { num: "∞", label: "erweiterbar" }],
+    ctaText: "Erstgespräch vereinbaren →",
+  },
+  "Webseiten": {
+    title: "Webseiten & Webportale", subtitle: "Ihr Auftritt, der Kunden bringt.",
+    intro: "Eine Webseite ist heute Ihre digitale Visitenkarte — und oft der erste Eindruck. Wir bauen schnelle, moderne Webseiten, die bei Google gefunden werden und auf jedem Gerät überzeugen.",
+    deliverables: [
+      { title: "Design & Konzeption", desc: "Wir gestalten Ihren Webauftritt so, dass er zu Ihrem Betrieb passt: seriös, klar, vertrauensbildend. Kein Baukastencharme, sondern individuelles Design." },
+      { title: "SEO-Optimierung", desc: "Technik, Struktur und Inhalte werden so aufgebaut, dass Google Sie findet — für die Suchbegriffe, die Ihre Kunden wirklich eingeben." },
+      { title: "Mobil & performant", desc: "Über 60% Ihrer Besucher kommen vom Smartphone. Unsere Seiten laden schnell und sehen auf jedem Bildschirm gut aus." },
+      { title: "DSGVO-konform", desc: "Cookie-Banner, Datenschutzerklärung, sichere Formulare — alles regelkonform, ohne dass Sie sich darum kümmern müssen." },
+    ],
+    usecases: ["Malerbetrieb: Neue Webseite bringt 3× mehr Anfragen über Google als die alte Baukastenlösung", "Kanzlei: Mandantenportal mit Login-Bereich für Dokumentenaustausch", "Zahnarztpraxis: Online-Terminbuchung reduziert Telefonanrufe um die Hälfte"],
+    highlights: ["Individuelles Design", "SEO-optimiert", "Mobiloptimiert", "DSGVO-konform"],
+    metrics: [{ num: "<2s", label: "Ladezeit" }, { num: "100%", label: "mobiloptimiert" }, { num: "+3×", label: "mehr Sichtbarkeit" }],
+    ctaText: "Erstgespräch vereinbaren →",
   },
 };
 
@@ -157,13 +185,14 @@ function FeatureCard({
   return (
     <div
       onClick={onClick}
-      className="feature-card group relative cursor-pointer overflow-hidden rounded-lg p-6 flex flex-col gap-2 border transition"
+      className="feature-card group relative cursor-pointer overflow-hidden rounded-xl p-8 sm:p-10 flex flex-col gap-2 border transition"
       style={{ borderColor: '#e0dbd5', background: '#fff', borderWidth: '1px' }}
       onMouseEnter={e=>(e.currentTarget.style.borderColor='#157d5a')} onMouseLeave={e=>(e.currentTarget.style.borderColor='#e0dbd5')}
     >
-      <div className="text-3xl">{icon}</div>
-      <h3 className="text-lg font-bold" style={{ color: '#1a1a1a', marginTop: '0.5rem' }}>{title}</h3>
-      <p className="text-sm" style={{ color: '#666' }}>{desc}</p>
+      <div className="text-4xl">{icon}</div>
+      <h3 className="text-2xl font-bold" style={{ color: '#1a1a1a', marginTop: '0.75rem' }}>{title}</h3>
+      <p className="text-base leading-relaxed" style={{ color: '#666' }}>{desc}</p>
+      <span className="mt-3 text-sm font-semibold" style={{ color: '#157d5a' }}>Details ansehen →</span>
     </div>
   );
 }
@@ -206,22 +235,28 @@ export default function LandingPage() {
       const data = await res.json();
       if (!res.ok) { setFormError(data.error ?? 'Fehler beim Senden.'); setFormStatus('error'); }
       else { setFormStatus('success'); setFormName(''); setFormEmail(''); setFormMessage(''); }
-    } catch { setFormError('Netzwerkfehler — bitte prüfe deine Verbindung.'); setFormStatus('error'); }
+    } catch { setFormError('Netzwerkfehler — bitte prüfen Sie Ihre Verbindung.'); setFormStatus('error'); }
   }
 
   const features: { title: string; desc: string; icon: string }[] = [
-    { title: "Angebote", desc: "In Minuten statt Stunden. Richtig kalküliert, Sie kontrollieren.", icon: "📋" },
-    { title: "Mails", desc: "Im richtigen Ton. Keine Fehler. Mit Ihren Daten.", icon: "✉️" },
-    { title: "Dokumentation", desc: "Prozesse aufschreiben. Automatisch aktuell.", icon: "📚" },
-    { title: "Dateneingabe", desc: "Rechnungen, Formulare. Erfasst korrekt und sofort.", icon: "🗂️" },
+    { title: "Angebote", desc: "Aus der Kundenanfrage wird in Minuten ein fertiges Angebot. Wir hinterlegen Ihre Preislisten und Kalkulationslogik — die KI erstellt, Sie prüfen und versenden. Keine Rechenfehler, einheitliche Optik.", icon: "📋" },
+    { title: "Mails", desc: "Terminbestätigungen, Rückfragen, Mandanten- und Patientenpost: Die KI entwirft jede Antwort im Ton Ihres Hauses, mit Ihren Daten. Sie geben in Sekunden frei — statt selbst zu tippen.", icon: "✉️" },
+    { title: "Dokumentation", desc: "Arbeitsanweisungen, Checklisten und Schulungsmaterial entstehen automatisch aus dem Wissen Ihrer erfahrenen Mitarbeiter. Neue Kollegen sind in Tagen produktiv statt in Wochen.", icon: "📚" },
+    { title: "Dateneingabe", desc: "Rechnungen, Lieferscheine, Stundenzettel und Formulare landen ohne Abtippen im richtigen System — geprüft, validiert, ohne Duplikate. Ihr Büro arbeitet mit sauberen Daten.", icon: "🗂️" },
+    { title: "Software", desc: "Individuelle Tools, Dashboards und interne Anwendungen — genau auf Ihren Betrieb zugeschnitten. Wir entwickeln, was es nicht von der Stange gibt: schnell, modern, wartbar.", icon: "⚙️" },
+    { title: "Webseiten", desc: "Professionelle Webauftritte, die Kunden überzeugen und bei Google gefunden werden. Von der Visitenkarte im Netz bis zum vollständigen Kundenportal — performant, mobiloptimiert, DSGVO-konform.", icon: "🌐" },
   ];
 
   const faqs = [
     ["Wie läuft der erste Termin ab?", "Wir schauen uns Ihren Betrieb an: Welche Büroprozesse kosten Zeit? Wo entstehen Fehler? Dann zeigen wir konkret, wie KI das ändern kann."],
-    ["Muss ich technisch fit sein?", "Nein. Sie schreiben wie immer — die KI macht die Arbeit schneller und besser. Keine Programmierung, keine Technik nötig."],
-    ["Wann spare ich wirklich Zeit?", "In den ersten zwei Wochen merken Sie den Unterschied: Angebote schneller, Mails ohne Tippfehler, weniger Papierkram nach Feierabend."],
+    ["Muss Ihr Team technisch fit sein?", "Nein. Sie schreiben wie immer — die KI macht die Arbeit schneller und besser. Keine Programmierung, keine Technik nötig."],
+    ["Wann sparen Sie wirklich Zeit?", "In den ersten zwei Wochen merken Sie den Unterschied: Angebote schneller, Mails ohne Tippfehler, weniger Papierkram nach Feierabend."],
     ["Wie sieht die Betreuung aus?", "Wir richten die KI für Ihre Prozesse ein, schulen Ihr Team, und bleiben erreichbar. Regelmäßig prüfen wir: Wo läuft es? Wo optimieren wir?"],
-    ["Was passiert mit meinen Daten?", "Ihre Daten bleiben bei Ihnen. Wir nutzen die Daten nur, um die KI besser für Sie einzustellen — keine Weitergabe an Dritte, DSGVO-konform."],
+    ["Was passiert mit Ihren Daten?", "Ihre Daten bleiben bei Ihnen. Wir nutzen die Daten nur, um die KI besser für Sie einzustellen — keine Weitergabe an Dritte, DSGVO-konform."],
+    ["Was kostet die Zusammenarbeit?", "Die Einrichtung erfolgt zum Festpreis, danach zahlen Sie eine monatliche Betreuungspauschale — abhängig von Umfang und Teamgröße. Im Erstgespräch nennen wir Ihnen eine konkrete Zahl. Keine versteckten Kosten, keine offenen Beratungsprojekte."],
+    ["Wie lange dauert die Einführung?", "Typisch sind zwei bis vier Wochen vom Erstgespräch bis zum Produktivbetrieb. Ihr Tagesgeschäft läuft währenddessen normal weiter — wir richten im Hintergrund ein und schulen Ihr Team in kurzen Terminen."],
+    ["Funktioniert das mit unserer Software?", "In der Regel ja. Wir arbeiten mit Ihren bestehenden Tools — E-Mail, Office, ERP, CRM oder Branchensoftware. Ein Systemwechsel ist nicht nötig; die KI wird um Ihre Abläufe herum aufgebaut."],
+    ["Gibt es eine Vertragsbindung?", "Die Betreuung ist monatlich kündbar. Wir überzeugen lieber durch Ergebnisse als durch Laufzeiten — deshalb berichten wir regelmäßig, was die Automatisierung konkret einspart."],
   ];
 
   return (
@@ -236,7 +271,7 @@ export default function LandingPage() {
             <span className="font-black tracking-tight text-base" style={{ color: '#1a1a1a' }}>veycron</span>
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm">
-            {[["Leistungen","#features"],["Referenzen","#cases"],["Häufige Fragen","#faq"],["Kontakt","#contact"]].map(([l,h])=>(
+            {[["Leistungen","#features"],["Branchen","#branchen"],["Ergebnisse","#cases"],["Ablauf","#ablauf"],["Häufige Fragen","#faq"],["Kontakt","#contact"]].map(([l,h])=>(
               <a key={l} href={h} className="transition-colors no-underline" style={{ color: '#666' }}
                 onMouseEnter={e=>(e.currentTarget.style.color='#1a1a1a')} onMouseLeave={e=>(e.currentTarget.style.color='#666')}>{l}</a>
             ))}
@@ -262,7 +297,7 @@ export default function LandingPage() {
         </div>
         {mobileOpen && (
           <div className="md:hidden border-t px-4 py-4 flex flex-col gap-1" style={{ borderColor: '#e0dbd5', background: '#f8f7f5' }}>
-            {[["Leistungen","#features"],["Referenzen","#cases"],["Häufige Fragen","#faq"],["Kontakt","#contact"]].map(([l,h])=>(
+            {[["Leistungen","#features"],["Branchen","#branchen"],["Ergebnisse","#cases"],["Ablauf","#ablauf"],["Häufige Fragen","#faq"],["Kontakt","#contact"]].map(([l,h])=>(
               <a key={l} href={h} onClick={()=>setMobileOpen(false)}
                 className="block rounded-lg px-3 py-2.5 text-sm no-underline transition" style={{ color: '#666' }}
                 onMouseEnter={e=>{ (e.currentTarget as HTMLElement).style.background='#f0f0f0'; }} onMouseLeave={e=>{ (e.currentTarget as HTMLElement).style.background='transparent'; }}>
@@ -278,16 +313,22 @@ export default function LandingPage() {
       </header>
 
       {/* ── HERO ────────────────────────────────────────────────────── */}
-      <section className="relative py-32 sm:py-40 flex items-center" style={{ background: '#f8f7f5' }}>
+      <section className="relative py-32 sm:py-40 flex items-center" style={{ background: '#f8f7f5', minHeight: '88vh' }}>
         <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8">
+          {/* kicker */}
+          <p className="fade-up-2 mb-6 text-xs font-bold uppercase tracking-widest" style={{ color: '#157d5a' }}>
+            KI-Automatisierung für den Mittelstand
+          </p>
           {/* headline */}
           <h1 className="fade-up-2 font-black tracking-tight leading-tight"
-            style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', letterSpacing: '-0.03em', color: '#1a1a1a', maxWidth: '90%' }}>
+            style={{ fontSize: 'clamp(3.5rem, 9vw, 7rem)', letterSpacing: '-0.03em', color: '#1a1a1a', maxWidth: '95%' }}>
             Ihr Büro.<br />Automatisiert.
           </h1>
           {/* subline */}
-          <p className="fade-up-3 mt-6 font-medium" style={{ fontSize: '1.05rem', color: '#666', maxWidth: '600px' }}>
-            Claude AI für die Prozesse, die Zeit kosten.
+          <p className="fade-up-3 mt-8 font-medium leading-relaxed" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.35rem)', color: '#666', maxWidth: '720px' }}>
+            Wir automatisieren Büroarbeit und bauen die Software, die Ihr Betrieb wirklich braucht —
+            von KI-gestützten Prozessen über Webseiten bis zu individuellen Anwendungen.
+            Ihr Team gewinnt bis zu 23 Stunden pro Woche zurück, ohne neue Software lernen zu müssen.
           </p>
           {/* CTAs */}
           <div className="fade-up-4 mt-12 flex flex-wrap gap-3">
@@ -295,8 +336,32 @@ export default function LandingPage() {
               style={{ background: '#157d5a' }}
               onMouseEnter={e=>{ (e.currentTarget as HTMLElement).style.background='#126b4b'; }}
               onMouseLeave={e=>{ (e.currentTarget as HTMLElement).style.background='#157d5a'; }}>
-              Termin vereinbaren
+              Kostenloses Erstgespräch
             </a>
+            <a href="#features" className="rounded-lg px-7 py-3.5 text-sm font-bold no-underline border transition"
+              style={{ borderColor: '#e0dbd5', color: '#1a1a1a' }}
+              onMouseEnter={e=>{ (e.currentTarget as HTMLElement).style.background='#f0f0f0'; }}
+              onMouseLeave={e=>{ (e.currentTarget as HTMLElement).style.background='transparent'; }}>
+              Leistungen ansehen
+            </a>
+          </div>
+          <p className="fade-up-4 mt-8 text-sm" style={{ color: '#999' }}>
+            DSGVO-konform &nbsp;·&nbsp; Festpreis statt Tagessätze &nbsp;·&nbsp; Betreuung inklusive
+          </p>
+        </div>
+      </section>
+
+      {/* ── LOGOS ───────────────────────────────────────────────────── */}
+      <section aria-label="Referenzen" className="py-12"
+        style={{ background: '#f8f7f5', borderTop: '1px solid #e0dbd5', borderBottom: '1px solid #e0dbd5' }}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-semibold uppercase tracking-widest text-center mb-8" style={{ color: '#999' }}>
+            Unsere Standards
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 sm:gap-x-16">
+            {["DSGVO-konform", "Server in der EU", "Festpreis-Garantie", "Monatlich kündbar", "Made in Germany"].map((t) => (
+              <span key={t} className="text-base font-bold tracking-tight" style={{ color: '#b0aba5' }}>{t}</span>
+            ))}
           </div>
         </div>
       </section>
@@ -304,12 +369,18 @@ export default function LandingPage() {
       {/* ── FEATURES ──────────────────────────────────────────────── */}
       <section id="features" className="py-32 sm:py-40" style={{ background: '#f0f0f0' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
-            Vier Prozesse.<br />Vier Hebel.
+          <p className="mb-5 text-xs font-bold uppercase tracking-widest" style={{ color: '#157d5a' }}>Leistungen</p>
+          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
+            Was wir für<br />Sie tun.
           </h2>
+          <p className="text-base leading-relaxed -mt-14 mb-20" style={{ color: '#666', maxWidth: '640px' }}>
+            Von der KI-Automatisierung Ihrer Büroprozesse bis zur individuellen Software —
+            wir liefern alles aus einer Hand. Klicken Sie auf eine Leistung für Details,
+            Beispiele und typische Ergebnisse.
+          </p>
 
           {/* Feature cards grid */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
               <FeatureCard key={f.title} title={f.title} desc={f.desc} icon={f.icon}
                 onClick={() => setActiveFeature(f.title)} />
@@ -318,16 +389,69 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── WARUM WIR ───────────────────────────────────────────────── */}
+      <section id="warum" className="py-32 sm:py-40" style={{ background: '#f8f7f5' }}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-5 text-xs font-bold uppercase tracking-widest" style={{ color: '#157d5a' }}>Warum wir</p>
+          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
+            Warum Betriebe<br />mit uns arbeiten.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              ["Festpreis statt Tagessätze", "Sie wissen vor dem Start, was die Einrichtung kostet und was die monatliche Betreuung. Keine offenen Beratungsprojekte, keine Nachträge."],
+              ["DSGVO & Datenhoheit", "Ihre Daten bleiben Ihre Daten. Auftragsverarbeitung nach DSGVO, keine Weitergabe an Dritte, kein Training fremder Modelle mit Ihren Informationen."],
+              ["Mittelstand statt Konzern-IT", "Wir sprechen die Sprache von Werkstatt, Praxis und Kanzlei — nicht die von IT-Abteilungen. Kein Projektjargon, keine 200-Seiten-Konzepte."],
+              ["Läuft mit Ihren Tools", "E-Mail, Office, Ihr ERP oder Ihre Branchensoftware bleiben. Wir bauen die KI um Ihre bestehenden Systeme herum — kein Umstieg, keine Migration."],
+              ["Ein fester Ansprechpartner", "Sie haben eine direkte Nummer und ein Team, das Ihren Betrieb kennt. Keine Hotline, keine Ticketsysteme, keine wechselnden Berater."],
+              ["Messbare Ergebnisse", "Wir definieren vor dem Start, was sich verbessern soll — Stunden, Durchlaufzeiten, Fehlerquoten — und berichten regelmäßig, ob es eintritt."],
+            ].map(([title, desc]) => (
+              <div key={title} className="rounded-xl p-8 border" style={{ borderColor: '#e0dbd5', background: '#fff' }}>
+                <h3 className="font-bold" style={{ color: '#1a1a1a' }}>{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: '#666' }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BRANCHEN ────────────────────────────────────────────────── */}
+      <section id="branchen" className="py-32 sm:py-40" style={{ background: '#f0f0f0' }}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-5 text-xs font-bold uppercase tracking-widest" style={{ color: '#157d5a' }}>Branchen</p>
+          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
+            Für wen wir arbeiten.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              ["🔧", "Handwerk", "Metallbau, Elektro, SHK, Maler: Angebote, Stundenzettel und Baustellendokumentation — automatisiert, ohne dass jemand abends im Büro sitzt."],
+              ["🏭", "Industrie & Produktion", "Auftragsabwicklung, Lieferscheine, Qualitätsdokumentation: Wir nehmen der Verwaltung die Routinearbeit ab, die Produktion läuft weiter wie bisher."],
+              ["🩺", "Praxen", "Terminbestätigungen, Patientenformulare, Abrechnungsvorbereitung — DSGVO-konform und im Ton, den Ihre Patienten von Ihnen kennen."],
+              ["⚖️", "Kanzleien", "Mandantenkorrespondenz, Fristen-Checklisten, Rechnungseingang: Die KI entlastet das Sekretariat, die inhaltliche Arbeit bleibt bei Ihnen."],
+            ].map(([icon, title, desc]) => (
+              <div key={title} className="rounded-xl p-8 border" style={{ borderColor: '#e0dbd5', background: '#fff' }}>
+                <div className="text-3xl">{icon}</div>
+                <h3 className="mt-3 font-bold" style={{ color: '#1a1a1a' }}>{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: '#666' }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── RESULTS ──────────────────────────────────────────────── */}
       <section id="cases" className="py-32 sm:py-40" style={{ background: '#f8f7f5' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
+          <p className="mb-5 text-xs font-bold uppercase tracking-widest" style={{ color: '#157d5a' }}>Ergebnisse</p>
+          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
             Ergebnisse, die zählen.
           </h2>
+          <p className="text-sm -mt-14 mb-20" style={{ color: '#999' }}>
+            Durchschnittliche Einsparungen aus KI-Implementierungen in Handwerks- und Industriebetrieben.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
             {[['23h','Büroarbeit pro Woche gespart'],['–60%','Angebotserstellung schneller'],['+15%','schnellere Auftragsannahme']].map(([n,l])=>(
               <div key={l} className="text-center">
-                <div className="text-6xl font-black" style={{ color: '#157d5a', lineHeight: '1.2', marginBottom: '1rem' }}>{n}</div>
+                <div className="font-black" style={{ fontSize: 'clamp(4rem, 7vw, 5.5rem)', color: '#157d5a', lineHeight: '1.1', marginBottom: '1rem' }}>{n}</div>
                 <p className="text-lg" style={{ color: '#666', fontWeight: '500' }}>{l}</p>
               </div>
             ))}
@@ -338,7 +462,8 @@ export default function LandingPage() {
       {/* ── FAQ ─────────────────────────────────────────────────────── */}
       <section id="faq" className="py-32 sm:py-40" style={{ background: '#f8f7f5' }}>
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
+          <p className="mb-5 text-xs font-bold uppercase tracking-widest" style={{ color: '#157d5a' }}>FAQ</p>
+          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
             Häufige Fragen.
           </h2>
           <div className="space-y-2">
@@ -364,6 +489,29 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── ABLAUF ──────────────────────────────────────────────────── */}
+      <section id="ablauf" className="py-32 sm:py-40" style={{ background: '#f0f0f0' }}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-5 text-xs font-bold uppercase tracking-widest" style={{ color: '#157d5a' }}>Ablauf</p>
+          <h2 className="font-black tracking-tight mb-20" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
+            So arbeiten wir.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12">
+            {[
+              ["01", "Erstgespräch", "Wir analysieren Ihren Bürobetrieb — kostenlos, 45 Minuten, remote oder vor Ort."],
+              ["02", "Einrichtung", "Wir konfigurieren die KI für Ihre Prozesse. Ihr Team arbeitet wie gewohnt — nur schneller."],
+              ["03", "Betrieb & Betreuung", "Wir bleiben. Monatliche Anpassungen, direkter Ansprechpartner, keine versteckten Kosten."],
+            ].map(([num, title, desc]) => (
+              <div key={num}>
+                <div className="font-black" style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', lineHeight: '1', color: '#d5d0ca', letterSpacing: '-0.02em' }}>{num}</div>
+                <h3 className="mt-6 text-lg font-bold" style={{ color: '#1a1a1a' }}>{title}</h3>
+                <p className="mt-3 text-sm leading-relaxed" style={{ color: '#666' }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── CONTACT ─────────────────────────────────────────────────── */}
       <section id="contact" className="py-32 sm:py-40" style={{ background: '#f8f7f5' }}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -371,7 +519,7 @@ export default function LandingPage() {
             <div className="grid lg:grid-cols-2">
               {/* left */}
               <div className="p-10 lg:p-14 border-r" style={{ borderColor: '#e0dbd5' }}>
-                <h2 className="font-black leading-tight" style={{ fontSize: 'clamp(2rem, 5vw, 2.8rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
+                <h2 className="font-black leading-tight" style={{ fontSize: 'clamp(2.4rem, 5vw, 3.4rem)', letterSpacing: '-0.02em', color: '#1a1a1a' }}>
                   Erste Stunde kostenlos.
                 </h2>
                 <p className="mt-4 text-base leading-relaxed" style={{ color: '#555' }}>
@@ -379,9 +527,9 @@ export default function LandingPage() {
                 </p>
                 <div className="mt-8 space-y-3">
                   {[
-                    ["Antwort innerhalb von 24 Stunden"],
-                    ["Keine versteckten Kosten"],
-                    ["Sie kontrollieren alles — wir passen an"],
+                    "Antwort innerhalb von 24 Stunden",
+                    "Keine versteckten Kosten",
+                    "Sie kontrollieren alles — wir passen an.",
                   ].map((text) => (
                     <div key={text} className="flex items-center gap-3 text-sm" style={{ color: '#555' }}>
                       <span style={{ color: '#157d5a' }}>✓</span>{text}
@@ -456,18 +604,37 @@ export default function LandingPage() {
       {/* ── FOOTER ──────────────────────────────────────────────────── */}
       <footer className="py-10" style={{ background: '#f0f0f0', borderTop: '1px solid #e0dbd5' }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="h-7 w-7 rounded-lg" style={{ background: '#1a3d52' }} />
-              <span className="font-black tracking-tight" style={{ color: '#1a1a1a' }}>veycron</span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 pb-10">
+            <div>
+              <div className="flex items-center gap-3">
+                <div className="h-7 w-7 rounded-lg" style={{ background: '#1a3d52' }} />
+                <span className="font-black tracking-tight" style={{ color: '#1a1a1a' }}>veycron</span>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed" style={{ color: '#999', maxWidth: '280px' }}>
+                Wir automatisieren Büroprozesse in Handwerks- und Industriebetrieben — DSGVO-konform, zum Festpreis, mit laufender Betreuung.
+              </p>
             </div>
-            <div className="flex flex-wrap gap-8 text-sm" style={{ color: '#999' }}>
-              {[["Impressum","/impressum"],["Datenschutz","/datenschutz"]].map(([l,h])=>(
-                <a key={l} href={h} className="no-underline transition-colors" style={{ color: '#999' }}
-                  onMouseEnter={e=>(e.currentTarget.style.color='#1a1a1a')} onMouseLeave={e=>(e.currentTarget.style.color='#999')}>{l}</a>
-              ))}
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: '#999' }}>Navigation</p>
+              <div className="flex flex-col gap-2 text-sm">
+                {[["Leistungen","#features"],["Branchen","#branchen"],["Ergebnisse","#cases"],["Ablauf","#ablauf"],["Häufige Fragen","#faq"],["Kontakt","#contact"]].map(([l,h])=>(
+                  <a key={l} href={h} className="no-underline transition-colors" style={{ color: '#999' }}
+                    onMouseEnter={e=>(e.currentTarget.style.color='#1a1a1a')} onMouseLeave={e=>(e.currentTarget.style.color='#999')}>{l}</a>
+                ))}
+              </div>
             </div>
-            <p className="text-sm" style={{ color: '#999' }}>© {new Date().getFullYear()} veycron</p>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: '#999' }}>Rechtliches</p>
+              <div className="flex flex-col gap-2 text-sm">
+                {[["Impressum","/impressum"],["Datenschutz","/datenschutz"]].map(([l,h])=>(
+                  <a key={l} href={h} className="no-underline transition-colors" style={{ color: '#999' }}
+                    onMouseEnter={e=>(e.currentTarget.style.color='#1a1a1a')} onMouseLeave={e=>(e.currentTarget.style.color='#999')}>{l}</a>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="pt-6 border-t" style={{ borderColor: '#e0dbd5' }}>
+            <p className="text-sm" style={{ color: '#999' }}>© {new Date().getFullYear()} veycron. Alle Rechte vorbehalten.</p>
           </div>
         </div>
       </footer>
