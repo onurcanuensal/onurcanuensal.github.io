@@ -1,9 +1,17 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: 'Kontaktformular ist aktuell nicht verfügbar.' },
+      { status: 503 }
+    );
+  }
+
+  const resend = new Resend(apiKey);
+
   try {
     const body = await request.json();
     const { name, email, message } = body as {
@@ -58,7 +66,7 @@ export async function POST(request: Request) {
     if (error) {
       console.error('Resend error:', error);
       return NextResponse.json(
-        { error: 'Mail konnte nicht gesendet werden. Bitte versuche es später erneut.' },
+        { error: 'Mail konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.' },
         { status: 500 }
       );
     }
@@ -67,7 +75,7 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error('Contact API error:', err);
     return NextResponse.json(
-      { error: 'Interner Fehler. Bitte versuche es später erneut.' },
+      { error: 'Interner Fehler. Bitte versuchen Sie es später erneut.' },
       { status: 500 }
     );
   }
