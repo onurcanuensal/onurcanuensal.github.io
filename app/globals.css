@@ -58,10 +58,18 @@ body {
 .faq-body {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s ease;
+  opacity: 0;
+  transition: grid-template-rows 0.35s ease, opacity 0.2s ease;
 }
-.faq-body.open { grid-template-rows: 1fr; }
-.faq-body-inner { overflow: hidden; }
+.faq-body.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 0.35s ease, opacity 0.3s ease 0.05s;
+}
+.faq-body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
 
 /* ── MODAL SLIDE ── */
 @keyframes slide-in {
