@@ -1,42 +1,34 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const siteName = "veycron";
 const siteDescription =
-  "veycron automatisiert Büroprozesse mit KI und baut individuelle Software und Webseiten für Handwerks- und Industriebetriebe — DSGVO-konform, zum Festpreis, mit laufender Betreuung.";
+  "XRechnung und ZUGFeRD in 2 Minuten erstellen — ohne Buchhaltungssoftware, ohne Steuerberater. Für Freelancer und Kleinunternehmer, die die E-Rechnungspflicht einfach erfüllen wollen.";
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://veycron.de";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://veycron.de";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: {
-    default: "veycron — KI-Automatisierung, Software & Webseiten für den Mittelstand",
-    template: "%s · veycron",
-  },
+  title: "veycron — XRechnung in 2 Minuten. Ohne Steuerberater.",
   description: siteDescription,
   keywords: [
-    "KI Automatisierung", "Büroautomatisierung", "Handwerk", "Mittelstand",
-    "KI für Handwerker", "Angebotserstellung KI", "Büroprozesse automatisieren",
-    "KI Beratung", "Künstliche Intelligenz Mittelstand", "DSGVO KI",
-    "Digitalisierung Handwerk", "KI Industriebetrieb", "Büroarbeit automatisieren",
-    "Softwareentwicklung Mittelstand", "Webseite Handwerker", "Webentwicklung",
-    "individuelle Software", "Webseite erstellen lassen", "Webagentur",
-    "veycron", "KI Praxis", "KI Kanzlei",
+    "XRechnung", "ZUGFeRD", "E-Rechnung", "E-Rechnungspflicht",
+    "Freelancer", "Kleinunternehmer", "Rechnung erstellen",
+    "XRechnung erstellen", "E-Rechnung Pflicht 2025",
+    "GoBD", "elektronische Rechnung", "veycron",
   ],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: "/",
-    siteName,
-    title: "veycron — KI-Automatisierung, Software & Webseiten für den Mittelstand",
+    siteName: "veycron",
+    title: "veycron — XRechnung in 2 Minuten. Ohne Steuerberater.",
     description: siteDescription,
     images: ["/og.png"],
     locale: "de_DE",
   },
   twitter: {
     card: "summary_large_image",
-    title: "veycron — KI-Automatisierung, Software & Webseiten für den Mittelstand",
+    title: "veycron — XRechnung in 2 Minuten.",
     description: siteDescription,
     images: ["/og.png"],
   },
@@ -60,25 +52,17 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
+  "@type": "SoftwareApplication",
   name: "veycron",
   description: siteDescription,
   url: baseUrl,
-  areaServed: { "@type": "Country", name: "DE" },
-  serviceType: [
-    "KI-Automatisierung",
-    "Büroprozess-Optimierung",
-    "KI-Beratung für Handwerk und Mittelstand",
-    "Softwareentwicklung",
-    "Webdesign und Webentwicklung",
-  ],
-  knowsAbout: [
-    "Künstliche Intelligenz",
-    "Büroautomatisierung",
-    "Angebotserstellung",
-    "Dokumentenverarbeitung",
-  ],
-  priceRange: "Festpreis",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    availability: "https://schema.org/PreOrder",
+    areaServed: { "@type": "Country", name: "DE" },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -90,7 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="antialiased bg-white text-gray-900">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
