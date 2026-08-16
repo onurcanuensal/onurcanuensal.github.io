@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: 'veycron <onboarding@resend.dev>',
+        from: 'veycron <kontakt@veycron.de>',
         to: [process.env.CONTACT_EMAIL ?? ''],
         subject: `Neuer Frühzugang: ${email.trim()}`,
         html: `<p>Neue E-Mail für den Frühzugang: <strong>${email.trim()}</strong></p><p>${new Date().toISOString()}</p>`,
