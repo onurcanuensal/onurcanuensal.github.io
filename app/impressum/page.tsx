@@ -53,7 +53,7 @@ export default function ImpressumPage() {
               "Deutschland",
             ]],
             ["Kontakt", [
-              "E-Mail: cetmikli21@gmailcom",
+              "E-Mail: cetmikli21@googlemail.com",
             ]],
             ["Vertretungsberechtigt", ["Yagmur Ünsal"]],
             ["Umsatzsteuer-ID", ["DE000000000 (falls vorhanden)"]],

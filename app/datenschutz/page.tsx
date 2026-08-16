@@ -55,11 +55,8 @@ export default function DatenschutzPage() {
           <section id="verantwortlicher" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
             <h2 className="text-xl font-semibold text-indigo-600">Verantwortlicher</h2>
             <p className="mt-2 text-gray-700">
-              [Vollständiger Name], [Straße Hausnummer], [PLZ Ort], Deutschland ·
-              E-Mail: kontakt@veycron.de
-            </p>
-            <p className="mt-2 text-sm text-gray-500">
-              Hinweis: Bitte hier eure vollständigen Kontaktdaten eintragen (siehe auch Impressum).
+              Yagmur Ünsal, Steigstraße 26, 86505 Münsterhausen, Deutschland ·
+              E-Mail: cetmikli21@googlemail.com
             </p>
           </section>
 
@@ -127,7 +124,7 @@ export default function DatenschutzPage() {
             <p className="mt-2 text-gray-700">
               Ihre E-Mail-Adresse speichern wir, bis Sie der Speicherung widersprechen, den
               Frühzugang nicht mehr wünschen oder das Produkt eingestellt wird. Eine Löschung können
-              Sie jederzeit formlos per E-Mail an kontakt@veycron.de verlangen.
+              Sie jederzeit formlos per E-Mail an cetmikli21@googlemail.com verlangen.
             </p>
           </section>
 
@@ -143,7 +140,7 @@ export default function DatenschutzPage() {
               <li>Beschwerde bei einer Datenschutz-Aufsichtsbehörde</li>
             </ul>
             <p className="mt-2 text-gray-700">
-              Für alle Anliegen wenden Sie sich an: kontakt@veycron.de
+              Für alle Anliegen wenden Sie sich an: cetmikli21@googlemail.com
             </p>
           </section>
 
