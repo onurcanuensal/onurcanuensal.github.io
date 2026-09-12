@@ -11,6 +11,11 @@
   --text-secondary: #5a6170;
   --text-muted: #8b919e;
   --border: #e2e5ea;
+  --amber: #9c5e18;
+  --amber-tint: #f8ecd9;
+  --bad: #a13f3f;
+  --bad-tint: #f6e4e2;
+  --good-tint: #e6f0ea;
 }
 
 @theme inline {
@@ -53,3 +58,7 @@ body {
 /* ── FORM ── */
 input:focus { outline: none; }
 button:disabled { cursor: not-allowed; }
+
+@media print {
+  body { background: #fff; }
+}

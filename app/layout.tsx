@@ -2,33 +2,32 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const siteDescription =
-  "XRechnung und ZUGFeRD in 2 Minuten erstellen — ohne Buchhaltungssoftware, ohne Steuerberater. Für Freelancer und Kleinunternehmer, die die E-Rechnungspflicht einfach erfüllen wollen.";
+  "Nebenkostenabrechnung für private Vermieter in Minuten statt Excel-Abenden — rechtssicher nach BetrKV, inklusive CO2-Kostenaufteilung und BGH-Pflichtbestandteilen.";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://veycron.de";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "veycron — XRechnung in 2 Minuten. Ohne Steuerberater.",
+  title: "veycron — Nebenkostenabrechnung ohne den Jahres-Krampf.",
   description: siteDescription,
   keywords: [
-    "XRechnung", "ZUGFeRD", "E-Rechnung", "E-Rechnungspflicht",
-    "Freelancer", "Kleinunternehmer", "Rechnung erstellen",
-    "XRechnung erstellen", "E-Rechnung Pflicht 2025",
-    "GoBD", "elektronische Rechnung", "veycron",
+    "Nebenkostenabrechnung", "Betriebskostenabrechnung", "BetrKV",
+    "Vermieter", "Nebenkostenrechner", "Heizkostenabrechnung",
+    "CO2-Kostenaufteilungsgesetz", "Nebenkosten Vorlage", "veycron",
   ],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: "/",
     siteName: "veycron",
-    title: "veycron — XRechnung in 2 Minuten. Ohne Steuerberater.",
+    title: "veycron — Nebenkostenabrechnung ohne den Jahres-Krampf.",
     description: siteDescription,
     images: ["/og.png"],
     locale: "de_DE",
   },
   twitter: {
     card: "summary_large_image",
-    title: "veycron — XRechnung in 2 Minuten.",
+    title: "veycron — Nebenkostenabrechnung ohne den Jahres-Krampf.",
     description: siteDescription,
     images: ["/og.png"],
   },

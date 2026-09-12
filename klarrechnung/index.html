@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klarrechnung – Nebenkostenabrechnung leicht gemacht</title>
+</head>
+<body>
+<style>
+  :root {
+    --paper: #f6f3ec;
+    --paper-raised: #fffdf8;
+    --ink: #1c2430;
+    --ink-soft: #4a5568;
+    --line: #d9d2c1;
+    --line-strong: #b9b09a;
+    --blueprint: #2c5f8a;
+    --blueprint-deep: #16324f;
+    --blueprint-tint: #e4edf3;
+    --amber: #9c5e18;
+    --amber-tint: #f3e6d2;
+    --good: #3f6b4a;
+    --good-tint: #e5efe6;
+    --bad: #a13f3f;
+    --bad-tint: #f3e2e0;
+    --shadow: 0 1px 2px rgba(28,36,48,0.06), 0 8px 24px -12px rgba(28,36,48,0.18);
+    --radius: 4px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181f; --paper-raised: #1b212b; --ink: #e8e6de; --ink-soft: #a8b0bc;
+      --line: #333c4a; --line-strong: #475263;
+      --blueprint: #7fb2dc; --blueprint-deep: #a9d0ee; --blueprint-tint: #1c2e3d;
+      --amber: #d9a25f; --amber-tint: #33291a;
+      --good: #86c294; --good-tint: #1a2b1f;
+      --bad: #d98b8b; --bad-tint: #2e1c1c;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181f; --paper-raised: #1b212b; --ink: #e8e6de; --ink-soft: #a8b0bc;
+    --line: #333c4a; --line-strong: #475263;
+    --blueprint: #7fb2dc; --blueprint-deep: #a9d0ee; --blueprint-tint: #1c2e3d;
+    --amber: #d9a25f; --amber-tint: #33291a;
+    --good: #86c294; --good-tint: #1a2b1f;
+    --bad: #d98b8b; --bad-tint: #2e1c1c;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Public Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: clamp(18px,5vw,48px) clamp(16px,5vw,32px) 90px; }
+  h1,h2,h3 { font-family: "Fraunces", Georgia, serif; text-wrap: balance; margin: 0; color: var(--ink); }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  a { color: var(--blueprint-deep); }
+
+  /* hero */
+  .hero { padding: 8px 0 20px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blueprint); margin: 0 0 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+  .hero h1 {
+    font-size: clamp(2.3rem, 7vw, 3.4rem); font-weight: 600; letter-spacing: -0.01em;
+    max-width: 16ch;
+  }
+  .hero .sub { margin-top: 16px; font-size: 1.12rem; color: var(--ink-soft); max-width: 48ch; }
+  .hero .stats {
+    margin-top: 26px; display: flex; gap: clamp(18px,4vw,36px); flex-wrap: wrap;
+  }
+  .hero .stat .num {
+    font-family: "IBM Plex Mono", monospace; font-size: 1.7rem; font-weight: 600;
+    color: var(--blueprint-deep); font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .hero .stat .lab { font-size: 0.82rem; color: var(--ink-soft); margin-top: 4px; max-width: 18ch; }
+
+  .cta-row { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn {
+    font-family: "Public Sans", sans-serif; font-weight: 600; font-size: 1rem;
+    padding: 13px 24px; border-radius: var(--radius); border: 1px solid var(--blueprint-deep);
+    background: var(--blueprint-deep); color: #fdfcf8; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn.ghost { background: transparent; color: var(--blueprint-deep); }
+  .hint { font-size: 0.85rem; color: var(--ink-soft); }
+
+  section { margin-top: 56px; }
+  .section-label {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--blueprint); display: flex; align-items: center;
+    gap: 10px; margin-bottom: 10px;
+  }
+  .section-label::after { content: ""; flex: 1; height: 1px; background: var(--line-strong); }
+  section h2 { font-size: clamp(1.35rem, 3.2vw, 1.65rem); font-weight: 600; margin-bottom: 12px; }
+  section > p.lede { font-size: 1.02rem; color: var(--ink-soft); max-width: 58ch; margin: 0 0 20px; }
+
+  .card {
+    background: var(--paper-raised); border: 1px solid var(--line-strong); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: clamp(16px,3vw,26px);
+  }
+
+  /* checker */
+  .checker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 8px; }
+  .chip {
+    background: var(--good-tint); border: 1px solid var(--good); border-radius: var(--radius);
+    padding: 9px 11px; font-size: 0.86rem; cursor: default; position: relative;
+  }
+  .chip::before { content: "✓ "; color: var(--good); font-weight: 700; }
+  .chip .n { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; color: var(--ink-soft); display: block; margin-top: 2px; }
+  .not-list {
+    margin-top: 16px; background: var(--bad-tint); border: 1px solid var(--bad); border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .not-list .lbl {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--bad); display: block; margin-bottom: 8px;
+  }
+  .not-list ul { margin: 0; padding-left: 1.2em; }
+  .not-list li { margin-bottom: 4px; }
+
+  /* bgh checklist */
+  .bgh-steps { display: flex; flex-direction: column; gap: 10px; }
+  .bgh-step { display: flex; gap: 12px; align-items: flex-start; }
+  .bgh-step .num {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--blueprint);
+    display: flex; align-items: center; justify-content: center; font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem; font-weight: 600; color: var(--blueprint-deep); background: var(--blueprint-tint);
+  }
+  .bgh-step b { display: block; margin-bottom: 2px; }
+  .bgh-step span.d { color: var(--ink-soft); font-size: 0.92rem; }
+
+  /* co2 gradient bar */
+  .co2-bar {
+    height: 14px; border-radius: 7px; margin: 18px 0 10px;
+    background: linear-gradient(90deg, var(--good) 0%, var(--amber) 55%, var(--bad) 100%);
+  }
+  .co2-labels { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--ink-soft); font-family: "IBM Plex Mono", monospace; }
+  .co2-callout {
+    margin-top: 16px; border-left: 3px solid var(--amber); background: var(--amber-tint);
+    padding: 12px 16px; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.94rem;
+  }
+
+  /* mieter mockup */
+  .mockup {
+    background: var(--paper-raised); border: 1px solid var(--line-strong); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 22px clamp(16px,4vw,28px); font-family: "IBM Plex Mono", monospace;
+    font-size: 0.86rem;
+  }
+  .mockup .mh { font-family: "Public Sans", sans-serif; font-weight: 600; font-size: 1.05rem; margin-bottom: 14px; }
+  .mockup table { width: 100%; border-collapse: collapse; }
+  .mockup td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .mockup td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+  .mockup tr.total td { border-top: 2px solid var(--ink); border-bottom: none; font-weight: 700; padding-top: 10px; }
+  .mockup tr.result td { color: var(--good); font-weight: 700; }
+
+  /* waitlist */
+  .waitlist-card {
+    background: var(--blueprint-deep); color: #fdfcf8; border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: clamp(22px,4vw,34px);
+  }
+  .waitlist-card h2 { color: #fdfcf8; }
+  .waitlist-card p { color: #d7e2ec; max-width: 50ch; }
+  .field-row { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .field-row input[type=email] {
+    flex: 1; min-width: 200px; padding: 13px 14px; border-radius: var(--radius); border: 1px solid transparent;
+    font-family: "Public Sans", sans-serif; font-size: 1rem; background: #fdfcf8; color: var(--ink);
+  }
+  .field-row .btn { background: #fdfcf8; color: var(--blueprint-deep); border-color: #fdfcf8; }
+  .waitlist-msg { margin-top: 12px; font-size: 0.88rem; color: #d7e2ec; min-height: 1.2em; }
+
+  .disclaimer {
+    margin-top: 56px; padding: 16px 18px; border: 1px dashed var(--line-strong); border-radius: var(--radius);
+    font-size: 0.86rem; color: var(--ink-soft); background: var(--paper-raised);
+  }
+  .disclaimer b { color: var(--ink); }
+
+  footer.src {
+    margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line-strong);
+    font-size: 0.8rem; color: var(--ink-soft);
+  }
+  footer.src h3 {
+    font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; font-family: "IBM Plex Mono", monospace;
+    color: var(--ink-soft); margin-bottom: 8px;
+  }
+  footer.src ol { padding-left: 1.2em; margin: 0; }
+  footer.src li { margin-bottom: 4px; }
+  footer.src a { color: var(--ink-soft); }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow"><span class="dot"></span>Für private Vermieter · Deutschland</p>
+    <h1>Nebenkostenabrechnung, ohne den Jahres-Krampf.</h1>
+    <p class="sub">Beleg-Fotos rein, rechtssichere Abrechnung raus &mdash; in Minuten statt Excel-Abenden. Für alle, die 1&ndash;10 Wohnungen vermieten und keine Hausverwaltung brauchen wollen.</p>
+    <div class="stats">
+      <div class="stat"><span class="num">93%</span><span class="lab">der Abrechnungen enthalten Fehler<sup>1</sup></span></div>
+      <div class="stat"><span class="num">12 Mon.</span><span class="lab">Frist, danach verfällt deine Nachforderung</span></div>
+      <div class="stat"><span class="num">0€</span><span class="lab">für die Checks unten &mdash; dauerhaft kostenlos</span></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn" href="rechner.html">Kostenlos abrechnen →</a>
+      <a class="btn ghost" href="#warteliste">Auf die Warteliste</a>
+    </div>
+  </div>
+
+  <section id="checker">
+    <p class="section-label">Kostenloser Check 1/3</p>
+    <h2>Was darfst du überhaupt umlegen?</h2>
+    <p class="lede">Die 17 Betriebskostenarten nach §&nbsp;2 BetrKV &mdash; alles, was grundsätzlich auf deinen Mieter umlagefähig ist.</p>
+    <div class="checker-grid">
+      <div class="chip">Grundsteuer<span class="n">Nr. 1</span></div>
+      <div class="chip">Wasserversorgung<span class="n">Nr. 2</span></div>
+      <div class="chip">Entwässerung<span class="n">Nr. 3</span></div>
+      <div class="chip">Heizung<span class="n">Nr. 4a</span></div>
+      <div class="chip">Warmwasser<span class="n">Nr. 4b</span></div>
+      <div class="chip">Aufzug<span class="n">Nr. 5</span></div>
+      <div class="chip">Straßenreinigung &amp; Müll<span class="n">Nr. 6</span></div>
+      <div class="chip">Gebäudereinigung<span class="n">Nr. 7</span></div>
+      <div class="chip">Gartenpflege<span class="n">Nr. 8</span></div>
+      <div class="chip">Beleuchtung<span class="n">Nr. 9</span></div>
+      <div class="chip">Schornsteinfeger<span class="n">Nr. 10</span></div>
+      <div class="chip">Sach-/Haftpflichtvers.<span class="n">Nr. 11</span></div>
+      <div class="chip">Hauswart<span class="n">Nr. 12</span></div>
+      <div class="chip">Antenne/Kabel<span class="n">Nr. 13</span></div>
+      <div class="chip">Wäschepflege<span class="n">Nr. 14</span></div>
+      <div class="chip">Gemeinschaftsflächen<span class="n">Nr. 15</span></div>
+      <div class="chip">Sonstige Betriebskosten<span class="n">Nr. 16</span></div>
+    </div>
+    <div class="not-list">
+      <span class="lbl">Nicht umlagefähig (§ 1 Abs. 2 BetrKV)</span>
+      <ul>
+        <li><strong>Verwaltungskosten</strong> &mdash; Hausverwaltung, Kontoführung, Eigentümerversammlungen</li>
+        <li><strong>Instandhaltung &amp; Instandsetzung</strong> &mdash; Reparaturen, Dach, Fassade, defekte Geräte</li>
+        <li><strong>Leerstandskosten</strong> &mdash; Kosten für leerstehende Einheiten</li>
+        <li><strong>Kapitalkosten</strong> &mdash; Kreditraten, Zinsen, Finanzierungskosten</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <p class="mono" style="font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 10px;">Nachgefragt: Versicherungen im Detail</p>
+      <p style="margin:0 0 10px; font-size:0.94rem;"><strong>Umlagefähig:</strong> Wohngebäudeversicherung (Feuer, Sturm, Wasser), Grundstücks-/Haus- &amp; Grundbesitzerhaftpflicht, Glasversicherung, Elementarschadenversicherung.</p>
+      <p style="margin:0 0 10px; font-size:0.94rem;"><strong>Nicht umlagefähig:</strong> eigenständige Mietausfallversicherung, Rechtsschutzversicherung, Hausratversicherung (die schließt ohnehin der Mieter selbst ab). Diese schützen nur dich persönlich als Vermieter, nicht das Gebäude.</p>
+      <p style="margin:0 0 10px; font-size:0.94rem;"><strong>Ausnahme:</strong> Ist der Mietausfallschutz Teil deiner Gebäudeversicherung (nicht separat abgeschlossen), zählt er laut BGH mit dazu &mdash; er gilt dann als Teil des Gebäudeschutzes, nicht als eigenständige Versicherung<sup>5</sup>.</p>
+      <p style="margin:0; font-size:0.94rem;"><strong>Wie viel Prozent trägt der Mieter?</strong> Es gibt keinen festen Prozentsatz. Maßgeblich ist der im Mietvertrag vereinbarte Verteilerschlüssel &mdash; steht dort nichts anderes, gilt die Wohnfläche: dein Anteil = deine m² ÷ Gesamt-Wohnfläche des Hauses × Gesamtprämie.</p>
+    </div>
+  </section>
+
+  <section id="bgh">
+    <p class="section-label">Kostenloser Check 2/3</p>
+    <h2>Ist deine Abrechnung überhaupt wirksam?</h2>
+    <p class="lede">Der BGH verlangt vier Pflichtbestandteile (Urteil VIII&nbsp;ZR&nbsp;244/18)<sup>2</sup> &mdash; fehlt einer, ist die ganze Abrechnung formell unwirksam, egal wie richtig die Zahlen sind.</p>
+    <div class="card">
+      <div class="bgh-steps">
+        <div class="bgh-step"><span class="num">1</span><div><b>Gesamtkosten je Kostenart</b><span class="d">Alle Ausgaben aufgeschlüsselt nach den 17 Betriebskostenarten</span></div></div>
+        <div class="bgh-step"><span class="num">2</span><div><b>Verteilerschlüssel benannt &amp; erklärt</b><span class="d">Nach welchem Maßstab wird umgelegt (Wohnfläche, Personen, Verbrauch)?</span></div></div>
+        <div class="bgh-step"><span class="num">3</span><div><b>Anteil des Mieters berechnet</b><span class="d">Die konkrete Rechnung, wie der Anteil zustande kommt</span></div></div>
+        <div class="bgh-step"><span class="num">4</span><div><b>Vorauszahlungen abgezogen</b><span class="d">Geleistete Vorauszahlungen gegengerechnet &mdash; Nachzahlung oder Guthaben</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="co2">
+    <p class="section-label">Kostenloser Check 3/3 · Neu seit 2023, oft übersehen</p>
+    <h2>CO2-Kosten: Der Anteil, den viele vergessen</h2>
+    <p class="lede">Seit dem CO2-Kostenaufteilungsgesetz trägst du als Vermieter je nach energetischem Zustand des Gebäudes einen Teil der CO2-Kosten mit &mdash; in 10&nbsp;Stufen<sup>3</sup>.</p>
+    <div class="card">
+      <div class="co2-bar"></div>
+      <div class="co2-labels"><span>effizientes Gebäude → 0% Vermieter</span><span>&gt; 52 kg CO2/m² → 95% Vermieter</span></div>
+      <div class="co2-callout">Diese Aufteilung muss in der Heizkostenabrechnung <strong>ausgewiesen</strong> werden. Fehlt sie, ist die Heizkostenabrechnung angreifbar &mdash; ein Punkt, den viele Excel-Vorlagen und ältere Tools schlicht nicht abbilden.</div>
+    </div>
+  </section>
+
+  <section id="mieter">
+    <p class="section-label">Für deinen Mieter</p>
+    <h2>So einfach soll das Ergebnis aussehen</h2>
+    <p class="lede">Eine Abrechnung, die dein Mieter auf einen Blick versteht, bedeutet weniger Rückfragen und weniger Widersprüche für dich.</p>
+    <div class="mockup">
+      <div class="mh">Nebenkostenabrechnung 2025 &mdash; Wohnung 2. OG links</div>
+      <table>
+        <tr><td>Gesamtkosten Haus</td><td>4.180,00 €</td></tr>
+        <tr><td>Verteilerschlüssel</td><td>nach Wohnfläche (68 / 412 m²)</td></tr>
+        <tr><td>Dein Anteil (16,5%)</td><td>689,70 €</td></tr>
+        <tr><td>Deine Vorauszahlungen</td><td>&minus; 720,00 €</td></tr>
+        <tr class="total"><td>Ergebnis</td><td></td></tr>
+        <tr class="result"><td>Guthaben für dich</td><td>30,30 €</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="warteliste">
+    <div class="waitlist-card">
+      <p class="section-label" style="color:#a9c6de;"><span style="color:#a9c6de;">Als Erste·r dabei</span></p>
+      <h2>Trag dich für den frühen Zugang ein</h2>
+      <p>Foto der Belege hochladen, den Rest übernimmt Klarrechnung &mdash; inklusive aller Checks von oben. Kein Spam, nur eine Nachricht, sobald es losgeht.</p>
+      <form id="waitlistForm">
+        <div class="field-row">
+          <input type="email" id="emailInput" placeholder="deine@email.de" required>
+          <button type="submit" class="btn">Eintragen</button>
+        </div>
+      </form>
+      <p class="waitlist-msg" id="waitlistMsg"></p>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    <b>Wichtig:</b> Diese Seite und alle Angaben sind eine Informations- und Berechnungshilfe, <strong>keine Rechtsberatung</strong>. Rechtsstand: August 2026, ohne Gewähr. Lass deine konkrete Abrechnung im Zweifel von einem Mieterverein oder Fachanwalt für Mietrecht prüfen.
+  </div>
+
+  <footer class="src">
+    <h3>Quellen</h3>
+    <ol>
+      <li>Fehlerquote: <a href="https://www.vivi-immo.de/blog-detail/nebenkostenabrechnung-erstellen.html" target="_blank" rel="noopener">vivi-immo.de</a></li>
+      <li>BGH VIII ZR 244/18, vier Pflichtbestandteile: <a href="https://www.nebenkosten-assistent.de/urteile/bgh-viii-zr-244-18-vier-pflichtbestandteile" target="_blank" rel="noopener">nebenkosten-assistent.de</a></li>
+      <li>CO2-Kostenaufteilungsgesetz: <a href="https://www.vzhh.de/themen/bauen-immobilien-energie/heizung/heizkostenabrechnung-vermieter-muessen-sich-co2-kosten-beteiligen" target="_blank" rel="noopener">Verbraucherzentrale Hamburg</a></li>
+      <li>Betriebskostenkatalog § 2 BetrKV: <a href="https://www.gesetze-im-internet.de/betrkv/__2.html" target="_blank" rel="noopener">gesetze-im-internet.de</a>, <a href="https://www.myinvest24.de/ratgeber/nebenkosten/betriebskostenverordnung/" target="_blank" rel="noopener">myinvest24.de</a></li>
+      <li>Versicherungen &amp; Mietausfallschutz: <a href="https://www.nebenkosten-assistent.de/wissen/versicherungen-fuer-vermieter-umlagefaehige-kosten" target="_blank" rel="noopener">nebenkosten-assistent.de</a>, <a href="https://www.haufe.de/immobilien/verwaltung/bgh-mietausfallschutz-in-gebaeudeversicherung-ist-umlegbar_258_457334.html" target="_blank" rel="noopener">Haufe / BGH-Urteil</a></li>
+    </ol>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  var WAITLIST_EMAIL = "hallo@klarrechnung.de"; // TODO Cano: durch echte Adresse ersetzen
+  var form = document.getElementById('waitlistForm');
+  var input = document.getElementById('emailInput');
+  var msg = document.getElementById('waitlistMsg');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = input.value.trim();
+    if (!email) return;
+    var subject = encodeURIComponent('Warteliste Klarrechnung');
+    var body = encodeURIComponent('Trag mich bitte auf die Warteliste ein.\n\nMeine E-Mail: ' + email);
+    window.location.href = 'mailto:' + WAITLIST_EMAIL + '?subject=' + subject + '&body=' + body;
+    msg.textContent = 'Dein Mail-Programm öffnet sich gleich — einfach absenden, dann bist du dabei.';
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klarrechnung – Rechner</title>
+</head>
+<body>
+<style>
+  :root {
+    --paper: #f6f3ec; --paper-raised: #fffdf8; --ink: #1c2430; --ink-soft: #4a5568;
+    --line: #d9d2c1; --line-strong: #b9b09a;
+    --blueprint: #2c5f8a; --blueprint-deep: #16324f; --blueprint-tint: #e4edf3;
+    --amber: #9c5e18; --amber-tint: #f3e6d2;
+    --good: #3f6b4a; --good-tint: #e5efe6;
+    --bad: #a13f3f; --bad-tint: #f3e2e0;
+    --shadow: 0 1px 2px rgba(28,36,48,0.06), 0 8px 24px -12px rgba(28,36,48,0.18);
+    --radius: 4px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181f; --paper-raised: #1b212b; --ink: #e8e6de; --ink-soft: #a8b0bc;
+      --line: #333c4a; --line-strong: #475263;
+      --blueprint: #7fb2dc; --blueprint-deep: #a9d0ee; --blueprint-tint: #1c2e3d;
+      --amber: #d9a25f; --amber-tint: #33291a; --good: #86c294; --good-tint: #1a2b1f;
+      --bad: #d98b8b; --bad-tint: #2e1c1c;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181f; --paper-raised: #1b212b; --ink: #e8e6de; --ink-soft: #a8b0bc;
+    --line: #333c4a; --line-strong: #475263;
+    --blueprint: #7fb2dc; --blueprint-deep: #a9d0ee; --blueprint-tint: #1c2e3d;
+    --amber: #d9a25f; --amber-tint: #33291a; --good: #86c294; --good-tint: #1a2b1f;
+    --bad: #d98b8b; --bad-tint: #2e1c1c;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Public Sans", -apple-system, "Segoe UI", sans-serif; line-height: 1.55; font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: clamp(16px,4vw,40px) clamp(14px,4vw,28px) 100px; }
+  h1,h2,h3 { font-family: "Fraunces", Georgia, serif; text-wrap: balance; margin: 0; color: var(--ink); }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  a { color: var(--blueprint-deep); }
+  label { display: block; font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 5px; font-weight: 500; }
+  input[type=text], input[type=number], select {
+    width: 100%; padding: 10px 11px; border: 1px solid var(--line-strong); border-radius: var(--radius);
+    background: var(--paper-raised); color: var(--ink); font-family: "Public Sans", sans-serif; font-size: 0.95rem;
+  }
+  input:focus, select:focus { outline: 2px solid var(--blueprint); outline-offset: 1px; }
+  .field { margin-bottom: 14px; }
+  .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 14px; }
+
+  header.top { padding: 4px 0 22px; }
+  .brand { font-family: "IBM Plex Mono", monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blueprint); }
+  header.top h1 { font-size: clamp(1.6rem,5vw,2.1rem); margin-top: 6px; }
+
+  .stepper { display: flex; gap: 4px; margin: 20px 0 30px; }
+  .stepper .seg { flex: 1; height: 5px; border-radius: 3px; background: var(--line); }
+  .stepper .seg.done { background: var(--blueprint); }
+  .stepper .seg.active { background: var(--blueprint-deep); }
+  .steplabels { display: flex; justify-content: space-between; font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; color: var(--ink-soft); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .steplabels span.cur { color: var(--blueprint-deep); font-weight: 600; }
+
+  .card { background: var(--paper-raised); border: 1px solid var(--line-strong); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(16px,3vw,26px); margin-bottom: 18px; }
+  .card h2 { font-size: 1.25rem; margin-bottom: 4px; }
+  .card .hint { font-size: 0.88rem; color: var(--ink-soft); margin: 0 0 16px; }
+  .microhint { font-size: 0.76rem; color: var(--ink-soft); margin-top: 5px; line-height: 1.4; }
+  .field .microhint { margin-top: -8px; margin-bottom: 12px; }
+  .intro-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .lead-result {
+    background: var(--good-tint); border: 1px solid var(--good); border-radius: var(--radius);
+    padding: 18px 20px; margin-bottom: 18px; font-size: 1.08rem;
+  }
+  .lead-result.pos { background: var(--amber-tint); border-color: var(--amber); }
+  .lead-result b { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+
+  .btn {
+    font-family: "Public Sans", sans-serif; font-weight: 600; font-size: 0.95rem; padding: 11px 20px;
+    border-radius: var(--radius); border: 1px solid var(--blueprint-deep); background: var(--blueprint-deep);
+    color: #fdfcf8; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn.ghost { background: transparent; color: var(--blueprint-deep); }
+  .btn.small { padding: 6px 12px; font-size: 0.82rem; }
+  .btn.danger { background: transparent; border-color: var(--bad); color: var(--bad); }
+  .navrow { display: flex; justify-content: space-between; margin-top: 22px; gap: 10px; }
+
+  table.items { width: 100%; border-collapse: collapse; }
+  table.items th { text-align: left; font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); padding: 6px 8px; border-bottom: 1px solid var(--line-strong); }
+  table.items td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.items input, table.items select { font-size: 0.88rem; padding: 7px 8px; }
+  .meter-row { display: flex; gap: 6px; margin-top: 6px; }
+  .meter-row input { font-size: 0.8rem; padding: 5px 6px; }
+  .warn-inline { font-size: 0.76rem; color: var(--bad); margin-top: 4px; }
+  .excluded { opacity: 0.45; }
+
+  .callout { border-left: 3px solid var(--blueprint); background: var(--blueprint-tint); padding: 12px 16px; border-radius: 0 var(--radius) var(--radius) 0; font-size: 0.9rem; margin-bottom: 16px; }
+  .callout.warn { border-left-color: var(--amber); background: var(--amber-tint); }
+
+  .co2-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin-top: 10px; }
+  .co2-table td { padding: 5px 8px; border-bottom: 1px solid var(--line); }
+  .co2-table tr.sel td { background: var(--blueprint-tint); font-weight: 600; }
+
+  /* units */
+  .unit-row { border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; background: var(--paper-raised); }
+  .unit-row .unit-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .unit-row .unit-head input[type=text] { font-weight: 600; font-family: "Fraunces", Georgia, serif; font-size: 1.05rem; border: none; background: transparent; padding: 2px 0; }
+  .unit-row .unit-head input[type=text]:focus { outline: none; border-bottom: 1px solid var(--blueprint); }
+  .eigen-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; white-space: nowrap; }
+  .eigen-toggle input { width: auto; }
+  .unit-summary { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 14px; font-size: 0.86rem; color: var(--ink-soft); }
+  .unit-summary b { font-family: "IBM Plex Mono", monospace; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .activeunit-bar {
+    background: var(--blueprint-tint); border: 1px solid var(--blueprint); border-radius: var(--radius);
+    padding: 12px 16px; margin-bottom: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 0.9rem;
+  }
+  .activeunit-bar select { width: auto; min-width: 220px; flex: 1; }
+  .activeunit-bar label { margin: 0; white-space: nowrap; color: var(--ink); }
+  .eigen-badge {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.04em;
+    background: var(--amber-tint); color: var(--amber); padding: 2px 8px; border-radius: 10px; white-space: nowrap;
+  }
+
+  /* result */
+  .result-total { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 14px; margin-bottom: 8px; }
+  .rt { }
+  .rt .num { font-family: "IBM Plex Mono", monospace; font-size: 1.7rem; font-weight: 600; color: var(--blueprint-deep); font-variant-numeric: tabular-nums; }
+  .rt.result .num.pos { color: var(--bad); }
+  .rt.result .num.neg { color: var(--good); }
+  .rt .lab { font-size: 0.82rem; color: var(--ink-soft); }
+
+  table.breakdown { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  table.breakdown th { text-align: left; font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; text-transform: uppercase; color: var(--ink-soft); padding: 6px 8px; border-bottom: 1px solid var(--line-strong); }
+  table.breakdown td { padding: 7px 8px; border-bottom: 1px solid var(--line); }
+  table.breakdown td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: "IBM Plex Mono", monospace; }
+  table.breakdown tr.sum td { border-top: 2px solid var(--ink); border-bottom: none; font-weight: 700; padding-top: 10px; }
+
+  .bgh-check { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .bgh-check .ok { display: flex; gap: 8px; align-items: center; font-size: 0.88rem; }
+  .bgh-check .ok .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex-shrink: 0; }
+
+  .disclaimer { margin-top: 30px; padding: 14px 16px; border: 1px dashed var(--line-strong); border-radius: var(--radius); font-size: 0.84rem; color: var(--ink-soft); background: var(--paper-raised); }
+  .disclaimer b { color: var(--ink); }
+
+  @media print {
+    body { background: #fff; }
+    .no-print { display: none !important; }
+    .wrap { max-width: 100%; padding: 0; }
+    .card { box-shadow: none; border: none; padding: 0; margin-bottom: 20px; }
+    #printArea { display: block !important; }
+  }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+
+<div class="wrap">
+  <header class="top no-print">
+    <p class="brand"><a href="index.html" style="color:inherit;text-decoration:none;">← Klarrechnung</a> · Rechner (Prototyp)</p>
+    <h1>Deine Nebenkostenabrechnung</h1>
+  </header>
+
+  <div class="no-print">
+    <div class="stepper" id="stepperBar"></div>
+    <div class="steplabels" id="stepperLabels"></div>
+  </div>
+
+  <div id="app"></div>
+</div>
+
+<script>
+(function() {
+  var STORAGE_KEY = 'klarrechnung-rechner-v2';
+  var STEPS = [
+    { id: 'objekt', label: 'Objekt' },
+    { id: 'kosten', label: 'Kosten' },
+    { id: 'heizung', label: 'Heizung' },
+    { id: 'vorauszahlung', label: 'Vorschuss' },
+    { id: 'ergebnis', label: 'Ergebnis' }
+  ];
+
+  var CO2_TIERS = [
+    { max: 12, share: 0 }, { max: 17, share: 10 }, { max: 22, share: 20 }, { max: 27, share: 30 },
+    { max: 32, share: 40 }, { max: 37, share: 50 }, { max: 42, share: 60 }, { max: 47, share: 70 },
+    { max: 52, share: 80 }, { max: Infinity, share: 95 }
+  ];
+
+  var BLOCKED_WORDS = ['verwaltung', 'instandhaltung', 'instandsetzung', 'leerstand', 'kredit', 'zins', 'darlehen', 'hausverwalt'];
+
+  var unitCounter = 2;
+  function uid() { unitCounter += 1; return 'u' + unitCounter; }
+
+  function defaultItems() {
+    return [
+      { name: 'Grundsteuer', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Wasserversorgung', betrag: '', schluessel: 'verbrauch', included: true, fixed: true, zHV: '', zHA: '', unitMeters: {} },
+      { name: 'Entwässerung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Aufzug', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Straßenreinigung & Müllbeseitigung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Gebäudereinigung & Ungezieferbekämpfung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Gartenpflege', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Beleuchtung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Schornsteinreinigung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Sach- & Haftpflichtversicherung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Hauswart', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Antenne / Kabel / Breitband', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+      { name: 'Wäschepflege (Gemeinschaft)', betrag: '', schluessel: 'einheiten', included: true, fixed: true }
+    ];
+  }
+
+  function defaultUnits() {
+    return [
+      { id: 'u1', name: 'Wohnung 1 (Erdgeschoss)', flaeche: '', personen: '', eigennutzung: true, mieterName: '', vorauszahlung: '' },
+      { id: 'u2', name: 'Wohnung 2 (Obergeschoss)', flaeche: '', personen: '', eigennutzung: false, mieterName: '', vorauszahlung: '' }
+    ];
+  }
+
+  function defaultState() {
+    return {
+      step: 0,
+      objekt: { strasse: '', hausnummer: '', plz: '', ort: '', zeitraumVon: '', zeitraumBis: '' },
+      units: defaultUnits(),
+      activeUnitId: 'u2',
+      items: defaultItems(),
+      heizung: { energietraeger: 'gas', gesamtkosten: '', verbrauchsanteil: 70, zHV: '', zHA: '', co2kosten: '', co2stufe: 0, unitMeters: {} },
+      warmwasser: { gesamtkosten: '', verbrauchsanteil: 70, zHV: '', zHA: '', unitMeters: {} }
+    };
+  }
+
+  function exampleState() {
+    return {
+      step: 0,
+      objekt: { strasse: 'Gartenstraße', hausnummer: '12', plz: '86343', ort: 'Königsbrunn', zeitraumVon: '2025-01-01', zeitraumBis: '2025-12-31' },
+      units: [
+        { id: 'u1', name: 'Wohnung 1 (Erdgeschoss)', flaeche: 90, personen: 3, eigennutzung: true, mieterName: '', vorauszahlung: '' },
+        { id: 'u2', name: 'Wohnung 2 (Obergeschoss)', flaeche: 68, personen: 2, eigennutzung: false, mieterName: 'Familie Beispiel', vorauszahlung: 900 }
+      ],
+      activeUnitId: 'u2',
+      items: [
+        { name: 'Grundsteuer', betrag: 620, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Wasserversorgung', betrag: 980, schluessel: 'verbrauch', included: true, fixed: true, zHV: 640, zHA: 810, unitMeters: { u2: { zEV: 120, zEA: 155 } } },
+        { name: 'Entwässerung', betrag: 540, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Aufzug', betrag: '', schluessel: 'wohnflaeche', included: false, fixed: true },
+        { name: 'Straßenreinigung & Müllbeseitigung', betrag: 410, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Gebäudereinigung & Ungezieferbekämpfung', betrag: 260, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Gartenpflege', betrag: 180, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Beleuchtung', betrag: 90, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Schornsteinreinigung', betrag: 65, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Sach- & Haftpflichtversicherung', betrag: 340, schluessel: 'wohnflaeche', included: true, fixed: true },
+        { name: 'Hauswart', betrag: '', schluessel: 'wohnflaeche', included: false, fixed: true },
+        { name: 'Antenne / Kabel / Breitband', betrag: 156, schluessel: 'personen', included: true, fixed: true },
+        { name: 'Wäschepflege (Gemeinschaft)', betrag: 40, schluessel: 'einheiten', included: true, fixed: true }
+      ],
+      heizung: { energietraeger: 'gas', gesamtkosten: 2100, verbrauchsanteil: 70, zHV: 8200, zHA: 9650, co2kosten: 180, co2stufe: 28, unitMeters: { u2: { zEV: 1400, zEA: 1650 } } },
+      warmwasser: { gesamtkosten: 640, verbrauchsanteil: 70, zHV: 210, zHA: 245, unitMeters: { u2: { zEV: 38, zEA: 45 } } }
+    };
+  }
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      var parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.units) || parsed.units.length === 0) return defaultState();
+      var d = defaultState();
+      return Object.assign(d, parsed, {
+        objekt: Object.assign(d.objekt, parsed.objekt || {}),
+        heizung: Object.assign(d.heizung, parsed.heizung || {}),
+        warmwasser: Object.assign(d.warmwasser, parsed.warmwasser || {})
+      });
+    } catch (e) { return defaultState(); }
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  var state = loadState();
+  var detailsOpen = false;
+  var confirmingReset = false;
+
+  function num(v) { var n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? 0 : n; }
+  function eur(n) { return n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+  function safeDiv(a, b) { return b > 0 ? a / b : 0; }
+
+  function totalFlaeche() { return state.units.reduce(function(s, u) { return s + num(u.flaeche); }, 0); }
+  function totalPersonen() { return state.units.reduce(function(s, u) { return s + num(u.personen); }, 0); }
+  function getUnit(id) { for (var i = 0; i < state.units.length; i++) { if (state.units[i].id === id) return state.units[i]; } return null; }
+  function activeUnit() { return getUnit(state.activeUnitId) || state.units[0]; }
+
+  function itemShare(item, unit) {
+    if (!item.included) return 0;
+    var gesamt = num(item.betrag);
+    if (item.schluessel === 'wohnflaeche') return gesamt * safeDiv(num(unit.flaeche), totalFlaeche());
+    if (item.schluessel === 'personen') return gesamt * safeDiv(num(unit.personen), totalPersonen());
+    if (item.schluessel === 'einheiten') return gesamt * safeDiv(1, state.units.length);
+    if (item.schluessel === 'verbrauch') {
+      var m = (item.unitMeters && item.unitMeters[unit.id]) || {};
+      var vE = num(m.zEA) - num(m.zEV);
+      var vH = num(item.zHA) - num(item.zHV);
+      return gesamt * safeDiv(vE, vH);
+    }
+    return 0;
+  }
+
+  function co2Share(kgProM2) {
+    for (var i = 0; i < CO2_TIERS.length; i++) { if (kgProM2 < CO2_TIERS[i].max) return CO2_TIERS[i].share; }
+    return 95;
+  }
+
+  function heatingCalc(h, unit, isWarm) {
+    var gesamt = num(h.gesamtkosten);
+    var vAnteil = num(h.verbrauchsanteil) / 100;
+    var grundAnteil = 1 - vAnteil;
+    var grundMieter = gesamt * grundAnteil * safeDiv(num(unit.flaeche), totalFlaeche());
+    var vHaus = num(h.zHA) - num(h.zHV);
+    var m = (h.unitMeters && h.unitMeters[unit.id]) || {};
+    var vEinheit = num(m.zEA) - num(m.zEV);
+    var verbrauchMieter = gesamt * vAnteil * safeDiv(vEinheit, vHaus);
+    var subtotal = grundMieter + verbrauchMieter;
+    var co2VermieterAnteil = 0, co2Prozent = 0;
+    if (!isWarm) {
+      co2Prozent = co2Share(num(h.co2stufe));
+      var co2Gesamt = num(h.co2kosten);
+      var co2VermieterTotal = co2Gesamt * (co2Prozent / 100);
+      co2VermieterAnteil = co2VermieterTotal * safeDiv(vEinheit, vHaus);
+    }
+    return { grundMieter: grundMieter, verbrauchMieter: verbrauchMieter, subtotal: subtotal, co2VermieterAnteil: co2VermieterAnteil, co2Prozent: co2Prozent, final: subtotal - co2VermieterAnteil };
+  }
+
+  function computeAll(unit) {
+    unit = unit || activeUnit();
+    var itemResults = state.items.map(function(it) { return { item: it, share: itemShare(it, unit) }; });
+    var itemsTotal = itemResults.reduce(function(s, r) { return s + r.share; }, 0);
+    var heiz = heatingCalc(state.heizung, unit, false);
+    var warm = heatingCalc(state.warmwasser, unit, true);
+    var gesamtMieter = itemsTotal + heiz.final + warm.final;
+    var vorauszahlung = num(unit.vorauszahlung);
+    var ergebnis = gesamtMieter - vorauszahlung;
+    return { itemResults: itemResults, itemsTotal: itemsTotal, heiz: heiz, warm: warm, gesamtMieter: gesamtMieter, vorauszahlung: vorauszahlung, ergebnis: ergebnis };
+  }
+
+  function schluesselLabel(s) {
+    return { wohnflaeche: 'nach Wohnfläche', personen: 'nach Personenzahl', einheiten: 'gleichmäßig je Einheit', verbrauch: 'nach Verbrauch (Zähler)' }[s] || s;
+  }
+
+  function schluesselHelp(s) {
+    return {
+      wohnflaeche: 'Jede Wohnung zahlt im Verhältnis ihrer m² zur Gesamtfläche des Hauses. Der Normalfall.',
+      personen: 'Aufteilung nach Kopfzahl je Wohnung, z. B. bei Müll.',
+      einheiten: 'Alle Wohnungen zahlen denselben Anteil, egal wie groß.',
+      verbrauch: 'Aus zwei Zählerständen: (Verbrauch dieser Wohnung ÷ Verbrauch ganzes Haus) × Gesamtkosten.'
+    }[s] || '';
+  }
+
+  function isBlocked(name) {
+    var l = (name || '').toLowerCase();
+    return BLOCKED_WORDS.some(function(w) { return l.indexOf(w) !== -1; });
+  }
+
+  // ---------- rendering ----------
+  var app = document.getElementById('app');
+
+  function renderStepper() {
+    var bar = document.getElementById('stepperBar');
+    var labels = document.getElementById('stepperLabels');
+    bar.innerHTML = STEPS.map(function(s, i) {
+      var cls = i < state.step ? 'done' : (i === state.step ? 'active' : '');
+      return '<div class="seg ' + cls + '"></div>';
+    }).join('');
+    labels.innerHTML = STEPS.map(function(s, i) {
+      return '<span class="' + (i === state.step ? 'cur' : '') + '">' + s.label + '</span>';
+    }).join('');
+  }
+
+  function fieldHtml(labelText, path, val, opts) {
+    opts = opts || {};
+    var type = opts.type || 'text';
+    var step = opts.step || (type === 'number' ? 'any' : '');
+    return '<div class="field"><label>' + labelText + '</label>' +
+      '<input type="' + type + '" data-path="' + path + '" value="' + (val == null ? '' : val) + '" ' + (step ? 'step="' + step + '"' : '') + ' placeholder="' + (opts.placeholder || '') + '"></div>';
+  }
+
+  function missingBasics() {
+    return totalFlaeche() <= 0 || num(activeUnit().flaeche) <= 0;
+  }
+
+  function basicsWarning() {
+    return missingBasics() ? '<div class="callout warn">⚠ Trag zuerst im ersten Schritt die Wohnungen mit ihrer Fläche ein &mdash; ohne sie kann nichts berechnet werden.</div>' : '';
+  }
+
+  function activeUnitBar() {
+    if (state.units.length < 2) return '';
+    var u = activeUnit();
+    return '<div class="activeunit-bar no-print">' +
+      '<label style="margin:0;">Du rechnest gerade ab für:</label>' +
+      '<select data-activeunit>' +
+        state.units.map(function(x) {
+          return '<option value="' + x.id + '"' + (x.id === u.id ? ' selected' : '') + '>' + x.name + (x.eigennutzung ? ' (Eigennutzung)' : (x.mieterName ? ' — ' + x.mieterName : '')) + '</option>';
+        }).join('') +
+      '</select>' +
+      (u.eigennutzung ? '<span class="eigen-badge">Eigennutzung</span>' : '') +
+    '</div>';
+  }
+
+  function renderObjekt() {
+    var o = state.objekt;
+    return '<div class="card">' +
+      '<h2>Willkommen 👋</h2>' +
+      '<p class="hint">In 5 kurzen Schritten zur fertigen Abrechnung &mdash; auch wenn du mehrere Wohnungen hast oder eine davon selbst bewohnst. Du brauchst griffbereit: die Rechnungen des letzten Jahres und die Zählerstände von letztem und diesem Jahr. Bist du unsicher, wie das Ganze aussieht? Schau es dir erst an einem Beispiel an.</p>' +
+      '<div class="intro-actions">' +
+        '<button class="btn ghost small" id="fillExampleBtn" type="button">Mit Beispielwerten ausfüllen</button>' +
+        (confirmingReset
+          ? '<span class="microhint" style="margin:0;">Wirklich alles löschen? </span><button class="btn small danger" id="confirmResetYes" type="button">Ja, löschen</button><button class="btn ghost small" id="confirmResetNo" type="button">Abbrechen</button>'
+          : '<button class="btn ghost small" id="resetBtn" type="button">Alles zurücksetzen</button>') +
+      '</div>' +
+    '</div>' +
+    '<div class="card">' +
+      '<h2>Adresse &amp; Zeitraum</h2><p class="hint">Die Angaben für den Kopf der Abrechnung.</p>' +
+      '<div class="field-grid">' +
+        fieldHtml('Straße', 'objekt.strasse', o.strasse) +
+        fieldHtml('Hausnummer', 'objekt.hausnummer', o.hausnummer) +
+        fieldHtml('PLZ', 'objekt.plz', o.plz) +
+        fieldHtml('Ort', 'objekt.ort', o.ort) +
+        fieldHtml('Abrechnungszeitraum von', 'objekt.zeitraumVon', o.zeitraumVon, {type:'date'}) +
+        fieldHtml('Abrechnungszeitraum bis', 'objekt.zeitraumBis', o.zeitraumBis, {type:'date'}) +
+      '</div>' +
+    '</div>' +
+    '<div class="card">' +
+      '<h2>Wohnungen im Haus</h2>' +
+      '<p class="hint">Trag jede Wohnung im Haus ein &mdash; auch die, in der du selbst wohnst (Eigennutzung). Das ist wichtig: Nur so wird die Gesamtfläche richtig berechnet und jede vermietete Wohnung bekommt ihren korrekten Anteil. Für ein klassisches Zweifamilienhaus reichen zwei Zeilen: eine für dich, eine für den Mieter.</p>' +
+      state.units.map(renderUnitRow).join('') +
+      '<button class="btn ghost small" id="addUnitBtn" type="button">+ Weitere Wohnung hinzufügen</button>' +
+      '<div class="unit-summary">' +
+        '<span>Gesamtfläche Haus: <b>' + totalFlaeche().toLocaleString('de-DE') + ' m²</b></span>' +
+        '<span>Personen gesamt: <b>' + totalPersonen().toLocaleString('de-DE') + '</b></span>' +
+        '<span>Wohneinheiten: <b>' + state.units.length + '</b></span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderUnitRow(u, i) {
+    return '<div class="unit-row">' +
+      '<div class="unit-head">' +
+        '<input type="text" data-upath="' + i + '.name" value="' + u.name + '" placeholder="Bezeichnung, z. B. Wohnung 1">' +
+        (state.units.length > 1 ? '<button class="btn small danger" data-remove-unit="' + i + '" type="button">×</button>' : '') +
+      '</div>' +
+      '<div class="field-grid">' +
+        fieldHtml('Wohnfläche (m²)', null, u.flaeche, {type:'number'}).replace('data-path="null"', 'data-upath="' + i + '.flaeche"') +
+        fieldHtml('Personen', null, u.personen, {type:'number'}).replace('data-path="null"', 'data-upath="' + i + '.personen"') +
+      '</div>' +
+      '<label class="eigen-toggle"><input type="checkbox" data-upath-check="' + i + '.eigennutzung" ' + (u.eigennutzung ? 'checked' : '') + '> Eigennutzung (ich wohne hier selbst, keine Abrechnung nötig)</label>' +
+      (!u.eigennutzung ? '<div style="margin-top:10px;">' + fieldHtml('Name Mieter·in', null, u.mieterName).replace('data-path="null"', 'data-upath="' + i + '.mieterName"') + '</div>' : '') +
+    '</div>';
+  }
+
+  function renderKostenRow(item, i, unit) {
+    var showMeter = item.schluessel === 'verbrauch';
+    var blocked = isBlocked(item.name);
+    var m = (item.unitMeters && item.unitMeters[unit.id]) || {};
+    return '<tr class="' + (item.included ? '' : 'excluded') + '">' +
+      '<td>' +
+        (item.fixed ? '<div>' + item.name + '</div>' : '<input type="text" data-kpath="' + i + '.name" value="' + item.name + '">') +
+        (blocked ? '<div class="warn-inline">⚠ evtl. nicht umlagefähig (Verwaltung/Instandhaltung/Zins) &mdash; prüfen</div>' : '') +
+      '</td>' +
+      '<td><input type="number" step="0.01" data-kpath="' + i + '.betrag" value="' + item.betrag + '" placeholder="0,00"></td>' +
+      '<td><select data-kpath="' + i + '.schluessel">' +
+        ['wohnflaeche','personen','einheiten','verbrauch'].map(function(s) {
+          return '<option value="' + s + '"' + (item.schluessel === s ? ' selected' : '') + '>' + schluesselLabel(s) + '</option>';
+        }).join('') +
+        '</select>' +
+        '<div class="microhint">' + schluesselHelp(item.schluessel) + '</div>' +
+        (showMeter ? '<div class="microhint">Zählerstand = die Zahl am Zähler. Verbrauch = aktuell − Vorjahr. „Haus" gilt für alle Wohnungen zusammen, „diese Wohnung" nur für ' + unit.name + '.</div><div class="meter-row">' +
+          '<input type="number" data-kmeter="' + i + '.' + unit.id + '.zEV" value="' + (m.zEV||'') + '" placeholder="Zähler diese Wohnung, Vorjahr">' +
+          '<input type="number" data-kmeter="' + i + '.' + unit.id + '.zEA" value="' + (m.zEA||'') + '" placeholder="Zähler diese Wohnung, aktuell">' +
+          '</div><div class="meter-row">' +
+          '<input type="number" data-kpath="' + i + '.zHV" value="' + (item.zHV||'') + '" placeholder="Zähler Haus, Vorjahr">' +
+          '<input type="number" data-kpath="' + i + '.zHA" value="' + (item.zHA||'') + '" placeholder="Zähler Haus, aktuell">' +
+          '</div>' : '') +
+      '</td>' +
+      '<td class="num">' + eur(itemShare(item, unit)) + '</td>' +
+      '<td><label style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;"><input type="checkbox" data-kpath-check="' + i + '.included" ' + (item.included ? 'checked' : '') + ' style="width:auto;"> an</label>' +
+        (!item.fixed ? ' <button class="btn small danger" data-remove="' + i + '" type="button">×</button>' : '') +
+      '</td>' +
+    '</tr>';
+  }
+
+  function renderKosten() {
+    var unit = activeUnit();
+    return activeUnitBar() + basicsWarning() + '<div class="card">' +
+      '<h2>Betriebskosten (allgemein)</h2>' +
+      '<p class="hint">Die 17 Betriebskostenarten aus dem Gesetz stehen schon da &mdash; du trägst nur den Betrag von der jeweiligen Rechnung ein (für das ganze Haus, nicht nur eine Wohnung). Was du nicht hattest (z. B. keinen Aufzug), schaltest du rechts einfach aus. Heizung &amp; Warmwasser folgen im nächsten Schritt.</p>' +
+      '<div class="callout warn">Nicht eintragen: Verwaltungskosten, Instandhaltung/Instandsetzung, Leerstand, Kapitalkosten (Kredite/Zinsen) &mdash; die darf ein Vermieter laut § 1 Abs. 2 BetrKV nicht auf den Mieter umlegen.</div>' +
+      '<div style="overflow-x:auto;"><table class="items"><thead><tr><th>Kostenart</th><th>Gesamtbetrag Haus</th><th>Verteilerschlüssel</th><th>Anteil ' + unit.name + '</th><th></th></tr></thead>' +
+      '<tbody>' + state.items.map(function(it, i) { return renderKostenRow(it, i, unit); }).join('') + '</tbody></table></div>' +
+      '<div style="margin-top:14px;"><button class="btn ghost small" id="addItemBtn" type="button">+ Sonstige Betriebskosten hinzufügen</button></div>' +
+    '</div>';
+  }
+
+  function heizBlock(prefix, h, title, hint, showCO2, unit) {
+    var m = (h.unitMeters && h.unitMeters[unit.id]) || {};
+    return '<div class="card">' +
+      '<h2>' + title + '</h2><p class="hint">' + hint + '</p>' +
+      (prefix === 'heizung' ? '<div class="field"><label>Energieträger</label><select data-hpath="' + prefix + '.energietraeger">' +
+        ['gas','oel','fernwaerme','strom'].map(function(e){
+          var lbl = {gas:'Erdgas (€/m³)', oel:'Heizöl (€/Liter)', fernwaerme:'Fernwärme (€/kWh)', strom:'Strom / Wärmepumpe (€/kWh)'}[e];
+          return '<option value="'+e+'"'+(h.energietraeger===e?' selected':'')+'>'+lbl+'</option>';
+        }).join('') + '</select></div>' : '') +
+      '<div class="field-grid">' +
+        fieldHtml('Gesamtkosten Haus lt. Rechnung (€)', prefix + '.gesamtkosten', h.gesamtkosten, {type:'number'}) +
+        '<div class="field"><label>Verbrauchsabhängiger Anteil</label><select data-hpath="' + prefix + '.verbrauchsanteil">' +
+          [50,60,70].map(function(p){ return '<option value="'+p+'"'+(Number(h.verbrauchsanteil)===p?' selected':'')+'>'+p+'%</option>'; }).join('') +
+        '</select><div class="microhint">Gesetzlich vorgeschrieben: 50&ndash;70% nach Verbrauch, der Rest gleichmäßig nach Wohnfläche. 70% ist der gängigste Wert.</div></div>' +
+      '</div>' +
+      '<p class="microhint" style="margin:0 0 8px;">„Haus" = Zähler für das ganze Gebäude. „' + unit.name + '" = nur diese Wohnung. „Vorjahr" = Stand bei der letzten Abrechnung, „aktuell" = Stand heute.</p>' +
+      '<div class="field-grid">' +
+        fieldHtml('Zählerstand Haus, Vorjahr', prefix + '.zHV', h.zHV, {type:'number'}) +
+        fieldHtml('Zählerstand Haus, aktuell', prefix + '.zHA', h.zHA, {type:'number'}) +
+        '<div class="field"><label>Zählerstand ' + unit.name + ', Vorjahr</label><input type="number" step="any" data-hmeter="' + prefix + '.' + unit.id + '.zEV" value="' + (m.zEV||'') + '"></div>' +
+        '<div class="field"><label>Zählerstand ' + unit.name + ', aktuell</label><input type="number" step="any" data-hmeter="' + prefix + '.' + unit.id + '.zEA" value="' + (m.zEA||'') + '"></div>' +
+      '</div>' +
+      (showCO2 ? '<div class="callout">CO2-Kostenaufteilungsgesetz: Je schlechter die Energieeffizienz des Gebäudes, desto mehr trägst du als Vermieter davon. Kennst du die Werte nicht, lass die zwei Felder einfach leer &mdash; dann wird nichts abgezogen.</div>' +
+        '<div class="field-grid">' +
+          fieldHtml('CO2-Kosten Haus lt. Rechnung (€, falls ausgewiesen)', 'heizung.co2kosten', state.heizung.co2kosten, {type:'number'}) +
+          fieldHtml('Gebäude-Emission (kg CO2/m² im Jahr)', 'heizung.co2stufe', state.heizung.co2stufe, {type:'number'}) +
+        '</div>' +
+        '<p class="microhint">Beide Werte stehen meist auf der Rechnung deines Gas-/Fernwärmeanbieters unter „CO2-Kosten" bzw. „CO2-Bepreisung".</p>' +
+        '<table class="co2-table">' + CO2_TIERS.map(function(t, idx){
+          var lower = idx === 0 ? 0 : CO2_TIERS[idx-1].max;
+          var sel = num(state.heizung.co2stufe) < t.max && num(state.heizung.co2stufe) >= lower;
+          var label = t.max === Infinity ? '≥ ' + lower + ' kg/m²' : lower + '–' + t.max + ' kg/m²';
+          return '<tr class="' + (sel ? 'sel' : '') + '"><td>' + label + '</td><td>Vermieteranteil ' + t.share + '%</td></tr>';
+        }).join('') + '</table>' : '') +
+    '</div>';
+  }
+
+  function renderHeizung() {
+    var unit = activeUnit();
+    return activeUnitBar() + basicsWarning() +
+           heizBlock('heizung', state.heizung, 'Heizung', 'So wie auf der Rechnung deines Energieversorgers, aufgeteilt nach Heizkostenverordnung.', true, unit) +
+           heizBlock('warmwasser', state.warmwasser, 'Warmwasser', 'Meist ein eigener Zähler, gleiche Rechenlogik wie bei der Heizung.', false, unit);
+  }
+
+  function renderVorauszahlung() {
+    var unit = activeUnit();
+    return activeUnitBar() + '<div class="card">' +
+      '<h2>Vorauszahlungen von ' + (unit.mieterName || unit.name) + '</h2><p class="hint">Der Betrag, den dieser Mieter im Abrechnungszeitraum monatlich schon vorausbezahlt hat (Summe über das ganze Jahr) &mdash; steht in deinen Kontoauszügen oder im Mietvertrag.</p>' +
+      '<div class="field"><label>Geleistete Vorauszahlungen gesamt (€)</label><input type="number" step="any" data-ufield="vorauszahlung" value="' + (unit.vorauszahlung == null ? '' : unit.vorauszahlung) + '"></div>' +
+    '</div>';
+  }
+
+  function renderErgebnis() {
+    var unit = activeUnit();
+    var r = computeAll(unit);
+    var ergebnisPositiv = r.ergebnis >= 0;
+    var o = state.objekt;
+    var rows = r.itemResults.filter(function(x){ return x.item.included; }).map(function(x) {
+      return '<tr><td>' + x.item.name + '</td><td>' + eur(num(x.item.betrag)) + '</td><td>' + schluesselLabel(x.item.schluessel) + '</td><td class="num">' + eur(x.share) + '</td></tr>';
+    }).join('');
+    var leadText = ergebnisPositiv
+      ? (unit.mieterName || 'Der Mieter') + ' muss noch <b>' + eur(Math.abs(r.ergebnis)) + '</b> nachzahlen.'
+      : (unit.mieterName || 'Der Mieter') + ' bekommt <b>' + eur(Math.abs(r.ergebnis)) + '</b> zurück.';
+    var eigenNote = unit.eigennutzung ? '<div class="callout warn">Diese Wohnung ist als Eigennutzung markiert &mdash; dafür brauchst du normalerweise keine Abrechnung. Wähle oben eine vermietete Wohnung aus.</div>' : '';
+    return activeUnitBar() + basicsWarning() + eigenNote + '<div class="card">' +
+      '<h2>Ergebnis für ' + unit.name + '</h2>' +
+      '<div class="lead-result ' + (ergebnisPositiv ? 'pos' : '') + '">👉 ' + leadText + '</div>' +
+      '<div class="result-total">' +
+        '<div class="rt"><div class="num">' + eur(r.gesamtMieter) + '</div><div class="lab">Betriebskosten-Anteil dieser Wohnung</div></div>' +
+        '<div class="rt"><div class="num">' + eur(r.vorauszahlung) + '</div><div class="lab">bereits gezahlte Vorauszahlungen</div></div>' +
+      '</div>' +
+      '<div class="bgh-check">' +
+        '<div class="ok"><span class="dot"></span>Gesamtkosten je Kostenart aufgeführt</div>' +
+        '<div class="ok"><span class="dot"></span>Verteilerschlüssel je Position benannt</div>' +
+        '<div class="ok"><span class="dot"></span>Mieteranteil berechnet</div>' +
+        '<div class="ok"><span class="dot"></span>Vorauszahlungen abgezogen</div>' +
+      '</div>' +
+      '<p class="hint" style="margin-top:10px;">Diese vier Punkte verlangt der BGH, damit die Abrechnung überhaupt gültig ist &mdash; alle vier sind hier automatisch erfüllt.</p>' +
+      '<div class="intro-actions" style="margin-top:16px;">' +
+        '<button class="btn no-print" id="printBtn" type="button">Als PDF speichern / drucken</button>' +
+        '<button class="btn ghost no-print" id="detailsToggleBtn" type="button">' + (detailsOpen ? 'Details verbergen' : 'Details für die Abrechnung anzeigen') + '</button>' +
+      '</div>' +
+      (state.units.filter(function(u){return !u.eigennutzung;}).length > 1 ? '<p class="microhint" style="margin-top:12px;">Mehrere vermietete Wohnungen? Wechsle oben die aktive Wohnung, um die nächste Abrechnung zu erzeugen &mdash; die allgemeinen Betriebskosten musst du dafür nicht nochmal eintragen.</p>' : '') +
+    '</div>' +
+
+    '<div class="card" id="printArea" style="' + (detailsOpen ? '' : 'display:none;') + '">' +
+      '<h2 class="mono" style="font-size:1.3rem;">Nebenkostenabrechnung ' + (o.zeitraumVon||'') + ' – ' + (o.zeitraumBis||'') + '</h2>' +
+      '<p style="color:var(--ink-soft); margin-top:6px;">' + (o.strasse||'') + ' ' + (o.hausnummer||'') + ', ' + unit.name + '<br>' + (o.plz||'') + ' ' + (o.ort||'') + '<br>Mieter·in: ' + (unit.mieterName||'') + '</p>' +
+      '<div style="overflow-x:auto; margin-top:16px;"><table class="breakdown"><thead><tr><th>Kostenart</th><th>Gesamtkosten Haus</th><th>Verteilerschlüssel</th><th>Ihr Anteil</th></tr></thead><tbody>' +
+        rows +
+        '<tr><td>Heizung (Grundkosten)</td><td></td><td>nach Wohnfläche</td><td class="num">' + eur(r.heiz.grundMieter) + '</td></tr>' +
+        '<tr><td>Heizung (Verbrauch)</td><td></td><td>nach Zählerstand</td><td class="num">' + eur(r.heiz.verbrauchMieter) + '</td></tr>' +
+        '<tr><td>Heizung: CO2-Anteil Vermieter (' + r.heiz.co2Prozent + '%)</td><td></td><td>abgezogen</td><td class="num">− ' + eur(r.heiz.co2VermieterAnteil) + '</td></tr>' +
+        '<tr><td>Warmwasser (Grundkosten)</td><td></td><td>nach Wohnfläche</td><td class="num">' + eur(r.warm.grundMieter) + '</td></tr>' +
+        '<tr><td>Warmwasser (Verbrauch)</td><td></td><td>nach Zählerstand</td><td class="num">' + eur(r.warm.verbrauchMieter) + '</td></tr>' +
+        '<tr class="sum"><td>Summe Betriebskosten</td><td></td><td></td><td class="num">' + eur(r.gesamtMieter) + '</td></tr>' +
+        '<tr><td>abzüglich Vorauszahlungen</td><td></td><td></td><td class="num">− ' + eur(r.vorauszahlung) + '</td></tr>' +
+        '<tr class="sum"><td>' + (ergebnisPositiv ? 'Nachzahlung' : 'Guthaben') + '</td><td></td><td></td><td class="num">' + eur(Math.abs(r.ergebnis)) + '</td></tr>' +
+      '</tbody></table></div>' +
+      '<div class="disclaimer"><b>Wichtig:</b> Diese Berechnung ist eine Informations- und Berechnungshilfe, keine Rechtsberatung. Rechtsstand August 2026, ohne Gewähr. Vor Versand im Zweifel von einem Mieterverein oder Fachanwalt für Mietrecht prüfen lassen.</div>' +
+    '</div>';
+  }
+
+  var RENDERERS = { objekt: renderObjekt, kosten: renderKosten, heizung: renderHeizung, vorauszahlung: renderVorauszahlung, ergebnis: renderErgebnis };
+
+  function render() {
+    if (!getUnit(state.activeUnitId) && state.units.length) { state.activeUnitId = state.units[0].id; }
+    renderStepper();
+    var id = STEPS[state.step].id;
+    var html = RENDERERS[id]();
+    html += '<div class="navrow no-print">' +
+      (state.step > 0 ? '<button class="btn ghost" id="backBtn" type="button">← Zurück</button>' : '<span></span>') +
+      (state.step < STEPS.length - 1 ? '<button class="btn" id="nextBtn" type="button">Weiter →</button>' : '<span></span>') +
+      '</div>';
+    app.innerHTML = html;
+    saveState();
+  }
+
+  app.addEventListener('input', function(e) {
+    var t = e.target;
+
+    var path = t.getAttribute('data-path');
+    if (path) {
+      var parts = path.split('.');
+      if (parts.length === 1) { state[parts[0]] = t.value; } else { state[parts[0]][parts[1]] = t.value; }
+      saveState(); return;
+    }
+    var kpath = t.getAttribute('data-kpath');
+    if (kpath) {
+      var kp = kpath.split('.');
+      state.items[Number(kp[0])][kp[1]] = t.value;
+      saveState(); return;
+    }
+    var hpath = t.getAttribute('data-hpath');
+    if (hpath) {
+      var hp = hpath.split('.');
+      state[hp[0]][hp[1]] = t.value;
+      saveState(); return;
+    }
+    var upath = t.getAttribute('data-upath');
+    if (upath) {
+      var up = upath.split('.');
+      state.units[Number(up[0])][up[1]] = t.value;
+      saveState(); return;
+    }
+    var kmeter = t.getAttribute('data-kmeter');
+    if (kmeter) {
+      var km = kmeter.split('.');
+      var it = state.items[Number(km[0])];
+      it.unitMeters = it.unitMeters || {};
+      it.unitMeters[km[1]] = it.unitMeters[km[1]] || {};
+      it.unitMeters[km[1]][km[2]] = t.value;
+      saveState(); return;
+    }
+    var hmeter = t.getAttribute('data-hmeter');
+    if (hmeter) {
+      var hm = hmeter.split('.');
+      var hh = state[hm[0]];
+      hh.unitMeters = hh.unitMeters || {};
+      hh.unitMeters[hm[1]] = hh.unitMeters[hm[1]] || {};
+      hh.unitMeters[hm[1]][hm[2]] = t.value;
+      saveState(); return;
+    }
+    var ufield = t.getAttribute('data-ufield');
+    if (ufield) {
+      activeUnit()[ufield] = t.value;
+      saveState(); return;
+    }
+  });
+
+  app.addEventListener('change', function(e) {
+    var t = e.target;
+    var checkPath = t.getAttribute('data-kpath-check');
+    if (checkPath) {
+      var cp = checkPath.split('.');
+      state.items[Number(cp[0])].included = t.checked;
+      render(); return;
+    }
+    var upathCheck = t.getAttribute('data-upath-check');
+    if (upathCheck) {
+      var uc = upathCheck.split('.');
+      state.units[Number(uc[0])].eigennutzung = t.checked;
+      render(); return;
+    }
+    if (t.matches('[data-activeunit]')) { state.activeUnitId = t.value; render(); return; }
+    var kpath = t.getAttribute('data-kpath');
+    if (kpath && t.tagName === 'SELECT') {
+      var kp = kpath.split('.');
+      state.items[Number(kp[0])][kp[1]] = t.value;
+      render(); return;
+    }
+    var hpath = t.getAttribute('data-hpath');
+    if (hpath) { render(); return; }
+    var path = t.getAttribute('data-path');
+    if (path) { render(); return; }
+  });
+
+  app.addEventListener('click', function(e) {
+    if (e.target.id === 'nextBtn') { state.step = Math.min(STEPS.length - 1, state.step + 1); render(); window.scrollTo(0,0); }
+    if (e.target.id === 'backBtn') { state.step = Math.max(0, state.step - 1); render(); window.scrollTo(0,0); }
+    if (e.target.id === 'addItemBtn') {
+      state.items.push({ name: 'Sonstige Betriebskosten', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: false, unitMeters: {} });
+      render();
+    }
+    if (e.target.id === 'addUnitBtn') {
+      var id = uid();
+      state.units.push({ id: id, name: 'Wohnung ' + state.units.length, flaeche: '', personen: '', eigennutzung: false, mieterName: '', vorauszahlung: '' });
+      render();
+    }
+    var rm = e.target.getAttribute('data-remove');
+    if (rm !== null) { state.items.splice(Number(rm), 1); render(); }
+    var rmu = e.target.getAttribute('data-remove-unit');
+    if (rmu !== null && state.units.length > 1) {
+      var removedId = state.units[Number(rmu)].id;
+      state.units.splice(Number(rmu), 1);
+      if (state.activeUnitId === removedId) { state.activeUnitId = state.units[0].id; }
+      render();
+    }
+    if (e.target.id === 'printBtn') { detailsOpen = true; render(); window.print(); }
+    if (e.target.id === 'detailsToggleBtn') { detailsOpen = !detailsOpen; render(); }
+    if (e.target.id === 'fillExampleBtn') { state = exampleState(); render(); }
+    if (e.target.id === 'resetBtn') { confirmingReset = true; render(); }
+    if (e.target.id === 'confirmResetYes') { state = defaultState(); confirmingReset = false; render(); }
+    if (e.target.id === 'confirmResetNo') { confirmingReset = false; render(); }
+  });
+
+  // re-render computed numbers on blur/tab-out, without re-rendering on every keystroke (which would break focus)
+  app.addEventListener('blur', function(e) {
+    if (e.target.matches && (
+      e.target.matches('[data-kpath]') || e.target.matches('[data-path]') || e.target.matches('[data-hpath]') ||
+      e.target.matches('[data-upath]') || e.target.matches('[data-kmeter]') || e.target.matches('[data-hmeter]') || e.target.matches('[data-ufield]')
+    )) {
+      render();
+    }
+  }, true);
+
+  render();
+})();
+</script>
+</body>
+</html>
