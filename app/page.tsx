@@ -1,5 +1,4 @@
 'use client';
-import React, { useState, useRef } from "react";
 import Link from "next/link";
 
 const BETRK_ITEMS = [
@@ -19,37 +18,6 @@ const BGH_STEPS = [
 ];
 
 export default function LandingPage() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [errorMsg, setErrorMsg] = useState('');
-  const formRef = useRef<HTMLFormElement>(null);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setStatus('loading');
-    setErrorMsg('');
-
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setErrorMsg(data.error ?? 'Fehler beim Senden.');
-        setStatus('error');
-      } else {
-        setStatus('success');
-        setEmail('');
-      }
-    } catch {
-      setErrorMsg('Verbindungsfehler — bitte versuchen Sie es erneut.');
-      setStatus('error');
-    }
-  }
-
   return (
     <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
 
@@ -62,13 +30,13 @@ export default function LandingPage() {
             <span className="font-semibold tracking-tight" style={{ color: 'var(--text)' }}>veycron</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/rechner" className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-              Rechner
+            <Link href="/login" className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+              Anmelden
             </Link>
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full pulse-subtle" style={{ background: 'var(--green)' }} />
-              <span className="text-xs" style={{ color: 'var(--text-muted)' }}>In Entwicklung</span>
-            </div>
+            <Link href="/register" className="rounded-md px-3 py-1.5 text-sm font-semibold text-white"
+              style={{ background: 'var(--green)' }}>
+              Registrieren
+            </Link>
           </div>
         </div>
       </header>
@@ -115,14 +83,14 @@ export default function LandingPage() {
           </div>
 
           <div className="fade-up-4 mt-10 flex flex-wrap gap-3">
-            <Link href="/rechner" className="rounded-lg px-6 py-3 text-sm font-semibold text-white transition-colors"
+            <Link href="/register" className="rounded-lg px-6 py-3 text-sm font-semibold text-white transition-colors"
               style={{ background: 'var(--green)' }}>
-              Kostenlos abrechnen →
+              Kostenlos registrieren →
             </Link>
-            <a href="#warteliste" className="rounded-lg px-6 py-3 text-sm font-semibold border transition-colors"
+            <Link href="/login" className="rounded-lg px-6 py-3 text-sm font-semibold border transition-colors"
               style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
-              Frühzugang zur Vollversion
-            </a>
+              Bereits registriert? Anmelden
+            </Link>
           </div>
         </div>
 
@@ -178,48 +146,23 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* ── WAITLIST ── */}
-        <section id="warteliste" className="w-full max-w-xl mt-16">
+        {/* ── REGISTER CTA ── */}
+        <section className="w-full max-w-xl mt-16">
           <div className="rounded-lg p-6 sm:p-8" style={{ background: 'var(--blue)' }}>
-            <h2 className="text-xl font-semibold text-white mb-2">Trag dich für den frühen Zugang ein</h2>
+            <h2 className="text-xl font-semibold text-white mb-2">Leg kostenlos los</h2>
             <p className="text-sm mb-5" style={{ color: '#d7e2ec' }}>
-              Der Rechner oben ist schon nutzbar. Für PDF-Export, Beleg-Upload per Foto und
-              automatischen Versand melden wir uns, sobald es losgeht.
+              Registrieren, anmelden, Abrechnung erstellen — der Rechner ist direkt nutzbar.
             </p>
-            {status === 'success' ? (
-              <div className="rounded-lg bg-white/10 p-4 flex items-center gap-3">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <div>
-                  <p className="font-semibold text-sm text-white">Du bist dabei.</p>
-                  <p className="text-xs mt-0.5" style={{ color: '#d7e2ec' }}>Wir melden uns, sobald veycron startet.</p>
-                </div>
-              </div>
-            ) : (
-              <form ref={formRef} onSubmit={handleSubmit}>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="deine@email.de"
-                    className="flex-1 rounded-lg border px-4 py-3 text-sm"
-                    style={{ borderColor: 'transparent', background: '#fdfcf8', color: 'var(--text)' }}
-                  />
-                  <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="rounded-lg px-6 py-3 text-sm font-semibold disabled:opacity-50"
-                    style={{ background: '#fdfcf8', color: 'var(--blue)' }}
-                  >
-                    {status === 'loading' ? 'Wird gesendet…' : 'Eintragen'}
-                  </button>
-                </div>
-                {status === 'error' && <p className="mt-2 text-xs" style={{ color: '#ffd7d7' }}>{errorMsg}</p>}
-              </form>
-            )}
+            <div className="flex flex-wrap gap-3">
+              <Link href="/register" className="rounded-lg px-6 py-3 text-sm font-semibold"
+                style={{ background: '#fdfcf8', color: 'var(--blue)' }}>
+                Konto erstellen
+              </Link>
+              <Link href="/login" className="rounded-lg px-6 py-3 text-sm font-semibold border"
+                style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#fdfcf8' }}>
+                Anmelden
+              </Link>
+            </div>
           </div>
         </section>
 
