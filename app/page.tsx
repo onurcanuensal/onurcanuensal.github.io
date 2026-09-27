@@ -55,8 +55,8 @@ export default function LandingPage() {
             </span>
           </div>
 
-          <h1 className="fade-up-2 font-bold leading-tight"
-            style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)', letterSpacing: '-0.025em', color: 'var(--text)' }}>
+          <h1 className="fade-up-2 leading-tight"
+            style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)', letterSpacing: '-0.01em', color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>
             Nebenkostenabrechnung,<br />
             <span style={{ color: 'var(--text-secondary)' }}>ohne den Jahres-Krampf.</span>
           </h1>
@@ -97,7 +97,7 @@ export default function LandingPage() {
         {/* ── WAS DARFST DU UMLEGEN ── */}
         <section className="w-full max-w-xl mt-20">
           <p className="text-xs font-mono tracking-widest uppercase mb-2" style={{ color: 'var(--blue)' }}>Kostenloser Check 1/2</p>
-          <h2 className="text-xl font-semibold mb-2" style={{ color: 'var(--text)' }}>Was darfst du überhaupt umlegen?</h2>
+          <h2 className="text-xl mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Was darfst du überhaupt umlegen?</h2>
           <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
             Die 17 Betriebskostenarten nach § 2 BetrKV — alles, was grundsätzlich auf deinen Mieter umlagefähig ist.
           </p>
@@ -127,7 +127,7 @@ export default function LandingPage() {
         {/* ── BGH ── */}
         <section className="w-full max-w-xl mt-16">
           <p className="text-xs font-mono tracking-widest uppercase mb-2" style={{ color: 'var(--blue)' }}>Kostenloser Check 2/2</p>
-          <h2 className="text-xl font-semibold mb-2" style={{ color: 'var(--text)' }}>Ist deine Abrechnung überhaupt wirksam?</h2>
+          <h2 className="text-xl mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Ist deine Abrechnung überhaupt wirksam?</h2>
           <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
             Der BGH verlangt vier Pflichtbestandteile (Urteil VIII ZR 244/18) — fehlt einer, ist die
             ganze Abrechnung formell unwirksam, egal wie richtig die Zahlen sind.
@@ -149,7 +149,7 @@ export default function LandingPage() {
         {/* ── REGISTER CTA ── */}
         <section className="w-full max-w-xl mt-16">
           <div className="rounded-lg p-6 sm:p-8" style={{ background: 'var(--blue)' }}>
-            <h2 className="text-xl font-semibold text-white mb-2">Leg kostenlos los</h2>
+            <h2 className="text-xl text-white mb-2" style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}>Leg kostenlos los</h2>
             <p className="text-sm mb-5" style={{ color: '#d7e2ec' }}>
               Registrieren, anmelden, Abrechnung erstellen — der Rechner ist direkt nutzbar.
             </p>

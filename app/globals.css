@@ -1,28 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --blue: #1a3149;
-  --blue-light: #2a4a6b;
-  --green: #2d6a4f;
+  --blue: #16324f;
+  --blue-light: #2c5f8a;
+  --green: #2f6b4f;
   --green-hover: #245a42;
-  --bg: #f7f8fa;
-  --bg-card: #ffffff;
-  --text: #1a1a1a;
-  --text-secondary: #5a6170;
-  --text-muted: #8b919e;
-  --border: #e2e5ea;
+  --bg: #f6f3ec;
+  --bg-card: #fffdf8;
+  --text: #1c2430;
+  --text-secondary: #4a5568;
+  --text-muted: #8a8272;
+  --border: #ddd5c4;
+  --border-strong: #b9b09a;
   --amber: #9c5e18;
-  --amber-tint: #f8ecd9;
+  --amber-tint: #f3e6d2;
   --bad: #a13f3f;
-  --bad-tint: #f6e4e2;
-  --good-tint: #e6f0ea;
+  --bad-tint: #f3e2e0;
+  --good-tint: #e5efe6;
+  --shadow-card: 0 1px 2px rgba(28,36,48,0.05), 0 6px 20px -10px rgba(28,36,48,0.18);
 }
 
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--text);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-data);
 }
 
 html { scroll-behavior: smooth; }
@@ -30,13 +32,19 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background: rgba(26, 49, 73, 0.15);
+  background: rgba(22, 50, 79, 0.15);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue-light);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* ── ANIMATIONS ── */
@@ -56,8 +64,40 @@ body {
 .pulse-subtle { animation: pulse-subtle 3s ease-in-out infinite; }
 
 /* ── FORM ── */
-input:focus { outline: none; }
 button:disabled { cursor: not-allowed; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  border-radius: 8px; padding: 0.6rem 1.1rem; font-size: 0.875rem; font-weight: 600;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid transparent; line-height: 1.2;
+}
+.btn:disabled { opacity: 0.5; }
+.btn-primary { background: var(--blue); color: #fffdf8; border-color: var(--blue); }
+.btn-primary:hover:not(:disabled) { background: var(--blue-light); border-color: var(--blue-light); }
+.btn-ghost { background: transparent; color: var(--text); border-color: var(--border-strong); }
+.btn-ghost:hover:not(:disabled) { border-color: var(--blue-light); color: var(--blue-light); }
+.btn-danger { background: transparent; color: var(--bad); border-color: var(--bad); }
+.btn-danger:hover:not(:disabled) { background: var(--bad-tint); }
+.btn-sm { padding: 0.4rem 0.7rem; font-size: 0.78rem; }
+
+/* ── FIELDS ── */
+.field-input {
+  width: 100%; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text); padding: 0.55rem 0.7rem; font-size: 0.92rem;
+  transition: border-color 0.15s ease;
+}
+.field-input:hover { border-color: var(--border-strong); }
+.field-input:focus-visible { border-color: var(--blue-light); }
+
+/* ── ITEM / INDEX CARD ── */
+.item-card {
+  border-radius: 8px; background: var(--bg-card); padding: 0.9rem 1rem;
+  border: 1px solid var(--border); border-left: 3px solid var(--blue-light);
+  box-shadow: var(--shadow-card);
+}
+.item-card.is-off { border-left-color: var(--border-strong); }
 
 @media print {
   body { background: #fff; }

@@ -27,31 +27,26 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center px-5" style={{ background: 'var(--bg)' }}>
       <div className="w-full max-w-sm">
         <Link href="/" className="text-sm font-semibold" style={{ color: 'var(--blue)' }}>← veycron</Link>
-        <h1 className="text-2xl font-bold mt-4 mb-1" style={{ color: 'var(--text)' }}>Konto erstellen</h1>
+        <h1 className="text-2xl mt-4 mb-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Konto erstellen</h1>
         <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
           Kostenlos registrieren und direkt deine Nebenkostenabrechnung erstellen.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>E-Mail</label>
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm" style={{ borderColor: 'var(--border)', color: 'var(--text)' }} />
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="field-input" />
           </div>
           <div>
             <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>Passwort</label>
-            <input type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm" style={{ borderColor: 'var(--border)', color: 'var(--text)' }} />
+            <input type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} className="field-input" />
             <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Mindestens 8 Zeichen.</p>
           </div>
           <div>
             <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>Passwort bestätigen</label>
-            <input type="password" required minLength={8} value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm" style={{ borderColor: 'var(--border)', color: 'var(--text)' }} />
+            <input type="password" required minLength={8} value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} className="field-input" />
           </div>
           {error && <p className="text-xs" style={{ color: 'var(--bad)' }}>{error}</p>}
-          <button type="submit" disabled={loading}
-            className="w-full rounded-md px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
-            style={{ background: 'var(--green)' }}>
+          <button type="submit" disabled={loading} className="btn btn-primary w-full justify-center">
             {loading ? 'Wird angelegt…' : 'Registrieren'}
           </button>
         </form>

@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { getCurrentUser, logout } from "../lib/auth";
 
 type Schluessel = 'wohnflaeche' | 'personen' | 'einheiten' | 'verbrauch';
+type Periode = 'jaehrlich' | 'quartal' | 'monatlich';
 type Meter = { zEV?: string; zEA?: string };
 type Item = {
-  name: string; betrag: string; schluessel: Schluessel; included: boolean; fixed: boolean;
-  zHV?: string; zHA?: string; unitMeters?: Record<string, Meter>;
+  name: string; formLabel?: string; betrag: string; schluessel: Schluessel; included: boolean; fixed: boolean;
+  zHV?: string; zHA?: string; unitMeters?: Record<string, Meter>; info?: string; periode?: Periode;
 };
 type Unit = {
   id: string; name: string; flaeche: string; personen: string;
@@ -17,6 +18,7 @@ type Unit = {
 type Heiz = {
   energietraeger: string; gesamtkosten: string; verbrauchsanteil: number;
   zHV: string; zHA: string; co2kosten: string; co2stufe: number; unitMeters: Record<string, Meter>;
+  oelMenge: string; oelPreis: string;
 };
 type Warm = { gesamtkosten: string; verbrauchsanteil: number; zHV: string; zHA: string; unitMeters: Record<string, Meter> };
 type AppState = {
@@ -49,15 +51,17 @@ const BLOCKED_WORDS = ['verwaltung', 'instandhaltung', 'instandsetzung', 'leerst
 function defaultItems(): Item[] {
   return [
     { name: 'Grundsteuer', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
-    { name: 'Wasserversorgung', betrag: '', schluessel: 'verbrauch', included: true, fixed: true, zHV: '', zHA: '', unitMeters: {} },
-    { name: 'Entwässerung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+    { name: 'Wasserversorgung', formLabel: 'Wasser (kalt + warm)', betrag: '', schluessel: 'verbrauch', included: true, fixed: true, zHV: '', zHA: '', unitMeters: {},
+      info: 'Kaltwasser laut Rechnung deines Wasserwerks — die Heizkosten dafür trägst du im nächsten Schritt ein.' },
+    { name: 'Entwässerung', formLabel: 'Abwasser (Schmutzwasser + Niederschlag)', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Aufzug', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Straßenreinigung & Müllbeseitigung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Gebäudereinigung & Ungezieferbekämpfung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Gartenpflege', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Beleuchtung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Schornsteinreinigung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
-    { name: 'Sach- & Haftpflichtversicherung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
+    { name: 'Sach- & Haftpflichtversicherung', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true,
+      info: 'Gebäude- und Grundstücks-Haftpflichtversicherung — nicht deine private Hausratversicherung.' },
     { name: 'Hauswart', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Antenne / Kabel / Breitband', betrag: '', schluessel: 'wohnflaeche', included: true, fixed: true },
     { name: 'Wäschepflege (Gemeinschaft)', betrag: '', schluessel: 'einheiten', included: true, fixed: true },
@@ -78,7 +82,7 @@ function defaultState(): AppState {
     units: defaultUnits(),
     activeUnitId: 'u2',
     items: defaultItems(),
-    heizung: { energietraeger: 'gas', gesamtkosten: '', verbrauchsanteil: 70, zHV: '', zHA: '', co2kosten: '', co2stufe: 0, unitMeters: {} },
+    heizung: { energietraeger: 'gas', gesamtkosten: '', verbrauchsanteil: 70, zHV: '', zHA: '', co2kosten: '', co2stufe: 0, unitMeters: {}, oelMenge: '', oelPreis: '' },
     warmwasser: { gesamtkosten: '', verbrauchsanteil: 70, zHV: '', zHA: '', unitMeters: {} },
   };
 }
@@ -92,22 +96,25 @@ function exampleState(): AppState {
       { id: 'u2', name: 'Wohnung 2 (Obergeschoss)', flaeche: '68', personen: '2', eigennutzung: false, mieterName: 'Familie Beispiel', vorauszahlung: '900' },
     ],
     activeUnitId: 'u2',
-    items: [
-      { name: 'Grundsteuer', betrag: '620', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Wasserversorgung', betrag: '980', schluessel: 'verbrauch', included: true, fixed: true, zHV: '640', zHA: '810', unitMeters: { u2: { zEV: '120', zEA: '155' } } },
-      { name: 'Entwässerung', betrag: '540', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Aufzug', betrag: '', schluessel: 'wohnflaeche', included: false, fixed: true },
-      { name: 'Straßenreinigung & Müllbeseitigung', betrag: '410', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Gebäudereinigung & Ungezieferbekämpfung', betrag: '260', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Gartenpflege', betrag: '180', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Beleuchtung', betrag: '90', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Schornsteinreinigung', betrag: '65', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Sach- & Haftpflichtversicherung', betrag: '340', schluessel: 'wohnflaeche', included: true, fixed: true },
-      { name: 'Hauswart', betrag: '', schluessel: 'wohnflaeche', included: false, fixed: true },
-      { name: 'Antenne / Kabel / Breitband', betrag: '156', schluessel: 'personen', included: true, fixed: true },
-      { name: 'Wäschepflege (Gemeinschaft)', betrag: '40', schluessel: 'einheiten', included: true, fixed: true },
-    ],
-    heizung: { energietraeger: 'gas', gesamtkosten: '2100', verbrauchsanteil: 70, zHV: '8200', zHA: '9650', co2kosten: '180', co2stufe: 28, unitMeters: { u2: { zEV: '1400', zEA: '1650' } } },
+    items: (() => {
+      const EXAMPLE_VALUES: Record<string, Partial<Item>> = {
+        'Grundsteuer': { betrag: '620' },
+        'Wasserversorgung': { betrag: '980', zHV: '640', zHA: '810', unitMeters: { u2: { zEV: '120', zEA: '155' } } },
+        'Entwässerung': { betrag: '540' },
+        'Aufzug': { included: false },
+        'Straßenreinigung & Müllbeseitigung': { betrag: '410' },
+        'Gebäudereinigung & Ungezieferbekämpfung': { betrag: '260' },
+        'Gartenpflege': { betrag: '180' },
+        'Beleuchtung': { betrag: '90' },
+        'Schornsteinreinigung': { betrag: '65' },
+        'Sach- & Haftpflichtversicherung': { betrag: '340' },
+        'Hauswart': { included: false },
+        'Antenne / Kabel / Breitband': { betrag: '156', schluessel: 'personen' },
+        'Wäschepflege (Gemeinschaft)': { betrag: '40' },
+      };
+      return defaultItems().map((it) => ({ ...it, ...(EXAMPLE_VALUES[it.name] || {}) }));
+    })(),
+    heizung: { energietraeger: 'gas', gesamtkosten: '2100', verbrauchsanteil: 70, zHV: '8200', zHA: '9650', co2kosten: '180', co2stufe: 28, unitMeters: { u2: { zEV: '1400', zEA: '1650' } }, oelMenge: '', oelPreis: '' },
     warmwasser: { gesamtkosten: '640', verbrauchsanteil: 70, zHV: '210', zHA: '245', unitMeters: { u2: { zEV: '38', zEA: '45' } } },
   };
 }
@@ -119,9 +126,21 @@ function safeDiv(a: number, b: number): number { return b > 0 ? a / b : 0; }
 function totalFlaeche(units: Unit[]) { return units.reduce((s, u) => s + num(u.flaeche), 0); }
 function totalPersonen(units: Unit[]) { return units.reduce((s, u) => s + num(u.personen), 0); }
 
+function periodenFaktor(p?: Periode): number {
+  if (p === 'monatlich') return 12;
+  if (p === 'quartal') return 4;
+  return 1;
+}
+function periodenLabel(p?: Periode): string {
+  if (p === 'monatlich') return 'pro Monat';
+  if (p === 'quartal') return 'pro Quartal';
+  return 'pro Jahr';
+}
+function jahresBetrag(item: Item): number { return num(item.betrag) * periodenFaktor(item.periode); }
+
 function itemShare(item: Item, unit: Unit, units: Unit[]): number {
   if (!item.included) return 0;
-  const gesamt = num(item.betrag);
+  const gesamt = jahresBetrag(item);
   if (item.schluessel === 'wohnflaeche') return gesamt * safeDiv(num(unit.flaeche), totalFlaeche(units));
   if (item.schluessel === 'personen') return gesamt * safeDiv(num(unit.personen), totalPersonen(units));
   if (item.schluessel === 'einheiten') return gesamt * safeDiv(1, units.length);
@@ -139,8 +158,15 @@ function co2Share(kgProM2: number): number {
   return 95;
 }
 
+function heizGesamt(h: Heiz | Warm): number {
+  if ('energietraeger' in h && h.energietraeger === 'oel' && num(h.oelMenge) > 0 && num(h.oelPreis) > 0) {
+    return num(h.oelMenge) * num(h.oelPreis);
+  }
+  return num(h.gesamtkosten);
+}
+
 function heatingCalc(h: Heiz | Warm, unit: Unit, units: Unit[], isWarm: boolean) {
-  const gesamt = num(h.gesamtkosten);
+  const gesamt = heizGesamt(h);
   const vAnteil = num(h.verbrauchsanteil) / 100;
   const grundAnteil = 1 - vAnteil;
   const grundMieter = gesamt * grundAnteil * safeDiv(num(unit.flaeche), totalFlaeche(units));
@@ -171,14 +197,14 @@ function computeAll(state: AppState, unit: Unit) {
 }
 
 function schluesselLabel(s: Schluessel) {
-  return ({ wohnflaeche: 'nach Wohnfläche', personen: 'nach Personenzahl', einheiten: 'gleichmäßig je Einheit', verbrauch: 'nach Verbrauch (Zähler)' } as Record<string, string>)[s] || s;
+  return ({ wohnflaeche: 'nach Wohnfläche', personen: 'nach Personenzahl', einheiten: 'gleichmäßig verteilt', verbrauch: 'nach Verbrauch' } as Record<string, string>)[s] || s;
 }
 function schluesselHelp(s: Schluessel) {
   return ({
-    wohnflaeche: 'Jede Wohnung zahlt im Verhältnis ihrer m² zur Gesamtfläche des Hauses. Der Normalfall.',
-    personen: 'Aufteilung nach Kopfzahl je Wohnung, z. B. bei Müll.',
-    einheiten: 'Alle Wohnungen zahlen denselben Anteil, egal wie groß.',
-    verbrauch: 'Aus zwei Zählerständen: (Verbrauch dieser Wohnung ÷ Verbrauch ganzes Haus) × Gesamtkosten.',
+    wohnflaeche: 'Der Normalfall: Eine Wohnung mit mehr Quadratmetern zahlt einen größeren Anteil.',
+    personen: 'Wird nach Anzahl der Personen pro Wohnung verteilt — üblich z. B. beim Müll.',
+    einheiten: 'Alle Wohnungen zahlen den gleichen Anteil, egal wie groß sie sind.',
+    verbrauch: 'Wird nach dem tatsächlichen Verbrauch berechnet. Dafür brauchst du die Zählerstände.',
   } as Record<string, string>)[s] || '';
 }
 function isBlocked(name: string) {
@@ -187,20 +213,14 @@ function isBlocked(name: string) {
 }
 
 // ── shared style helpers ──
-const card = "rounded-lg border p-5 sm:p-6 mb-4";
-const cardStyle = { borderColor: 'var(--border)', background: 'var(--bg-card)' };
+const card = "rounded-xl border p-5 sm:p-6 mb-4";
+const cardStyle = { borderColor: 'var(--border)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' };
+const heading = "text-lg font-semibold mb-1";
+const headingStyle: React.CSSProperties = { color: 'var(--text)', fontFamily: 'var(--font-display)' };
 const label = "block text-xs font-medium mb-1";
 const labelStyle = { color: 'var(--text-secondary)' };
-const inputCls = "w-full rounded-md border px-3 py-2 text-sm";
-const inputStyle = { borderColor: 'var(--border)', background: '#fff', color: 'var(--text)' };
-function btn(_kind: 'primary' | 'ghost' | 'danger' = 'primary') {
-  return "rounded-md px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 disabled:opacity-50";
-}
-function btnStyle(kind: 'primary' | 'ghost' | 'danger' = 'primary'): React.CSSProperties {
-  if (kind === 'primary') return { background: 'var(--blue)', color: '#fff' };
-  if (kind === 'danger') return { border: '1px solid var(--bad)', color: 'var(--bad)', background: 'transparent' };
-  return { border: '1px solid var(--border)', color: 'var(--text)', background: 'transparent' };
-}
+const inputCls = "field-input";
+const mono: React.CSSProperties = { fontFamily: 'var(--font-data)', fontVariantNumeric: 'tabular-nums' };
 
 function Field({ labelText, value, onChange, type = 'text', placeholder }: {
   labelText: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string;
@@ -209,7 +229,7 @@ function Field({ labelText, value, onChange, type = 'text', placeholder }: {
     <div>
       <label className={label} style={labelStyle}>{labelText}</label>
       <input type={type} value={value ?? ''} placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)} className={inputCls} style={inputStyle} />
+        onChange={(e) => onChange(e.target.value)} className={inputCls} style={type === 'number' ? mono : undefined} />
     </div>
   );
 }
@@ -237,7 +257,7 @@ function BasicsWarning({ missingBasics }: { missingBasics: boolean }) {
   if (!missingBasics) return null;
   return (
     <div className="rounded-md border px-4 py-3 text-sm mb-4" style={{ borderColor: 'var(--amber)', background: 'var(--amber-tint)', color: 'var(--text)' }}>
-      ⚠ Trag zuerst im ersten Schritt die Wohnungen mit ihrer Fläche ein — ohne sie kann nichts berechnet werden.
+      Trag zuerst im ersten Schritt die Wohnungen mit ihrer Fläche ein — ohne sie kann nichts berechnet werden.
     </div>
   );
 }
@@ -245,11 +265,11 @@ function BasicsWarning({ missingBasics }: { missingBasics: boolean }) {
 function ActiveUnitBar({ units, activeUnit, setActiveUnitId }: { units: Unit[]; activeUnit: Unit; setActiveUnitId: (id: string) => void }) {
   if (units.length < 2) return null;
   return (
-    <div className="rounded-md border px-4 py-3 mb-4 flex flex-wrap items-center gap-3 text-sm"
-      style={{ borderColor: 'var(--blue)', background: '#eaf1f7' }}>
-      <label style={labelStyle} className="mb-0">Du rechnest gerade ab für:</label>
+    <div className="rounded-xl border px-4 py-3 mb-4 flex flex-wrap items-center gap-3 text-sm"
+      style={{ borderColor: 'var(--blue-light)', background: 'var(--bg-card)', borderLeftWidth: '3px' }}>
+      <label style={labelStyle} className="mb-0 shrink-0">Du rechnest gerade ab für</label>
       <select value={activeUnit.id} onChange={(e) => setActiveUnitId(e.target.value)}
-        className="rounded-md border px-2 py-1.5 text-sm flex-1 min-w-[200px]" style={inputStyle}>
+        className="field-input flex-1 min-w-[200px]" style={{ width: 'auto' }}>
         {units.map((u) => (
           <option key={u.id} value={u.id}>
             {u.name}{u.eigennutzung ? ' (Eigennutzung)' : (u.mieterName ? ' — ' + u.mieterName : '')}
@@ -272,32 +292,30 @@ function StepObjekt({ state, confirmingReset, setConfirmingReset, h }: {
   return (
     <>
       <div className={card} style={cardStyle}>
-        <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>Willkommen 👋</h2>
+        <h2 className={heading} style={headingStyle}>Willkommen</h2>
         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-          In 5 kurzen Schritten zur fertigen Abrechnung — auch wenn du mehrere Wohnungen hast oder
-          eine davon selbst bewohnst. Du brauchst griffbereit: die Rechnungen des letzten Jahres und
-          die Zählerstände von letztem und diesem Jahr.
+          Du brauchst: die Jahresrechnungen und die Zählerstände von letztem und diesem Jahr.
         </p>
         <div className="flex flex-wrap gap-3 items-center">
-          <button type="button" className={btn('ghost')} style={btnStyle('ghost')} onClick={h.fillExample}>
+          <button type="button" className="btn btn-ghost" onClick={h.fillExample}>
             Mit Beispielwerten ausfüllen
           </button>
           {confirmingReset ? (
             <>
               <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Wirklich alles löschen?</span>
-              <button type="button" className={btn('danger')} style={btnStyle('danger')} onClick={() => { h.resetAll(); setConfirmingReset(false); }}>Ja, löschen</button>
-              <button type="button" className={btn('ghost')} style={btnStyle('ghost')} onClick={() => setConfirmingReset(false)}>Abbrechen</button>
+              <button type="button" className="btn btn-danger" onClick={() => { h.resetAll(); setConfirmingReset(false); }}>Ja, löschen</button>
+              <button type="button" className="btn btn-ghost" onClick={() => setConfirmingReset(false)}>Abbrechen</button>
             </>
           ) : (
-            <button type="button" className={btn('ghost')} style={btnStyle('ghost')} onClick={() => setConfirmingReset(true)}>Alles zurücksetzen</button>
+            <button type="button" className="btn btn-ghost" onClick={() => setConfirmingReset(true)}>Alles zurücksetzen</button>
           )}
         </div>
       </div>
 
       <div className={card} style={cardStyle}>
-        <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>Adresse &amp; Zeitraum</h2>
+        <h2 className={heading} style={headingStyle}>Adresse &amp; Zeitraum</h2>
         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>Die Angaben für den Kopf der Abrechnung.</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <Field labelText="Straße" value={o.strasse} onChange={(v) => h.updateObjekt('strasse', v)} />
           <Field labelText="Hausnummer" value={o.hausnummer} onChange={(v) => h.updateObjekt('hausnummer', v)} />
           <Field labelText="PLZ" value={o.plz} onChange={(v) => h.updateObjekt('plz', v)} />
@@ -308,7 +326,7 @@ function StepObjekt({ state, confirmingReset, setConfirmingReset, h }: {
       </div>
 
       <div className={card} style={cardStyle}>
-        <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>Wohnungen im Haus</h2>
+        <h2 className={heading} style={headingStyle}>Wohnungen im Haus</h2>
         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
           Trag jede Wohnung im Haus ein — auch die, in der du selbst wohnst (Eigennutzung). Nur so
           wird die Gesamtfläche richtig berechnet.
@@ -321,7 +339,7 @@ function StepObjekt({ state, confirmingReset, setConfirmingReset, h }: {
                 className="font-semibold text-base bg-transparent border-0 border-b focus:border-b-2 px-0 py-1"
                 style={{ borderColor: 'var(--border)', color: 'var(--text)' }} />
               {state.units.length > 1 && (
-                <button type="button" className={btn('danger')} style={btnStyle('danger')} onClick={() => h.removeUnit(i)}>×</button>
+                <button type="button" className="btn btn-danger" onClick={() => h.removeUnit(i)}>×</button>
               )}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
@@ -339,7 +357,7 @@ function StepObjekt({ state, confirmingReset, setConfirmingReset, h }: {
             )}
           </div>
         ))}
-        <button type="button" className={btn('ghost')} style={btnStyle('ghost')} onClick={h.addUnit}>+ Weitere Wohnung hinzufügen</button>
+        <button type="button" className="btn btn-ghost" onClick={h.addUnit}>+ Weitere Wohnung hinzufügen</button>
         <div className="flex flex-wrap gap-6 mt-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
           <span>Gesamtfläche Haus: <b style={{ color: 'var(--text)' }}>{totalFlaeche(state.units).toLocaleString('de-DE')} m²</b></span>
           <span>Personen gesamt: <b style={{ color: 'var(--text)' }}>{totalPersonen(state.units).toLocaleString('de-DE')}</b></span>
@@ -357,14 +375,20 @@ function StepKosten({ state, activeUnit, missingBasics, h }: { state: AppState; 
       <ActiveUnitBar units={state.units} activeUnit={activeUnit} setActiveUnitId={h.setActiveUnitId} />
       <BasicsWarning missingBasics={missingBasics} />
       <div className={card} style={cardStyle}>
-        <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>Betriebskosten (allgemein)</h2>
+        <h2 className={heading} style={headingStyle}>Deine Kosten</h2>
         <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>
-          Die 17 Betriebskostenarten aus dem Gesetz stehen schon da — trag nur den Betrag von der
-          jeweiligen Rechnung ein (für das ganze Haus). Was du nicht hattest, schaltest du rechts aus.
+          Die üblichen Kostenarten stehen schon da. Trag bei jeder ein, wie viel du dafür im ganzen
+          Jahr für das ganze Haus bezahlt hast — die Zahl findest du auf der jeweiligen Jahresrechnung
+          (z. B. vom Wasserwerk oder der Versicherung). Was bei dir nicht vorkommt, schaltest du
+          rechts einfach aus.
         </p>
+        <div className="rounded-md border px-4 py-3 text-sm mb-4" style={{ borderColor: 'var(--blue)', background: '#eaf1f7' }}>
+          Zwei Rechnungen überschneiden sich im Abrechnungszeitraum (z. B. Nachzahlung 2026 +
+          Vorauszahlung 2027)? Beide Beträge zusammenzählen — entscheidend ist, was du in diesem
+          Zeitraum tatsächlich bezahlt hast, nicht das Rechnungsjahr.
+        </div>
         <div className="rounded-md border px-4 py-3 text-sm mb-4" style={{ borderColor: 'var(--amber)', background: 'var(--amber-tint)' }}>
-          Nicht eintragen: Verwaltungskosten, Instandhaltung/Instandsetzung, Leerstand, Kapitalkosten
-          (Kredite/Zinsen) — die darf ein Vermieter laut § 1 Abs. 2 BetrKV nicht umlegen.
+          Nicht umlagefähig: Hausverwaltung, Reparaturen, Leerstand, Kredite/Zinsen.
         </div>
         <div className="space-y-3">
           {state.items.map((it, i) => {
@@ -372,12 +396,15 @@ function StepKosten({ state, activeUnit, missingBasics, h }: { state: AppState; 
             const blocked = isBlocked(it.name);
             const m = (it.unitMeters && it.unitMeters[unit.id]) || {};
             return (
-              <div key={i} className="rounded-md border p-3" style={{ borderColor: 'var(--border)', opacity: it.included ? 1 : 0.45 }}>
+              <div key={i} className={`item-card${it.included ? '' : ' is-off'}`} style={{ opacity: it.included ? 1 : 0.55 }}>
                 <div className="flex justify-between items-start gap-2 mb-2">
                   {it.fixed ? (
-                    <div className="font-medium text-sm" style={{ color: 'var(--text)' }}>{it.name}</div>
+                    <div>
+                      <div className="font-medium text-sm" style={{ color: 'var(--text)' }}>{it.formLabel || it.name}</div>
+                      {it.formLabel && <div className="text-xs" style={{ color: 'var(--text-muted)' }}>amtlich: {it.name}</div>}
+                    </div>
                   ) : (
-                    <input type="text" value={it.name} onChange={(e) => h.updateItem(i, 'name', e.target.value)} className={inputCls} style={inputStyle} />
+                    <input type="text" value={it.name} onChange={(e) => h.updateItem(i, 'name', e.target.value)} className={inputCls} />
                   )}
                   <div className="flex items-center gap-2 shrink-0">
                     <label className="inline-flex items-center gap-1 text-xs whitespace-nowrap">
@@ -386,25 +413,39 @@ function StepKosten({ state, activeUnit, missingBasics, h }: { state: AppState; 
                     {!it.fixed && <button type="button" onClick={() => h.removeItem(i)} className="text-xs" style={{ color: 'var(--bad)' }}>×</button>}
                   </div>
                 </div>
-                {blocked && <div className="text-xs mb-2" style={{ color: 'var(--bad)' }}>⚠ evtl. nicht umlagefähig — prüfen</div>}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                  <Field labelText="Gesamtbetrag Haus (€)" type="number" value={it.betrag} placeholder="0,00" onChange={(v) => h.updateItem(i, 'betrag', v)} />
+                {it.info && <p className="text-xs mb-2" style={{ color: 'var(--text-secondary)' }}>{it.info}</p>}
+                {blocked && <div className="text-xs mb-2" style={{ color: 'var(--bad)' }}>Evtl. nicht umlagefähig — prüfen</div>}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-1">
+                  <Field labelText="Bezahlt fürs ganze Haus (€)" type="number" value={it.betrag} placeholder="0,00" onChange={(v) => h.updateItem(i, 'betrag', v)} />
                   <div>
-                    <label className={label} style={labelStyle}>Verteilerschlüssel</label>
-                    <select value={it.schluessel} onChange={(e) => h.updateItem(i, 'schluessel', e.target.value as Schluessel)} className={inputCls} style={inputStyle}>
+                    <label className={label} style={labelStyle}>Zeitraum</label>
+                    <select value={it.periode || 'jaehrlich'} onChange={(e) => h.updateItem(i, 'periode', e.target.value as Periode)} className={inputCls}>
+                      <option value="jaehrlich">pro Jahr</option>
+                      <option value="quartal">pro Quartal</option>
+                      <option value="monatlich">pro Monat</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={label} style={labelStyle}>Wie wird aufgeteilt?</label>
+                    <select value={it.schluessel} onChange={(e) => h.updateItem(i, 'schluessel', e.target.value as Schluessel)} className={inputCls}>
                       {(['wohnflaeche', 'personen', 'einheiten', 'verbrauch'] as Schluessel[]).map((s) => (
                         <option key={s} value={s}>{schluesselLabel(s)}</option>
                       ))}
                     </select>
                   </div>
                 </div>
+                {(it.periode === 'monatlich' || it.periode === 'quartal') && num(it.betrag) > 0 && (
+                  <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                    = {eur(jahresBetrag(it))} im Jahr ({periodenLabel(it.periode)} × {periodenFaktor(it.periode)})
+                  </p>
+                )}
                 <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>{schluesselHelp(it.schluessel)}</p>
                 {showMeter && (
                   <>
                     <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
-                      Zählerstand = die Zahl am Zähler. Verbrauch = aktuell − Vorjahr.
+                      Verbrauch = aktuell − Vorjahr.
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
                       <Field labelText="Diese Wohnung, Vorjahr" type="number" value={m.zEV || ''} onChange={(v) => h.updateItemMeter(i, unit.id, 'zEV', v)} />
                       <Field labelText="Diese Wohnung, aktuell" type="number" value={m.zEA || ''} onChange={(v) => h.updateItemMeter(i, unit.id, 'zEA', v)} />
                       <Field labelText="Haus, Vorjahr" type="number" value={it.zHV || ''} onChange={(v) => h.updateItem(i, 'zHV', v)} />
@@ -420,7 +461,7 @@ function StepKosten({ state, activeUnit, missingBasics, h }: { state: AppState; 
             );
           })}
         </div>
-        <button type="button" className={btn('ghost') + " mt-4"} style={btnStyle('ghost')} onClick={h.addItem}>+ Sonstige Betriebskosten hinzufügen</button>
+        <button type="button" className="btn btn-ghost mt-4" onClick={h.addItem}>+ Sonstige Betriebskosten hinzufügen</button>
       </div>
     </>
   );
@@ -434,12 +475,12 @@ function HeizBlock({ prefix, h, title, hint, showCO2, unit, onUpdate, onUpdateMe
   const m = (h.unitMeters && h.unitMeters[unit.id]) || {};
   return (
     <div className={card} style={cardStyle}>
-      <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>{title}</h2>
+      <h2 className={heading} style={headingStyle}>{title}</h2>
       <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>{hint}</p>
       {prefix === 'heizung' && 'energietraeger' in h && (
         <div className="mb-3">
           <label className={label} style={labelStyle}>Energieträger</label>
-          <select value={h.energietraeger} onChange={(e) => onUpdate('energietraeger', e.target.value)} className={inputCls} style={inputStyle}>
+          <select value={h.energietraeger} onChange={(e) => onUpdate('energietraeger', e.target.value)} className={inputCls}>
             <option value="gas">Erdgas (€/m³)</option>
             <option value="oel">Heizöl (€/Liter)</option>
             <option value="fernwaerme">Fernwärme (€/kWh)</option>
@@ -447,20 +488,29 @@ function HeizBlock({ prefix, h, title, hint, showCO2, unit, onUpdate, onUpdateMe
           </select>
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-        <Field labelText="Gesamtkosten Haus lt. Rechnung (€)" type="number" value={h.gesamtkosten} onChange={(v) => onUpdate('gesamtkosten', v)} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-1">
+        {prefix === 'heizung' && 'energietraeger' in h && h.energietraeger === 'oel' ? (
+          <>
+            <Field labelText="Menge (Liter)" type="number" value={h.oelMenge} onChange={(v) => onUpdate('oelMenge', v)} />
+            <Field labelText="Preis pro Liter (€)" type="number" value={h.oelPreis} onChange={(v) => onUpdate('oelPreis', v)} />
+          </>
+        ) : (
+          <Field labelText="Gesamtkosten fürs Haus lt. Rechnung (€)" type="number" value={h.gesamtkosten} onChange={(v) => onUpdate('gesamtkosten', v)} />
+        )}
         <div>
-          <label className={label} style={labelStyle}>Verbrauchsabhängiger Anteil</label>
-          <select value={h.verbrauchsanteil} onChange={(e) => onUpdate('verbrauchsanteil', Number(e.target.value))} className={inputCls} style={inputStyle}>
+          <label className={label} style={labelStyle}>Anteil nach Verbrauch</label>
+          <select value={h.verbrauchsanteil} onChange={(e) => onUpdate('verbrauchsanteil', Number(e.target.value))} className={inputCls}>
             {[50, 60, 70].map((p) => <option key={p} value={p}>{p}%</option>)}
           </select>
-          <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Gesetzlich 50–70% nach Verbrauch, der Rest nach Wohnfläche.</p>
+          <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Standard: 70%. Rest nach Wohnfläche.</p>
         </div>
       </div>
-      <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-        &bdquo;Haus&ldquo; = Zähler für das ganze Gebäude. &bdquo;{unit.name}&ldquo; = nur diese Wohnung.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {prefix === 'heizung' && 'energietraeger' in h && h.energietraeger === 'oel' && num(h.oelMenge) > 0 && num(h.oelPreis) > 0 && (
+        <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+          = {eur(num(h.oelMenge) * num(h.oelPreis))} Gesamtkosten
+        </p>
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <Field labelText="Zählerstand Haus, Vorjahr" type="number" value={h.zHV} onChange={(v) => onUpdate('zHV', v)} />
         <Field labelText="Zählerstand Haus, aktuell" type="number" value={h.zHA} onChange={(v) => onUpdate('zHA', v)} />
         <Field labelText={`Zählerstand ${unit.name}, Vorjahr`} type="number" value={m.zEV || ''} onChange={(v) => onUpdateMeter(unit.id, 'zEV', v)} />
@@ -469,12 +519,11 @@ function HeizBlock({ prefix, h, title, hint, showCO2, unit, onUpdate, onUpdateMe
       {showCO2 && 'co2stufe' in h && (
         <>
           <div className="rounded-md border px-4 py-3 text-sm my-4" style={{ borderColor: 'var(--blue)', background: '#eaf1f7' }}>
-            CO2-Kostenaufteilungsgesetz: Je schlechter die Energieeffizienz, desto mehr trägst du als
-            Vermieter. Kennst du die Werte nicht, lass die Felder leer.
+            Bei Öl-/Gasheizungen trägst du je nach Energieeffizienz einen Teil der CO2-Kosten. Werte unbekannt? Felder leer lassen.
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field labelText="CO2-Kosten Haus (€, falls ausgewiesen)" type="number" value={h.co2kosten} onChange={(v) => onUpdate('co2kosten', v)} />
-            <Field labelText="Gebäude-Emission (kg CO2/m² im Jahr)" type="number" value={String(h.co2stufe)} onChange={(v) => onUpdate('co2stufe', num(v))} />
+            <Field labelText="CO2-Kosten fürs Haus (€, falls auf der Rechnung ausgewiesen)" type="number" value={h.co2kosten} onChange={(v) => onUpdate('co2kosten', v)} />
+            <Field labelText="Energiewert des Gebäudes (kg CO2/m² im Jahr, steht auf der Heizkostenrechnung)" type="number" value={String(h.co2stufe)} onChange={(v) => onUpdate('co2stufe', num(v))} />
           </div>
           <table className="w-full text-sm mt-3">
             <tbody>
@@ -502,9 +551,9 @@ function StepHeizung({ state, activeUnit, missingBasics, h }: { state: AppState;
     <>
       <ActiveUnitBar units={state.units} activeUnit={activeUnit} setActiveUnitId={h.setActiveUnitId} />
       <BasicsWarning missingBasics={missingBasics} />
-      <HeizBlock prefix="heizung" h={state.heizung} title="Heizung" hint="So wie auf der Rechnung deines Energieversorgers, aufgeteilt nach Heizkostenverordnung." showCO2 unit={activeUnit}
+      <HeizBlock prefix="heizung" h={state.heizung} title="Heizung" hint="Kosten fürs Beheizen laut Rechnung deines Energieversorgers." showCO2 unit={activeUnit}
         onUpdate={(f, v) => h.updateHeiz(f as keyof Heiz, v)} onUpdateMeter={h.updateHeizMeter} />
-      <HeizBlock prefix="warmwasser" h={state.warmwasser} title="Warmwasser" hint="Meist ein eigener Zähler, gleiche Rechenlogik wie bei der Heizung." showCO2={false} unit={activeUnit}
+      <HeizBlock prefix="warmwasser" h={state.warmwasser} title="Warmwasser" hint="Nicht das Wasser selbst (das steht bei den Kosten), sondern die Energie zum Erwärmen — meist auf derselben Rechnung wie die Heizung, oft mit eigenem Zähler." showCO2={false} unit={activeUnit}
         onUpdate={(f, v) => h.updateWarm(f as keyof Warm, v)} onUpdateMeter={h.updateWarmMeter} />
     </>
   );
@@ -516,7 +565,7 @@ function StepVorauszahlung({ state, activeUnit, h }: { state: AppState; activeUn
     <>
       <ActiveUnitBar units={state.units} activeUnit={activeUnit} setActiveUnitId={h.setActiveUnitId} />
       <div className={card} style={cardStyle}>
-        <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text)' }}>Vorauszahlungen von {activeUnit.mieterName || activeUnit.name}</h2>
+        <h2 className={heading} style={headingStyle}>Vorauszahlungen von {activeUnit.mieterName || activeUnit.name}</h2>
         <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
           Der Betrag, den dieser Mieter im Abrechnungszeitraum monatlich schon vorausbezahlt hat
           (Summe über das ganze Jahr).
@@ -543,23 +592,23 @@ function StepErgebnis({ state, activeUnit, missingBasics, detailsOpen, setDetail
       </div>
       {unit.eigennutzung && (
         <div className="rounded-md border px-4 py-3 text-sm mb-4 print:hidden" style={{ borderColor: 'var(--amber)', background: 'var(--amber-tint)' }}>
-          Diese Wohnung ist als Eigennutzung markiert — dafür brauchst du normalerweise keine
-          Abrechnung. Wähle oben eine vermietete Wohnung aus.
+          Eigennutzung — hierfür brauchst du normalerweise keine Abrechnung. Wähle oben eine
+          vermietete Wohnung.
         </div>
       )}
       <div className={card} style={cardStyle}>
-        <h2 className="text-lg font-semibold mb-3" style={{ color: 'var(--text)' }}>Ergebnis für {unit.name}</h2>
-        <div className="rounded-md border px-5 py-4 mb-4 text-base"
-          style={ergebnisPositiv ? { borderColor: 'var(--amber)', background: 'var(--amber-tint)' } : { borderColor: 'var(--green)', background: 'var(--good-tint)' }}>
-          👉 {unit.mieterName || 'Der Mieter'} {ergebnisPositiv ? <>muss noch <b className="font-mono">{eur(Math.abs(r.ergebnis))}</b> nachzahlen.</> : <>bekommt <b className="font-mono">{eur(Math.abs(r.ergebnis))}</b> zurück.</>}
+        <h2 className={heading} style={headingStyle}>Ergebnis für {unit.name}</h2>
+        <div className="rounded-lg border px-5 py-4 mb-4 text-base"
+          style={ergebnisPositiv ? { borderColor: 'var(--amber)', background: 'var(--amber-tint)', borderLeftWidth: '3px' } : { borderColor: 'var(--green)', background: 'var(--good-tint)', borderLeftWidth: '3px' }}>
+          👉 {unit.mieterName || 'Der Mieter'} {ergebnisPositiv ? <>muss noch <b style={mono}>{eur(Math.abs(r.ergebnis))}</b> nachzahlen.</> : <>bekommt <b style={mono}>{eur(Math.abs(r.ergebnis))}</b> zurück.</>}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <div className="text-2xl font-mono font-semibold" style={{ color: 'var(--blue)' }}>{eur(r.gesamtMieter)}</div>
+            <div className="text-2xl font-semibold" style={{ ...mono, color: 'var(--blue)' }}>{eur(r.gesamtMieter)}</div>
             <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Betriebskosten-Anteil dieser Wohnung</div>
           </div>
           <div>
-            <div className="text-2xl font-mono font-semibold" style={{ color: 'var(--blue)' }}>{eur(r.vorauszahlung)}</div>
+            <div className="text-2xl font-semibold" style={{ ...mono, color: 'var(--blue)' }}>{eur(r.vorauszahlung)}</div>
             <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>bereits gezahlte Vorauszahlungen</div>
           </div>
         </div>
@@ -575,10 +624,10 @@ function StepErgebnis({ state, activeUnit, missingBasics, detailsOpen, setDetail
           sind hier automatisch erfüllt.
         </p>
         <div className="flex flex-wrap gap-3 print:hidden">
-          <button type="button" className={btn('primary')} style={btnStyle('primary')} onClick={() => { setDetailsOpen(true); setTimeout(() => window.print(), 50); }}>
+          <button type="button" className="btn btn-primary" onClick={() => { setDetailsOpen(true); setTimeout(() => window.print(), 50); }}>
             Als PDF speichern / drucken
           </button>
-          <button type="button" className={btn('ghost')} style={btnStyle('ghost')} onClick={() => setDetailsOpen(!detailsOpen)}>
+          <button type="button" className="btn btn-ghost" onClick={() => setDetailsOpen(!detailsOpen)}>
             {detailsOpen ? 'Details verbergen' : 'Details für die Abrechnung anzeigen'}
           </button>
         </div>
@@ -586,7 +635,7 @@ function StepErgebnis({ state, activeUnit, missingBasics, detailsOpen, setDetail
 
       {detailsOpen && (
         <div className={card} style={cardStyle} id="printArea">
-          <h2 className="text-lg font-semibold font-mono mb-1" style={{ color: 'var(--text)' }}>
+          <h2 className={heading} style={headingStyle}>
             Nebenkostenabrechnung {o.zeitraumVon || ''} – {o.zeitraumBis || ''}
           </h2>
           <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
@@ -606,7 +655,7 @@ function StepErgebnis({ state, activeUnit, missingBasics, detailsOpen, setDetail
                 {rows.map((x, i) => (
                   <tr key={i}>
                     <td className="px-2 py-1.5 border-b" style={{ borderColor: 'var(--border)' }}>{x.item.name}</td>
-                    <td className="px-2 py-1.5 border-b" style={{ borderColor: 'var(--border)' }}>{eur(num(x.item.betrag))}</td>
+                    <td className="px-2 py-1.5 border-b" style={{ borderColor: 'var(--border)' }}>{eur(jahresBetrag(x.item))}</td>
                     <td className="px-2 py-1.5 border-b" style={{ borderColor: 'var(--border)' }}>{schluesselLabel(x.item.schluessel)}</td>
                     <td className="px-2 py-1.5 border-b text-right font-mono whitespace-nowrap" style={{ borderColor: 'var(--border)' }}>{eur(x.share)}</td>
                   </tr>
@@ -720,48 +769,47 @@ export default function RechnerPage() {
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
-      <header className="border-b print:hidden" style={{ borderColor: 'var(--border)' }}>
-        <div className="mx-auto max-w-2xl px-5 h-14 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="text-sm font-semibold" style={{ color: 'var(--blue)' }}>← veycron</Link>
-            <span className="text-sm" style={{ color: 'var(--text-muted)' }}>· Nebenkostenrechner</span>
+      <header className="sticky top-0 z-20 border-b print:hidden" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-5 h-14 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <Link href="/" className="text-sm font-semibold shrink-0" style={{ color: 'var(--blue)', fontFamily: 'var(--font-display)' }}>← veycron</Link>
+            <span className="text-sm truncate" style={{ color: 'var(--text-muted)' }}>Nebenkostenrechner</span>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{user}</span>
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="text-xs hidden sm:inline" style={{ color: 'var(--text-muted)' }}>{user}</span>
             <button type="button" onClick={() => { logout(); router.push('/'); }}
               className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
               Abmelden
             </button>
           </div>
         </div>
-      </header>
-
-      <div className="mx-auto max-w-2xl px-5 py-8 pb-24">
-        <div className="print:hidden mb-6">
-          <div className="flex gap-1 mb-2">
+        <div className="mx-auto max-w-6xl px-4 sm:px-5 pb-3">
+          <div className="flex gap-1 mb-1.5">
             {STEPS.map((s, i) => (
               <div key={s.id} className="flex-1 h-1.5 rounded-full" style={{ background: i <= state.step ? 'var(--blue)' : 'var(--border)' }} />
             ))}
           </div>
-          <div className="flex justify-between text-xs font-mono uppercase" style={{ color: 'var(--text-muted)' }}>
-            {STEPS.map((s, i) => (
-              <span key={s.id} style={i === state.step ? { color: 'var(--blue)', fontWeight: 600 } : undefined}>{s.label}</span>
-            ))}
-          </div>
+          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+            Schritt <span style={mono}>{state.step + 1}</span> von <span style={mono}>{STEPS.length}</span> · {STEPS[state.step].label}
+          </p>
         </div>
+      </header>
 
+      <div className="mx-auto max-w-6xl px-4 sm:px-5 py-6 pb-28">
         {stepId === 'objekt' && <StepObjekt state={state} confirmingReset={confirmingReset} setConfirmingReset={setConfirmingReset} h={handlers} />}
         {stepId === 'kosten' && <StepKosten state={state} activeUnit={activeUnit} missingBasics={missingBasics} h={handlers} />}
         {stepId === 'heizung' && <StepHeizung state={state} activeUnit={activeUnit} missingBasics={missingBasics} h={handlers} />}
         {stepId === 'vorauszahlung' && <StepVorauszahlung state={state} activeUnit={activeUnit} h={handlers} />}
         {stepId === 'ergebnis' && <StepErgebnis state={state} activeUnit={activeUnit} missingBasics={missingBasics} detailsOpen={detailsOpen} setDetailsOpen={setDetailsOpen} h={handlers} />}
+      </div>
 
-        <div className="flex justify-between mt-6 print:hidden">
+      <div className="sticky bottom-0 z-20 border-t print:hidden" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-5 py-3 flex justify-between gap-3">
           {state.step > 0 ? (
-            <button type="button" className={btn('ghost')} style={btnStyle('ghost')} onClick={() => goto(state.step - 1)}>← Zurück</button>
+            <button type="button" className="btn btn-ghost" onClick={() => goto(state.step - 1)}>← Zurück</button>
           ) : <span />}
           {state.step < STEPS.length - 1 ? (
-            <button type="button" className={btn('primary')} style={btnStyle('primary')} onClick={() => goto(state.step + 1)}>Weiter →</button>
+            <button type="button" className="btn btn-primary" onClick={() => goto(state.step + 1)}>Weiter →</button>
           ) : <span />}
         </div>
       </div>

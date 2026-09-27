@@ -25,25 +25,21 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-5" style={{ background: 'var(--bg)' }}>
       <div className="w-full max-w-sm">
         <Link href="/" className="text-sm font-semibold" style={{ color: 'var(--blue)' }}>← veycron</Link>
-        <h1 className="text-2xl font-bold mt-4 mb-1" style={{ color: 'var(--text)' }}>Anmelden</h1>
+        <h1 className="text-2xl mt-4 mb-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Anmelden</h1>
         <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
           Melde dich an, um deine Nebenkostenabrechnung zu erstellen.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>E-Mail</label>
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm" style={{ borderColor: 'var(--border)', color: 'var(--text)' }} />
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="field-input" />
           </div>
           <div>
             <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>Passwort</label>
-            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm" style={{ borderColor: 'var(--border)', color: 'var(--text)' }} />
+            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="field-input" />
           </div>
           {error && <p className="text-xs" style={{ color: 'var(--bad)' }}>{error}</p>}
-          <button type="submit" disabled={loading}
-            className="w-full rounded-md px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"
-            style={{ background: 'var(--green)' }}>
+          <button type="submit" disabled={loading} className="btn btn-primary w-full justify-center">
             {loading ? 'Wird geprüft…' : 'Anmelden'}
           </button>
         </form>

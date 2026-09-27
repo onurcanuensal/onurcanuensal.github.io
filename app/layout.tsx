@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import { Fraunces, Public_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+
+const fraunces = Fraunces({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-display" });
+const publicSans = Public_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body" });
+const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-data" });
 
 const siteDescription =
   "Nebenkostenabrechnung für private Vermieter in Minuten statt Excel-Abenden — rechtssicher nach BetrKV, inklusive CO2-Kostenaufteilung und BGH-Pflichtbestandteilen.";
@@ -66,7 +71,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de">
+    <html lang="de" className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
