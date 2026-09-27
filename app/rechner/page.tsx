@@ -600,7 +600,7 @@ function StepErgebnis({ state, activeUnit, missingBasics, detailsOpen, setDetail
         <h2 className={heading} style={headingStyle}>Ergebnis für {unit.name}</h2>
         <div className="rounded-lg border px-5 py-4 mb-4 text-base"
           style={ergebnisPositiv ? { borderColor: 'var(--amber)', background: 'var(--amber-tint)', borderLeftWidth: '3px' } : { borderColor: 'var(--green)', background: 'var(--good-tint)', borderLeftWidth: '3px' }}>
-          👉 {unit.mieterName || 'Der Mieter'} {ergebnisPositiv ? <>muss noch <b style={mono}>{eur(Math.abs(r.ergebnis))}</b> nachzahlen.</> : <>bekommt <b style={mono}>{eur(Math.abs(r.ergebnis))}</b> zurück.</>}
+          {unit.mieterName || 'Der Mieter'} {ergebnisPositiv ? <>muss noch <b style={mono}>{eur(Math.abs(r.ergebnis))}</b> nachzahlen.</> : <>bekommt <b style={mono}>{eur(Math.abs(r.ergebnis))}</b> zurück.</>}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
@@ -619,11 +619,7 @@ function StepErgebnis({ state, activeUnit, missingBasics, detailsOpen, setDetail
             </div>
           ))}
         </div>
-        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-          Diese vier Punkte verlangt der BGH, damit die Abrechnung überhaupt gültig ist — alle vier
-          sind hier automatisch erfüllt.
-        </p>
-        <div className="flex flex-wrap gap-3 print:hidden">
+        <div className="flex flex-wrap gap-3 print:hidden mt-4">
           <button type="button" className="btn btn-primary" onClick={() => { setDetailsOpen(true); setTimeout(() => window.print(), 50); }}>
             Als PDF speichern / drucken
           </button>

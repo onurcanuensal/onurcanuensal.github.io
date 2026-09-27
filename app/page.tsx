@@ -103,10 +103,16 @@ export default function LandingPage() {
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {BETRK_ITEMS.map(([name, nr]) => (
-              <div key={name} className="rounded-md border px-3 py-2 text-sm"
+              <div key={name} className="rounded-md border px-3 py-2 text-sm flex items-start gap-1.5"
                 style={{ borderColor: 'var(--green)', background: 'var(--good-tint)', color: 'var(--text)' }}>
-                <span style={{ color: 'var(--green)', fontWeight: 700 }}>✓ </span>{name}
-                <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{nr}</div>
+                <svg className="mt-0.5 shrink-0" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                  stroke="var(--green)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <div>
+                  {name}
+                  <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{nr}</div>
+                </div>
               </div>
             ))}
           </div>
