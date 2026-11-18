@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AuthLayout from "../components/AuthLayout";
 import { login } from "../lib/auth";
 
 export default function LoginPage() {
@@ -11,24 +12,18 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError('');
-    const res = login(email, password);
+    const res = await login(email, password);
     setLoading(false);
     if (!res.ok) { setError(res.error); return; }
-    router.push('/rechner');
+    router.push('/dashboard');
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-5" style={{ background: 'var(--bg)' }}>
-      <div className="w-full max-w-sm">
-        <Link href="/" className="text-sm font-semibold" style={{ color: 'var(--blue)' }}>← veycron</Link>
-        <h1 className="text-2xl mt-4 mb-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Anmelden</h1>
-        <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-          Melde dich an, um deine Nebenkostenabrechnung zu erstellen.
-        </p>
+    <AuthLayout title="Anmelden" sub="Melde dich an, um deine Nebenkostenabrechnung zu erstellen.">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>E-Mail</label>
@@ -46,7 +41,6 @@ export default function LoginPage() {
         <p className="text-sm mt-5" style={{ color: 'var(--text-secondary)' }}>
           Noch kein Konto? <Link href="/register" className="font-semibold" style={{ color: 'var(--blue)' }}>Jetzt registrieren</Link>
         </p>
-      </div>
-    </div>
+    </AuthLayout>
   );
 }

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import AuthLayout from "../components/AuthLayout";
 import { register } from "../lib/auth";
 
 export default function RegisterPage() {
@@ -12,25 +13,19 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (password !== passwordConfirm) { setError('Die Passwörter stimmen nicht überein.'); return; }
     setLoading(true);
     setError('');
-    const res = register(email, password);
+    const res = await register(email, password);
     setLoading(false);
     if (!res.ok) { setError(res.error); return; }
-    router.push('/rechner');
+    router.push('/dashboard');
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-5" style={{ background: 'var(--bg)' }}>
-      <div className="w-full max-w-sm">
-        <Link href="/" className="text-sm font-semibold" style={{ color: 'var(--blue)' }}>← veycron</Link>
-        <h1 className="text-2xl mt-4 mb-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Konto erstellen</h1>
-        <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-          Kostenlos registrieren und direkt deine Nebenkostenabrechnung erstellen.
-        </p>
+    <AuthLayout title="Konto erstellen" sub="Kostenlos registrieren und direkt deine Nebenkostenabrechnung erstellen.">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium mb-1" style={{ color: 'var(--text-secondary)' }}>E-Mail</label>
@@ -53,7 +48,6 @@ export default function RegisterPage() {
         <p className="text-sm mt-5" style={{ color: 'var(--text-secondary)' }}>
           Schon registriert? <Link href="/login" className="font-semibold" style={{ color: 'var(--blue)' }}>Anmelden</Link>
         </p>
-      </div>
-    </div>
+    </AuthLayout>
   );
 }

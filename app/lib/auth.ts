@@ -1,5 +1,5 @@
-// ponytail: accounts + passwords live in localStorage (client-only prototype).
-// No server, no hashing — swap for a real backend (hashed passwords, DB) before handling real users.
+// ponytail: client-only accounts in localStorage — this gates the UI, it is not security.
+// Anyone with the JS bundle can read TEST_ACCOUNT. Real protection needs a backend (server-side hashing + sessions).
 
 const USERS_KEY = 'veycron-users';
 const SESSION_KEY = 'veycron-session';
@@ -7,8 +7,14 @@ const SESSION_KEY = 'veycron-session';
 // Always works, regardless of registration — for your own testing.
 const TEST_ACCOUNT = { email: 'test@test.de', password: '12345678' };
 
-type StoredUser = { email: string; password: string };
+type StoredUser = { email: string; hash?: string; password?: string };
 type AuthResult = { ok: true } | { ok: false; error: string };
+
+async function hash(email: string, password: string): Promise<string> {
+  const bytes = new TextEncoder().encode(`${email}:${password}`);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('');
+}
 
 function getUsers(): StoredUser[] {
   try { return JSON.parse(localStorage.getItem(USERS_KEY) || '[]'); } catch { return []; }
@@ -20,26 +26,31 @@ function setSession(email: string) {
   try { localStorage.setItem(SESSION_KEY, email); } catch { /* ignore */ }
 }
 
-export function register(email: string, password: string): AuthResult {
+export async function register(email: string, password: string): Promise<AuthResult> {
   const normalized = email.trim().toLowerCase();
   if (!normalized || !password) return { ok: false, error: 'Bitte E-Mail und Passwort angeben.' };
   if (password.length < 8) return { ok: false, error: 'Das Passwort muss mindestens 8 Zeichen haben.' };
-  if (normalized === TEST_ACCOUNT.email) return { ok: false, error: 'Für diese E-Mail existiert bereits ein Konto.' };
   const users = getUsers();
-  if (users.some((u) => u.email === normalized)) return { ok: false, error: 'Für diese E-Mail existiert bereits ein Konto.' };
-  saveUsers([...users, { email: normalized, password }]);
+  if (normalized === TEST_ACCOUNT.email || users.some((u) => u.email === normalized)) {
+    return { ok: false, error: 'Für diese E-Mail existiert bereits ein Konto.' };
+  }
+  saveUsers([...users, { email: normalized, hash: await hash(normalized, password) }]);
   setSession(normalized);
   return { ok: true };
 }
 
-export function login(email: string, password: string): AuthResult {
+export async function login(email: string, password: string): Promise<AuthResult> {
   const normalized = email.trim().toLowerCase();
   if (normalized === TEST_ACCOUNT.email && password === TEST_ACCOUNT.password) {
     setSession(normalized);
     return { ok: true };
   }
-  const match = getUsers().find((u) => u.email === normalized && u.password === password);
-  if (!match) return { ok: false, error: 'E-Mail oder Passwort ist falsch.' };
+  const users = getUsers();
+  const user = users.find((u) => u.email === normalized);
+  const h = await hash(normalized, password);
+  const legacyMatch = !!user && user.password !== undefined && user.password === password;
+  if (!user || (user.hash !== h && !legacyMatch)) return { ok: false, error: 'E-Mail oder Passwort ist falsch.' };
+  if (legacyMatch) saveUsers(users.map((u) => (u === user ? { email: u.email, hash: h } : u)));
   setSession(normalized);
   return { ok: true };
 }

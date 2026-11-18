@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Fraunces, Public_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-display" });
-const publicSans = Public_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body" });
-const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-data" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-body" });
+const geistDisplay = Geist({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-display" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-data" });
 
 const siteDescription =
   "Nebenkostenabrechnung für private Vermieter in Minuten statt Excel-Abenden — rechtssicher nach BetrKV, inklusive CO2-Kostenaufteilung und BGH-Pflichtbestandteilen.";
@@ -27,19 +27,16 @@ export const metadata: Metadata = {
     siteName: "veycron",
     title: "veycron — Nebenkostenabrechnung ohne den Jahres-Krampf.",
     description: siteDescription,
-    images: ["/og.png"],
     locale: "de_DE",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "veycron — Nebenkostenabrechnung ohne den Jahres-Krampf.",
     description: siteDescription,
-    images: ["/og.png"],
   },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
   },
   robots: {
     index: true,
@@ -64,14 +61,16 @@ const jsonLd = {
   operatingSystem: "Web",
   offers: {
     "@type": "Offer",
-    availability: "https://schema.org/PreOrder",
+    price: "0",
+    priceCurrency: "EUR",
+    availability: "https://schema.org/InStock",
     areaServed: { "@type": "Country", name: "DE" },
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable}`}>
+    <html lang="de" className={`${geist.variable} ${geistDisplay.variable} ${geistMono.variable}`}>
       <head>
         <script
           type="application/ld+json"

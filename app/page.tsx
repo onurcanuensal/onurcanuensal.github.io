@@ -2,192 +2,173 @@
 import Link from "next/link";
 
 const BETRK_ITEMS = [
-  ["Grundsteuer", "Nr. 1"], ["Wasserversorgung", "Nr. 2"], ["Entwässerung", "Nr. 3"],
-  ["Heizung", "Nr. 4a"], ["Warmwasser", "Nr. 4b"], ["Aufzug", "Nr. 5"],
-  ["Straßenreinigung & Müll", "Nr. 6"], ["Gebäudereinigung", "Nr. 7"], ["Gartenpflege", "Nr. 8"],
-  ["Beleuchtung", "Nr. 9"], ["Schornsteinfeger", "Nr. 10"], ["Sach-/Haftpflichtvers.", "Nr. 11"],
-  ["Hauswart", "Nr. 12"], ["Antenne/Kabel", "Nr. 13"], ["Wäschepflege", "Nr. 14"],
-  ["Gemeinschaftsflächen", "Nr. 15"], ["Sonstige Betriebskosten", "Nr. 16"],
+  "Grundsteuer", "Wasserversorgung", "Entwässerung", "Heizung", "Warmwasser", "Aufzug",
+  "Straßenreinigung & Müll", "Gebäudereinigung", "Gartenpflege", "Beleuchtung", "Schornsteinfeger",
+  "Sach-/Haftpflichtvers.", "Hauswart", "Antenne/Kabel", "Wäschepflege", "Gemeinschaftsflächen", "Sonstige Betriebskosten",
 ];
 
 const BGH_STEPS = [
-  ["Gesamtkosten je Kostenart", "Alle Ausgaben aufgeschlüsselt nach den 17 Betriebskostenarten"],
-  ["Verteilerschlüssel benannt & erklärt", "Nach welchem Maßstab wird umgelegt (Wohnfläche, Personen, Verbrauch)?"],
-  ["Anteil des Mieters berechnet", "Die konkrete Rechnung, wie der Anteil zustande kommt"],
-  ["Vorauszahlungen abgezogen", "Geleistete Vorauszahlungen gegengerechnet — Nachzahlung oder Guthaben"],
+  ["Gesamtkosten", "Alle Ausgaben je Kostenart"],
+  ["Verteilerschlüssel", "Benannt und erklärt"],
+  ["Mieteranteil", "Nachvollziehbar berechnet"],
+  ["Vorauszahlungen", "Nachzahlung oder Guthaben"],
 ];
+
+const NOT_ALLOWED = [
+  ["Verwaltungskosten", "Hausverwaltung, Kontoführung"],
+  ["Instandhaltung", "Reparaturen, Dach, Fassade"],
+  ["Leerstand", "Kosten leerstehender Einheiten"],
+  ["Kapitalkosten", "Kreditraten, Zinsen"],
+];
+
+const Check = ({ c = "var(--green)" }: { c?: string }) => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+);
+
+function Mockup() {
+  const rows = [["Grundsteuer", "212,40 €"], ["Wasser & Abwasser", "468,00 €"], ["Heizung & Warmwasser", "1.184,75 €"], ["Müll & Reinigung", "236,10 €"]];
+  return (
+    <div className="relative mx-auto mt-16 w-full max-w-3xl fade-up-4">
+      <div className="absolute -inset-x-10 -top-10 bottom-0 -z-10 dot-grid opacity-60 [mask-image:radial-gradient(closest-side,black,transparent)]" />
+      <div className="surface p-5 sm:p-8 text-left" style={{ boxShadow: '0 40px 80px -30px rgba(79,70,229,0.35), var(--shadow-card)' }}>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Nebenkostenabrechnung 2025</p>
+            <p className="font-semibold" style={{ color: 'var(--text)' }}>Musterstraße 12 · 2. OG links</p>
+          </div>
+          <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ background: 'var(--good-tint)', color: 'var(--green-hover)' }}>BGH-konform</span>
+        </div>
+        <div className="space-y-3">
+          {rows.map(([n, v]) => (
+            <div key={n} className="flex justify-between text-sm pb-3 border-b" style={{ borderColor: 'var(--border)' }}>
+              <span style={{ color: 'var(--text-secondary)' }}>{n}</span>
+              <span style={{ fontFamily: 'var(--font-data)', color: 'var(--text)' }}>{v}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 rounded-2xl p-5 flex items-end justify-between text-white"
+          style={{ background: 'radial-gradient(300px 160px at 100% 0%, rgba(219,39,119,0.5), transparent 70%), radial-gradient(300px 160px at 0% 100%, rgba(79,70,229,0.7), transparent 70%), #0b1220' }}>
+          <span className="text-sm text-white/70">Guthaben Mieter</span>
+          <span className="text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-data)', letterSpacing: '-0.04em' }}>− 143,25 €</span>
+        </div>
+      </div>
+      <div className="surface float hidden sm:flex items-center gap-2 absolute -left-6 top-24 px-4 py-3 text-sm font-medium" style={{ ['--r' as string]: '-4deg' }}>
+        <Check /> CO2-Aufteilung
+      </div>
+      <div className="surface float hidden sm:flex items-center gap-2 absolute -right-6 bottom-28 px-4 py-3 text-sm font-medium" style={{ ['--r' as string]: '3deg', animationDelay: '-3s' }}>
+        <Check /> 17 Kostenarten
+      </div>
+    </div>
+  );
+}
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg)' }}>
-
+    <div className="min-h-screen flex flex-col">
       {/* ── NAV ── */}
-      <header className="w-full border-b" style={{ borderColor: 'var(--border)' }}>
-        <div className="mx-auto max-w-3xl flex items-center justify-between px-5 h-14">
+      <header className="sticky top-3 z-30 px-4">
+        <div className="mx-auto max-w-4xl h-14 rounded-full border glass flex items-center justify-between pl-5 pr-2"
+          style={{ borderColor: 'var(--border)', boxShadow: 'var(--shadow-card)' }}>
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md flex items-center justify-center text-white text-xs font-bold"
-              style={{ background: 'var(--blue)' }}>v</div>
-            <span className="font-semibold tracking-tight" style={{ color: 'var(--text)' }}>veycron</span>
+            <span className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold" style={{ background: 'var(--accent-grad)' }}>v</span>
+            <span className="font-semibold tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>veycron</span>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-              Anmelden
-            </Link>
-            <Link href="/register" className="rounded-md px-3 py-1.5 text-sm font-semibold text-white"
-              style={{ background: 'var(--green)' }}>
-              Registrieren
-            </Link>
+          <div className="flex items-center gap-1">
+            <Link href="/login" className="px-3 text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Anmelden</Link>
+            <Link href="/register" className="btn btn-primary" style={{ borderRadius: 999 }}>Registrieren</Link>
           </div>
         </div>
       </header>
 
-      {/* ── HERO ── */}
-      <main className="flex-1 flex flex-col items-center px-5 py-16 sm:py-24">
-        <div className="w-full max-w-xl">
-
-          <div className="fade-up-1 mb-8">
-            <span className="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-medium"
-              style={{ borderColor: 'var(--border)', color: 'var(--text-secondary)', background: 'var(--bg-card)' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-              Für private Vermieter · Deutschland
-            </span>
-          </div>
-
-          <h1 className="fade-up-2 leading-tight"
-            style={{ fontSize: 'clamp(2.2rem, 6vw, 3.2rem)', letterSpacing: '-0.01em', color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>
-            Nebenkostenabrechnung,<br />
-            <span style={{ color: 'var(--text-secondary)' }}>ohne den Jahres-Krampf.</span>
+      <main className="flex-1 px-5 pt-16 sm:pt-24 pb-24">
+        {/* ── HERO ── */}
+        <section className="mx-auto max-w-4xl text-center">
+          <span className="fade-up-1 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg-card)', color: 'var(--text-secondary)' }}>
+            <span className="w-1.5 h-1.5 rounded-full pulse-subtle" style={{ background: 'var(--green)' }} />
+            Für private Vermieter · Deutschland
+          </span>
+          <h1 className="fade-up-2 mt-6" style={{ fontSize: 'clamp(2.8rem, 8vw, 5.5rem)', lineHeight: 1, letterSpacing: '-0.05em', fontFamily: 'var(--font-display)', fontWeight: 700 }}>
+            Nebenkosten,<br />
+            <span className="grad-text">ohne Krampf.</span>
           </h1>
-
-          <p className="fade-up-3 mt-5 text-lg leading-relaxed" style={{ color: 'var(--text-secondary)', maxWidth: '520px' }}>
-            Für alle, die 1–10 Wohnungen vermieten und keine Hausverwaltung brauchen wollen —
-            rechtssicher nach BetrKV, in Minuten statt Excel-Abenden.
+          <p className="fade-up-3 mt-6 mx-auto text-lg leading-relaxed" style={{ color: 'var(--text-secondary)', maxWidth: 540 }}>
+            Für alle mit 1–10 Wohnungen: rechtssicher nach BetrKV, in Minuten statt Excel-Abenden.
           </p>
-
-          <div className="fade-up-3 mt-8 space-y-3">
-            {[
-              "17 Betriebskostenarten schon vorausgefüllt, inklusive CO2-Kostenaufteilung",
-              "Mehrere Wohneinheiten & Eigennutzung werden korrekt berücksichtigt",
-              "Erfüllt automatisch die vier BGH-Pflichtbestandteile einer Abrechnung",
-            ].map((text) => (
-              <div key={text} className="flex items-start gap-3">
-                <svg className="mt-1 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="var(--green)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{text}</span>
-              </div>
-            ))}
+          <div className="fade-up-3 mt-9 flex flex-wrap justify-center gap-3">
+            <Link href="/register" className="btn btn-accent" style={{ padding: '0.9rem 1.7rem', fontSize: '0.95rem', borderRadius: 999 }}>Kostenlos starten →</Link>
+            <Link href="/login" className="btn btn-ghost" style={{ padding: '0.9rem 1.7rem', fontSize: '0.95rem', borderRadius: 999 }}>Anmelden</Link>
           </div>
-
-          <div className="fade-up-4 mt-10 flex flex-wrap gap-3">
-            <Link href="/register" className="rounded-lg px-6 py-3 text-sm font-semibold text-white transition-colors"
-              style={{ background: 'var(--green)' }}>
-              Kostenlos registrieren →
-            </Link>
-            <Link href="/login" className="rounded-lg px-6 py-3 text-sm font-semibold border transition-colors"
-              style={{ borderColor: 'var(--border)', color: 'var(--text)' }}>
-              Bereits registriert? Anmelden
-            </Link>
-          </div>
-        </div>
-
-        {/* ── WAS DARFST DU UMLEGEN ── */}
-        <section className="w-full max-w-xl mt-20">
-          <p className="text-xs font-mono tracking-widest uppercase mb-2" style={{ color: 'var(--blue)' }}>Kostenloser Check 1/2</p>
-          <h2 className="text-xl mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Was darfst du überhaupt umlegen?</h2>
-          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-            Die 17 Betriebskostenarten nach § 2 BetrKV — alles, was grundsätzlich auf deinen Mieter umlagefähig ist.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {BETRK_ITEMS.map(([name, nr]) => (
-              <div key={name} className="rounded-md border px-3 py-2 text-sm flex items-start gap-1.5"
-                style={{ borderColor: 'var(--green)', background: 'var(--good-tint)', color: 'var(--text)' }}>
-                <svg className="mt-0.5 shrink-0" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                  stroke="var(--green)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <div>
-                  {name}
-                  <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{nr}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 rounded-md border px-4 py-3 text-sm"
-            style={{ borderColor: 'var(--bad)', background: 'var(--bad-tint)', color: 'var(--text)' }}>
-            <p className="text-xs font-mono uppercase tracking-wide mb-2" style={{ color: 'var(--bad)' }}>
-              Nicht umlagefähig (§ 1 Abs. 2 BetrKV)
-            </p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Verwaltungskosten</strong> — Hausverwaltung, Kontoführung, Eigentümerversammlungen</li>
-              <li><strong>Instandhaltung & Instandsetzung</strong> — Reparaturen, Dach, Fassade, defekte Geräte</li>
-              <li><strong>Leerstandskosten</strong> — Kosten für leerstehende Einheiten</li>
-              <li><strong>Kapitalkosten</strong> — Kreditraten, Zinsen, Finanzierungskosten</li>
-            </ul>
-          </div>
+          <Mockup />
         </section>
 
-        {/* ── BGH ── */}
-        <section className="w-full max-w-xl mt-16">
-          <p className="text-xs font-mono tracking-widest uppercase mb-2" style={{ color: 'var(--blue)' }}>Kostenloser Check 2/2</p>
-          <h2 className="text-xl mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontWeight: 600 }}>Ist deine Abrechnung überhaupt wirksam?</h2>
-          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-            Der BGH verlangt vier Pflichtbestandteile (Urteil VIII ZR 244/18) — fehlt einer, ist die
-            ganze Abrechnung formell unwirksam, egal wie richtig die Zahlen sind.
-          </p>
-          <div className="rounded-lg border p-5 space-y-4" style={{ borderColor: 'var(--border)', background: 'var(--bg-card)' }}>
-            {BGH_STEPS.map(([title, desc], i) => (
-              <div key={title} className="flex gap-3 items-start">
-                <span className="shrink-0 w-7 h-7 rounded-full border flex items-center justify-center text-xs font-mono font-semibold"
-                  style={{ borderColor: 'var(--blue)', color: 'var(--blue)' }}>{i + 1}</span>
-                <div>
-                  <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{title}</p>
-                  <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{desc}</p>
-                </div>
+        {/* ── BENTO ── */}
+        <section className="mx-auto max-w-5xl mt-32">
+          <p className="text-sm font-semibold mb-3 grad-text inline-block">Check 1 · Umlagefähigkeit</p>
+          <h2 className="text-3xl sm:text-5xl mb-10" style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}>Was darfst du überhaupt umlegen?</h2>
+          <div className="grid gap-4 md:grid-cols-5">
+            <div className="surface p-7 md:col-span-3">
+              <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)' }}>Die 17 Betriebskostenarten nach § 2 BetrKV — grundsätzlich umlagefähig:</p>
+              <div className="flex flex-wrap gap-2">
+                {BETRK_ITEMS.map((n) => (
+                  <span key={n} className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm" style={{ background: 'var(--good-tint)', color: '#065f46' }}>
+                    <Check c="#059669" />{n}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── REGISTER CTA ── */}
-        <section className="w-full max-w-xl mt-16">
-          <div className="rounded-lg p-6 sm:p-8" style={{ background: 'var(--blue)' }}>
-            <h2 className="text-xl text-white mb-2" style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}>Leg kostenlos los</h2>
-            <p className="text-sm mb-5" style={{ color: '#d7e2ec' }}>
-              Registrieren, anmelden, Abrechnung erstellen — der Rechner ist direkt nutzbar.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/register" className="rounded-lg px-6 py-3 text-sm font-semibold"
-                style={{ background: '#fdfcf8', color: 'var(--blue)' }}>
-                Konto erstellen
-              </Link>
-              <Link href="/login" className="rounded-lg px-6 py-3 text-sm font-semibold border"
-                style={{ borderColor: 'rgba(255,255,255,0.4)', color: '#fdfcf8' }}>
-                Anmelden
-              </Link>
+            </div>
+            <div className="surface p-7 md:col-span-2" style={{ background: 'var(--bad-tint)', borderColor: 'transparent' }}>
+              <p className="text-sm font-semibold mb-5" style={{ color: 'var(--bad)' }}>Nicht umlagefähig · § 1 Abs. 2 BetrKV</p>
+              <ul className="space-y-4">
+                {NOT_ALLOWED.map(([t, d]) => (
+                  <li key={t}>
+                    <p className="font-semibold text-sm" style={{ color: 'var(--text)' }}>{t}</p>
+                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{d}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
 
-        <div className="w-full max-w-xl mt-14 p-4 rounded-md border border-dashed text-xs"
-          style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
-          <b style={{ color: 'var(--text)' }}>Wichtig:</b> Diese Seite und der Rechner sind eine
-          Informations- und Berechnungshilfe, keine Rechtsberatung. Ohne Gewähr. Lass deine konkrete
-          Abrechnung im Zweifel von einem Mieterverein oder Fachanwalt für Mietrecht prüfen.
-        </div>
+        {/* ── BGH ── */}
+        <section className="mx-auto max-w-5xl mt-32">
+          <p className="text-sm font-semibold mb-3 grad-text inline-block">Check 2 · Wirksamkeit</p>
+          <h2 className="text-3xl sm:text-5xl mb-4" style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}>Ist deine Abrechnung wirksam?</h2>
+          <p className="mb-10 max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
+            Der BGH verlangt vier Pflichtbestandteile (VIII ZR 244/18). Fehlt einer, ist die Abrechnung formell unwirksam — egal wie richtig die Zahlen sind.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {BGH_STEPS.map(([t, d], i) => (
+              <div key={t} className="surface card-hover p-6">
+                <span className="text-5xl grad-text" style={{ fontFamily: 'var(--font-data)', letterSpacing: '-0.06em' }}>0{i + 1}</span>
+                <p className="font-semibold mt-6" style={{ color: 'var(--text)' }}>{t}</p>
+                <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>{d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CTA ── */}
+        <section className="mx-auto max-w-5xl mt-32">
+          <div className="rounded-[32px] p-10 sm:p-16 text-center text-white"
+            style={{ background: 'radial-gradient(600px 300px at 100% 0%, rgba(219,39,119,0.55), transparent 70%), radial-gradient(600px 300px at 0% 100%, rgba(79,70,229,0.8), transparent 70%), #0b1220' }}>
+            <h2 className="text-4xl sm:text-6xl" style={{ fontFamily: 'var(--font-display)', fontWeight: 700, letterSpacing: '-0.045em' }}>Leg kostenlos los.</h2>
+            <p className="mt-4 text-white/70">Registrieren, anmelden, Abrechnung erstellen.</p>
+            <Link href="/register" className="btn mt-8" style={{ background: '#fff', color: 'var(--blue)', padding: '0.9rem 1.8rem', borderRadius: 999 }}>Konto erstellen →</Link>
+          </div>
+          <p className="mt-10 text-xs max-w-2xl mx-auto text-center" style={{ color: 'var(--text-muted)' }}>
+            <b style={{ color: 'var(--text)' }}>Wichtig:</b> Informations- und Berechnungshilfe, keine Rechtsberatung. Ohne Gewähr. Lass deine Abrechnung im Zweifel von einem Mieterverein oder Fachanwalt für Mietrecht prüfen.
+          </p>
+        </section>
       </main>
 
-      {/* ── FOOTER ── */}
       <footer className="border-t py-6 px-5" style={{ borderColor: 'var(--border)' }}>
-        <div className="mx-auto max-w-3xl flex flex-wrap items-center justify-between gap-4 text-xs"
-          style={{ color: 'var(--text-muted)' }}>
+        <div className="mx-auto max-w-5xl flex flex-wrap items-center justify-between gap-4 text-xs" style={{ color: 'var(--text-muted)' }}>
           <span>© {new Date().getFullYear()} veycron</span>
           <div className="flex gap-5">
-            <a href="/impressum" className="no-underline transition-colors" style={{ color: 'var(--text-muted)' }}>Impressum</a>
-            <a href="/datenschutz" className="no-underline transition-colors" style={{ color: 'var(--text-muted)' }}>Datenschutz</a>
+            <a href="/impressum">Impressum</a>
+            <a href="/datenschutz">Datenschutz</a>
           </div>
         </div>
       </footer>
