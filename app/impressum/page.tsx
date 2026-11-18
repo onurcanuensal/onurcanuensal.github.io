@@ -14,7 +14,7 @@ export default function ImpressumPage() {
       sections={[
         {
           title: "Anbieter",
-          body: <p>veycron<br />Yagmur Ünsal<br />Steigstraße 26<br />86505 Münsterhausen<br />Deutschland</p>,
+          body: <p>veycron<br />noreply<br />noreply<br />86505 noreply<br />Deutschland</p>,
         },
         {
           title: "Kontakt",

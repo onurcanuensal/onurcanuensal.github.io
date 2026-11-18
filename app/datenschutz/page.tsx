@@ -16,7 +16,7 @@ export default function DatenschutzPage() {
       sections={[
         {
           title: "Verantwortlicher",
-          body: <p>Yagmur Ünsal, Steigstraße 26, 86505 Münsterhausen, Deutschland · E-Mail: noreply@googlemail.com</p>,
+          body: <p>noreply, noreply, 86505 noreply, Deutschland · E-Mail: noreply@googlemail.com</p>,
         },
         {
           title: "Was im Browser bleibt",
