@@ -14,7 +14,7 @@ export default function ImpressumPage() {
       sections={[
         {
           title: "Anbieter",
-          body: <p>veycron<br />noreply<br />noreply<br />86505 noreply<br />Deutschland</p>,
+          body: <p>veycron<br />noreply<br />noreply<br />noreply noreply<br />Deutschland</p>,
         },
         {
           title: "Kontakt",
